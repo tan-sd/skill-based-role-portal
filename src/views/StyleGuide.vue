@@ -5,7 +5,7 @@
 <template>
     <!-- main title -->
     <div class="container-fluid bg-light text-dark d-flex justify-content-center py-4">
-        <h1 class="fw-light"><span class="fw-bold fs-1">Skill<span class="fw-bold text-secondary">Net</span> :</span> Style Guide</h1>
+        <h1 class="fw-light"><img src="@/assets/logo/sbrp_logo_default.png" width="150"> Style Guide</h1>
     </div>
 
     <!-- colors -->
