@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import ListingDetails from './components/ListingDetails.vue'
+import MyApplicants from './components/MyApplicants.vue';
 </script>
 
 <template>
