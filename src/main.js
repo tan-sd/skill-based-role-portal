@@ -14,9 +14,9 @@ import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 /* import specific icons [autofill] */
-import { faCircleUser, faEarthAfrica, faHamsa, faHouseChimney, faShrimp, faWheatAwn } from '@fortawesome/free-solid-svg-icons'
+import { faCircleUser, faEarthAfrica, faHamsa, faHouseChimney, faShrimp, faWheatAwn, faDownload, faCalendar, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCircleUser, faHouseChimney, faEarthAfrica, faShrimp, faHamsa, faWheatAwn) // <== Import your FontAwesome icons here and it should auto-populate at [autofill] above
+library.add(faCircleUser, faHouseChimney, faEarthAfrica, faShrimp, faHamsa, faWheatAwn, faDownload, faCalendar, faUserGroup) // <== Import your FontAwesome icons here and it should auto-populate at [autofill] above
 
 // FONT AWESOME [END] =============================================================
 
