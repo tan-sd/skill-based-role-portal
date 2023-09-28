@@ -11,7 +11,7 @@ import MyJobListings from './components/MyJobListings.vue';
 <template>
   <div class="app">
     <NavBar />
-    <ListingDetails />
+    <RouterView />
   </div>
 </template>
 

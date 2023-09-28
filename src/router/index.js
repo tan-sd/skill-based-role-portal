@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import StyleGuide from '../views/StyleGuide.vue'
+import EditView from '../views/EditView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,13 @@ const router = createRouter({
       path: '/style-guide',
       name: 'style-guide',
       component: StyleGuide
+    },
+
+    //Test if the data is received after HR submit the job listing form
+    {
+      path: '/editView',
+      name: 'editView',
+      component: EditView
     }
   ]
 })
