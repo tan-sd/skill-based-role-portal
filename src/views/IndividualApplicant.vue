@@ -1,8 +1,12 @@
 <script setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import { useRoute } from 'vue-router'
+  import {read_staff_data, read_listing_data} from '../firebase/individualApplicant_CRUD'
+
 </script>
 
 <template>
+  
 
     <div class=" d-flex flex-column align-items-center w-100">
         <div class="header w-100">
@@ -20,7 +24,8 @@
                 </div>
 
                 <div class="col-3">
-                    <h3 class="card-title" style="font-family: montserrat-bold;text-align: left;">{{ applicant.name }}</h3>
+                    <h3 class="card-title m-0" style="font-family: montserrat-bold;text-align: left;">{{ applicant.firstname }} {{ applicant.lastname }}</h3>
+                    <p class="m-0">{{ applicant.email }}</p>
                 </div>
 
                 <div class="col-1 d-flex justify-content-end">
@@ -30,7 +35,7 @@
                 <div class="col-6">
                     <h5 class="card-title ">{{ applicant.position }}</h5>
                     <div class="row">
-                        <p class="card-title ">{{ applicant.department }} Department, {{ applicant.country }}</p>
+                        <p class="card-title ">{{ applicant.department }} department, {{ applicant.country }}</p>
                     </div>
 
                 </div>
@@ -42,25 +47,25 @@
                 <div class="pb-4">
                   <h4> Current Skills </h4>
                   <div v-for="skill in job.applicantSkills" :key="skill" class="d-inline">
-                      <span class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3">{{ skill }} </span>
+                      <span class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3" style="font-size: small; font-weight: 400;">{{ skill }} </span>
                   </div>
                 </div>
                 <div>
                   <h4> Required Skills </h4>
                   <div v-for="skill in job.jobSkills" :key="skill" class="d-inline">
                       <span v-if="job.applicantSkills.includes(skill)">
-                        <span class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3">{{ skill }} </span>
+                        <span class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3" style="font-size: small; font-weight: 400;">{{ skill }} </span>
                       </span>
                       <span v-else>
-                        <span class="badge bg-light me-2 p-2 ps-3 pe-3 mb-3">{{ skill }} </span>
+                        <span class="badge bg-light me-2 p-2 ps-3 pe-3 mb-3" style="font-size: small; font-weight: 400;">{{ skill }} </span>
                       </span>
                   </div>
                 </div>
             </div>
               <div class="col-6">
-                <div class="progress-bar" :style="getProgressBarStyle(applicant.matchPercentage)">
-                <div class="progress-text" style="font-size: x-large;"> {{ applicant.matchPercentage }}%
-                <span class="match-text" style="font-size: small;">Match</span>
+                <div class="progress-bar" :style="getProgressBarStyle(getMatchPercentage)">
+                <div class="progress-text" style="font-size: x-large"> {{getMatchPercentage }}%
+                <span class="match-text" style="font-size: small">Match</span>
                 </div>
                 </div>
               </div>
@@ -86,6 +91,8 @@
     </div>
     </div>
   </template>
+
+
   
   <script>
   export default {
@@ -93,27 +100,39 @@
       return {
         applicant: 
           {
-            name: 'Seth Yap',
-            position: 'Lead Product Designer',
+            firstname: '',
+            lastname:'',
+            email:'',
+            position: '',
             profilePicture: 'profile.jpg',
-            matchPercentage: 67,
-            department: 'Tech',
-            country: 'Singapore'
+            department: '',
+            country: '',
           },
 
         job:
         {
-          applicantSkills: ['Figma', 'Wireframing', 'HTML', 'CSS'],
-          jobSkills:['Figma', 'Wireframing', 'HTML', 'CSS', 'Javascript', 'React']
+          applicantSkills: [],
+          jobSkills:[]
         }
           
       };
     },
+    async created(){
+      const response = await read_staff_data(this.$route.params.name)
+      this.applicant.firstname = response.firstname
+      this.applicant.lastname = response.lastname
+      this.applicant.email = response.email
+      this.applicant.position = response.position
+      this.applicant.department =response.department
+      this.applicant.country = response.country
+      this.job.applicantSkills= response.skillsets
+
+      const response1 = await read_listing_data(this.$route.params.id)
+      this.job.jobSkills = response1.skills
+    
+    },
     methods: {
-      handleCardClick(index) {
-        // Handle card click event, e.g., navigate to the applicant's details page
-        console.log(`Clicked on card ${index}`);
-      },
+    
       getProgressBarStyle(matchPercentage) {
         // Determine the color of the progress bar based on matchPercentage
           return {
@@ -122,8 +141,21 @@
             radial-gradient(closest-side, white 79%, transparent 80% 100%),
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`,
           };
-        }
+        },
+
       },
+      computed:{
+        getMatchPercentage(){
+          let skillsApplicantMatchcount =0 
+          for(let i=0; i<this.job.jobSkills.length; i++){
+            if(this.job.applicantSkills.includes(this.job.jobSkills[i])){
+              skillsApplicantMatchcount++
+            }
+          }
+          const matchPercentage= Math.round((skillsApplicantMatchcount/this.job.jobSkills.length)*100)
+          return matchPercentage         
+        }
+      }
     };
 
     
@@ -132,7 +164,7 @@
   
    <style scoped>
    .header {
-     font-family: 'montserrat-bold';
+     font-family: 'montserrat';
      font-size: 30px;
      margin-left: 40px;
      padding: 10px;

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import StyleGuide from '../views/StyleGuide.vue'
 import EditView from '../views/EditView.vue'
+import individualApplicant from '../views/individualApplicant.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/editView',
       name: 'editView',
       component: EditView
+    },
+
+    {
+      path: '/individualApplicant/:name/:id',
+      name: 'individualApplicant',
+      component: individualApplicant
     }
   ]
 })
