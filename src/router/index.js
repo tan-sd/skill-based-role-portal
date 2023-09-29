@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import StyleGuide from '../views/StyleGuide.vue'
 import EditView from '../views/EditView.vue'
 import individualApplicant from '../views/individualApplicant.vue'
+import myApplicants from '../views/myApplicants.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,12 @@ const router = createRouter({
       path: '/individualApplicant/:name/:id',
       name: 'individualApplicant',
       component: individualApplicant
+    },
+
+    {
+      path: '/:id/myApplicants/',
+      name: 'myApplicants',
+      component: myApplicants
     }
   ]
 })
