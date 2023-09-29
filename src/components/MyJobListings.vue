@@ -1,4 +1,6 @@
 <script setup>
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 </script>
 <template>
     <div>
@@ -9,7 +11,7 @@
           Manage your listings!
         </div>
         <!-- Apply Now button -->
-        <button class="btn btn-secondary createButton">+ Apply Now</button>
+        <button class="btn btn-secondary createButton">+ Create Listing</button>
       </div>
   
       <!-- Container for Cards -->
@@ -18,9 +20,11 @@
         <div class="card" @click="handleCardClick(0)">
           <div class="border"></div>
           <div class="details">
-            <div class="name">{{ applicants[0].name }}</div>
-            <div class="position">{{ applicants[0].position }}</div>
+            <div class="name">{{ job[0].name }}</div>
+            <div class="position">{{ job[0].position }}</div>
           </div>
+          <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2"/><div class="applicantsCount">{{ job[0].applicantsCount }} Applicants </div>
+          <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2"/><div class="dateDue">{{ job[0].dateDue }}</div>
           <button class="edit-button">Edit</button>
         </div>
   
@@ -28,9 +32,11 @@
         <div class="card" @click="handleCardClick(1)">
           <div class="border"></div>
           <div class="details">
-            <div class="name">{{ applicants[1].name }}</div>
-            <div class="position">{{ applicants[1].position }}</div>
+            <div class="name">{{ job[1].name }}</div>
+            <div class="position">{{ job[1].position }}</div>
           </div>
+          <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2"/><div class="applicantsCount">{{ job[1].applicantsCount }} Applicants </div>
+          <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2"/><div class="dateDue">{{ job[1].dateDue }}</div>
           <button class="edit-button">Edit</button>
         </div>
   
@@ -38,9 +44,11 @@
         <div class="card" @click="handleCardClick(2)">
           <div class="border"></div>
           <div class="details">
-            <div class="name">{{ applicants[2].name }}</div>
-            <div class="position">{{ applicants[2].position }}</div>
+            <div class="name">{{ job[2].name }}</div>
+            <div class="position">{{ job[2].position }}</div>
           </div>
+          <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2"/><div class="applicantsCount">{{ job[2].applicantsCount }} Applicants </div>
+          <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2"/><div class="dateDue">{{ job[2].dateDue }}</div>
           <button class="edit-button">Edit</button>
         </div>
   
@@ -48,9 +56,11 @@
         <div class="card" @click="handleCardClick(3)">
           <div class="border"></div>
           <div class="details">
-            <div class="name">{{ applicants[3].name }}</div>
-            <div class="position">{{ applicants[3].position }}</div>
+            <div class="name">{{ job[3].name }}</div>
+            <div class="position">{{ job[3].position }}</div>
           </div>
+          <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2"/><div class="applicantsCount">{{ job[3].applicantsCount }} Applicants </div>
+          <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2"/><div class="dateDue">{{ job[3].dateDue }}</div>
           <button class="edit-button">Edit</button>
         </div>
       </div>
@@ -61,7 +71,7 @@
   export default {
     data() {
       return {
-        applicants: [
+        job: [
           {
             name: 'Sales Lead',
             position: 'Sales Dept.',
@@ -99,6 +109,7 @@
   </script>
   
   <style scoped>
+  
   .header-container {
     display: flex;
     justify-content: space-between;
@@ -114,6 +125,7 @@
   
   .createButton {
     color: #ffffff;
+    font-family: 'montserrat-bold';
   }
   
   .container {
@@ -122,6 +134,7 @@
     border-radius: 10px;
     width: 75vw;
     height: 85vh;
+    flex-wrap: wrap; /* Allow cards to wrap when container width is reduced */
   }
   
   .card {
@@ -138,6 +151,7 @@
     transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
     color: black;
+    position: relative;
   }
   
   .card:hover {
@@ -147,6 +161,11 @@
   
   .card:hover .position {
     color: #ffffffdc;
+  }
+
+  .card:hover .edit-button {
+    background-color: #FFFFFF;
+    color: #6A44D4;
   }
   
   .border {
@@ -171,6 +190,19 @@
     font-size: 14px;
     color: #857F95;
   }
+
+  .applicantsCount {
+    font-size: 20px;
+    font-family: 'montserrat-bold';
+    margin-right: 15%;
+  }
+  
+  .dateDue {
+    font-size: 20px;
+    font-family: 'montserrat-bold';
+    margin-right: 30%; 
+  }
+  
   
   .edit-button {
     margin-left: auto;
@@ -182,8 +214,7 @@
     cursor: pointer;
   }
   
-  .edit-button:hover {
-    background-color: #FFFFFF;
+  .me-2{
     color: #6A44D4;
   }
   </style>
