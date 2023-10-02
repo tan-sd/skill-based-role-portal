@@ -10,7 +10,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'homePage',
       component: HomePage
     },
     {
@@ -22,8 +22,8 @@ const router = createRouter({
       // component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/style-guide',
-      name: 'style-guide',
+      path: '/styleGuide',
+      name: 'styleGuide',
       component: StyleGuide
     },
 

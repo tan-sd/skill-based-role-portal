@@ -18,7 +18,7 @@
                       :key="index"
                       class="nav-item mb-3"
                   >
-                      <router-link :class="navbarItemClass(link.to)" :to="link.to">{{ link.text }}</router-link>
+                      <router-link :class="navbarItemClass(link.to, link.views)" :to="link.to">{{ link.text }}</router-link>
                   </li>
               </ul>
             </div>
@@ -46,7 +46,7 @@
       <router-link v-for="(link, index) in navLinks"
           :key="index"
           :to="link.to"
-          :class="navbarItemClass(link.to)"
+          :class="navbarItemClass(link.to, link.views)"
       >
           {{ link.text }}
       </router-link>
@@ -64,23 +64,35 @@
 export default {
   data() {
     return {
-      // Data properties go here
+      // Titles & Links in navbar   note: views is a list of views names (copy directly from views folder but make first letter lowercase)
       navLinks: [
-          { text: 'Discover Jobs', to: '/style-guide' },
-          { text: 'My Listings', to: '/editView' },
-          { text: 'Log Out', to: '/' },
+          { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
+          { text: 'My Listings', to: '/editView', views: ['individualApplicant', 'myApplicants', 'editView'] },
+          { text: 'Log Out', to: '/', views: ['homePage'] },
       ],
+
+      // For Profile Button
       username: 'Alice',
       imgSrc: '../assets/profile_pics/user1.png',
     };
   },
   methods: {
     // Methods go here
-    navbarItemClass(path) {
-      return {
-        'active text-dark': this.$route.path === path,
-        'text-light2': this.$route.path !== path,
-      };
+    navbarItemClass(path, views) {
+      const currentRoute = this.$route
+      const currentComponent = currentRoute.name
+
+      console.log("currentcomponent: " + currentComponent)
+
+      if (currentRoute.path === path) {
+        return 'active text-dark'
+      }
+
+      if (views.includes(currentComponent)) {
+        return 'active text-dark'
+      }
+
+      return 'text-light2'
     },
     getImageUrl(name) {
         return new URL(name, import.meta.url).href
