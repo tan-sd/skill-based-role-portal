@@ -9,18 +9,27 @@ import MyJobListings from './components/MyJobListings.vue';
 </script>
 
 <template>
-  <div class="app">
-    <NavBar />
-    <RouterView />
+  <div class="app bg-light flex-column flex-md-row">
+    <div id="appVueNavbar">
+      <NavBar />
+    </div>
+    <RouterView id="appVueRouter" />
   </div>
 </template>
 
 <style scoped>
 .app {
-  width: 100vw;
   height: 100vh;
-  background-color: #efe7ef;
+  width: 100vw;
   display: flex;
-  flex-direction: row;
+}
+
+#appVueNavbar {
+  flex: 0 0 175px;
+}
+
+#appVueRouter {
+  flex: 1 0 0px;
+  overflow: scroll;
 }
 </style>

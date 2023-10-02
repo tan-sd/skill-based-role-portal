@@ -14,6 +14,7 @@ $dark:          #160B32;
 
 $custom-theme-colors: (
     "extra-dark": #070411,
+    "light2": #B5A8B5,
 );
 
 $theme-colors: map-merge($custom-theme-colors, $theme-colors);
