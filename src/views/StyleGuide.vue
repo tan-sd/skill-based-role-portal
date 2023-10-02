@@ -15,8 +15,8 @@
 
             <div class="text-center row d-flex mt-4 gx-3 justify-content-evenly">
                 <h4>Main Background Colors</h4>
-                <div class="col-sm-2 py-2 rounded bg-light"><p>bg-light</p></div>
-                <div class="col-sm-2 py-2 rounded bg-white border border-dark border-2"><p>bg-white</p></div>
+                <div class="col-sm-2 py-2 rounded bg-light border border-dark border-2"><p>bg-light</p></div>
+                <div class="col-sm-2 py-2 rounded bg-white"><p>bg-white</p></div>
                 <div class="col-sm-2 py-2 rounded bg-dark text-light"><p>bg-dark<br><i>(w text-light)</i></p></div>
                 <div class="col-sm-2 py-2 rounded bg-extra-dark text-light"><p>bg-extra-dark<br><i>(w text-light)</i></p></div>
             </div>
@@ -42,7 +42,7 @@
             <p class="text-center fw-bold">Try to keep to the main bg and accent colors and only use "Other Colors" when absolutely necessary</p>
 
             <div class="progress mx-2" style="height: 2rem;">
-                <div class="progress-bar bg-light text-dark fw-semibold" style="width: 65%">Light or White</div>
+                <div class="progress-bar bg-white text-dark fw-semibold" style="width: 65%">Light or White</div>
                 <div class="progress-bar bg-dark" style="width: 15%">Dark or Extra Dark</div>
                 <div class="progress-bar bg-primary" style="width: 15%">Primary</div>
                 <div class="progress-bar bg-secondary" style="width: 5%">Secondary</div>
@@ -64,7 +64,7 @@
         </div>
 
         <!-- buttons -->
-        <div class="container-fluid pb-4 mb-5">
+        <div class="container-fluid pb-4 mb-5 bg-white">
             <h2 class="text-center bg-dark text-light p-2 rounded">Buttons</h2>
 
             <div class="row mt-4">

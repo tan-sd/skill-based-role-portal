@@ -27,7 +27,7 @@ import MyJobListings from './components/MyJobListings.vue';
 }
 
 #appVueNavbar {
-  flex: 0 0 175px;
+  flex: 0 0 0px;
 }
 
 #appVueRouter {
