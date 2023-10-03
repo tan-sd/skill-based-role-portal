@@ -24,7 +24,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
         <div class="applicantsCount">{{ job[0].applicantsCount }} Applicants</div>
         <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
         <div class="dateDue">{{ job[0].dateDue }}</div>
-        <button class="edit-button">Edit</button>
       </div>
 
       <!-- Card 2 -->
@@ -38,7 +37,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
         <div class="applicantsCount">{{ job[1].applicantsCount }} Applicants</div>
         <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
         <div class="dateDue">{{ job[1].dateDue }}</div>
-        <button class="edit-button">Edit</button>
       </div>
 
       <!-- Card 3 -->
@@ -52,7 +50,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
         <div class="applicantsCount">{{ job[2].applicantsCount }} Applicants</div>
         <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
         <div class="dateDue">{{ job[2].dateDue }}</div>
-        <button class="edit-button">Edit</button>
       </div>
 
       <!-- Card 4 -->
@@ -66,7 +63,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
         <div class="applicantsCount">{{ job[3].applicantsCount }} Applicants</div>
         <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
         <div class="dateDue">{{ job[3].dateDue }}</div>
-        <button class="edit-button">Edit</button>
       </div>
     </div>
   </div>
@@ -152,6 +148,7 @@ export default {
   border-radius: 5px;
   flex: 1;
   width: 100%;
+  height: 15%;
   transition:
     background-color 0.3s,
     color 0.3s;
@@ -167,11 +164,6 @@ export default {
 
 .card:hover .position {
   color: #ffffffdc;
-}
-
-.card:hover .edit-button {
-  background-color: #ffffff;
-  color: #6a44d4;
 }
 
 .border {

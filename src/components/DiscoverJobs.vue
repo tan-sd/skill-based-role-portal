@@ -155,6 +155,7 @@
      background-color: #ffffff;
      border-radius: 5px;
      flex: 1;
+     height: 15%;
      width: 100%;
      transition: background-color 0.3s, color 0.3s;
      cursor: pointer;
@@ -203,7 +204,7 @@
    .dateDue {
     font-size: 20px;
     font-family: 'montserrat-bold';
-    margin-right: 45%; 
+    margin-right: 50%; 
   }
    
    .progress-bar {
