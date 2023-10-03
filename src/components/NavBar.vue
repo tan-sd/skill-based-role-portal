@@ -21,10 +21,13 @@
       <div class="collapse navbar-collapse row m-0" id="navbarSupportedContent">
         <div class="col-12 col-sm">
           <ul class="navbar-nav ms-4 me-auto mt-4 mb-lg-0 navbarItems">
-            <li v-for="(link, index) in navLinks" :key="index" class="nav-item mb-3">
-              <router-link :class="navbarItemClass(link.to, link.views)" :to="link.to">{{
-                link.text
-              }}</router-link>
+            <li v-for="(link, index) in filteredNavLinks" :key="index" class="nav-item mb-3">
+              <router-link
+                :class="navbarItemClass(link.to, link.views)"
+                :to="link.to"
+                @click="link.text === 'Log Out' ? logoutUser() : null"
+                >{{ link.text }}</router-link
+              >
             </li>
           </ul>
         </div>
@@ -97,7 +100,7 @@ export default {
     ])
 
     const filteredNavLinks = computed(() => {
-      return navLinks.value.filter(link => {
+      return navLinks.value.filter((link) => {
         if (link.text === 'My Listings') {
           return accessRights.value == '1'
         }
