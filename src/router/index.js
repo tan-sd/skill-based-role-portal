@@ -6,6 +6,7 @@ import MyApplicants from '../components/MyApplicants.vue'
 import LoginPage from '../views/LoginPage.vue'
 import MyListings from '../components/MyListings.vue'
 import MyApplications from '../components/MyApplications.vue'
+import DiscoverJobs from '../components/DiscoverJobs.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
       path: '/:id/myApplicants/',
       name: 'myApplicants',
       component: MyApplicants
+    },
+    {
+      path: '/discoverJobs',
+      name: 'discoverJobs',
+      component: DiscoverJobs
     }
   ]
 })
