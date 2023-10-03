@@ -1,17 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../views/HomePage.vue'
 import StyleGuide from '../views/StyleGuide.vue'
 import EditView from '../views/EditView.vue'
-import individualApplicant from '../views/individualApplicant.vue'
-import myApplicants from '../views/myApplicants.vue'
+import IndividualApplicant from '../components/IndividualApplicant.vue'
+import MyApplicants from '../components/MyApplicants.vue'
+import LoginPage from '../views/LoginPage.vue'
+import MyListings from '../components/MyListings.vue'
+import MyApplications from '../components/MyApplications.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'homePage',
-      component: HomePage
+      name: 'login',
+      component: LoginPage
     },
     {
       // path: '/about',
@@ -20,6 +22,16 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       // component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/mylistings',
+      name: 'myListings',
+      component: MyListings
+    },
+    {
+      path: '/myapplications',
+      name: 'myApplications',
+      component: MyApplications
     },
     {
       path: '/styleGuide',
@@ -37,13 +49,12 @@ const router = createRouter({
     {
       path: '/individualApplicant/:name/:id',
       name: 'individualApplicant',
-      component: individualApplicant
+      component: IndividualApplicant
     },
-
     {
       path: '/:id/myApplicants/',
       name: 'myApplicants',
-      component: myApplicants
+      component: MyApplicants
     }
   ]
 })
