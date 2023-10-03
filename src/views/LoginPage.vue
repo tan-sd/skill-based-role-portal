@@ -14,12 +14,17 @@
       <div class="login_inputs">
         <form class="login_form">
           <div>Email</div>
-          <input type="text" class="login_input mb-4" v-model="email" />
+          <input type="text" class="login_input mb-4" v-model="email" @keyup.enter="loginUser" />
           <div>Password</div>
-          <input type="password" class="login_input" v-model="password" />
+          <input type="password" class="login_input" v-model="password" @keyup.enter="loginUser" />
         </form>
+        <div v-if="isIncorrect" class="mt-4 border rounded bg-warning p-2">
+          Incorrect Email or Password
+        </div>
+        <div v-if="isMissing" class="mt-4 border rounded bg-warning p-2">
+          Missing Email or Password
+        </div>
       </div>
-
       <div class="button_container">
         <button id="login_button" class="btn btn-secondary applyButton" @click="loginUser">
           Login
@@ -39,15 +44,26 @@ export default {
   setup() {
     const email = ref('')
     const password = ref('')
+    const isIncorrect = ref(false)
+    const isMissing = ref(false)
     const auth = useAuthStore()
 
     const loginUser = async () => {
-      if (await validateLogin(email)) {
+      if (!email.value || !password.value) {
+        console.log(email.value)
+        console.log(password.value)
+        isMissing.value = true
+        isIncorrect.value = false
+        console.log(isMissing.value)
+        console.log(isIncorrect.value)
+      } else if (await validateLogin(email)) {
         console.log('Valid login')
         auth.login()
         router.push('/StyleGuide')
       } else {
         console.log('Invalid login')
+        isMissing.value = false
+        isIncorrect.value = true
       }
     }
 
@@ -67,7 +83,7 @@ export default {
         return false
       }
     }
-    return { loginUser, email, password }
+    return { loginUser, email, password, isIncorrect, isMissing }
   }
 }
 </script>
