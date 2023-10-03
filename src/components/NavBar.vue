@@ -52,7 +52,7 @@
     <!-- Navbar Links -->
     <nav class="navbarItems">
       <router-link
-        v-for="(link, index) in navLinks"
+        v-for="(link, index) in filteredNavLinks"
         :key="index"
         :to="link.to"
         :class="navbarItemClass(link.to, link.views)"
@@ -73,35 +73,62 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue'
 import { useAuthStore } from '../stores/authStore.js'
 
 export default {
   setup() {
     const auth = useAuthStore()
+    const accessRights = ref(localStorage.getItem('accessRights'))
+    const navLinks = ref([
+      { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
+      {
+        text: 'My Applications',
+        to: '/myapplications',
+        views: ['myapplications'],
+        accessRights: ''
+      },
+      {
+        text: 'My Listings',
+        to: '/mylistings',
+        views: ['mylistings']
+      },
+      { text: 'Log Out', to: '/', views: ['loginPage'] }
+    ])
+
+    const filteredNavLinks = computed(() => {
+      return navLinks.value.filter(link => {
+        if (link.text === 'My Listings') {
+          return accessRights.value == '1'
+        }
+        return true
+      })
+    })
 
     const logoutUser = () => {
       auth.logout()
     }
 
-    return { logoutUser }
+    return { logoutUser, filteredNavLinks }
   },
   data() {
     return {
       // Titles & Links in navbar   note: views is a list of views names (copy directly from views folder but make first letter lowercase)
-      navLinks: [
-        { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
-        {
-          text: 'My Applications',
-          to: '/myapplications',
-          views: ['myapplications']
-        },
-        {
-          text: 'My Listings',
-          to: '/mylistings',
-          views: ['mylistings']
-        },
-        { text: 'Log Out', to: '/', views: ['loginPage'] }
-      ],
+      // navLinks: [
+      //   { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
+      //   {
+      //     text: 'My Applications',
+      //     to: '/myapplications',
+      //     views: ['myapplications'],
+      //     accessRights: ''
+      //   },
+      //   {
+      //     text: 'My Listings',
+      //     to: '/mylistings',
+      //     views: ['mylistings']
+      //   },
+      //   { text: 'Log Out', to: '/', views: ['loginPage'] }
+      // ],
       // For Profile Button
       username: 'Alice',
       imgSrc: '../assets/profile_pics/user1.png'
