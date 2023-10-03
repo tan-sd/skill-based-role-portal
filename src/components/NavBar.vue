@@ -84,7 +84,7 @@ export default {
     const auth = useAuthStore()
     const accessRights = ref(localStorage.getItem('accessRights'))
     const navLinks = ref([
-      { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
+      { text: 'Discover Jobs', to: '/discoverJobs', views: ['discoverJobs'] },
       {
         text: 'My Applications',
         to: '/myapplications',
