@@ -1,37 +1,45 @@
 <template>
   <!-- Top NavBar for below MD -->
   <nav class="navbar navbar-expand-md bg-white d-flex d-md-none">
-      <div class="container-fluid">
+    <div class="container-fluid">
+      <router-link to="/">
+        <img alt="sbrp-logo" src="@/assets/logo/sbrp_logo_default.png" width="100" class="m-3" />
+      </router-link>
 
-          <router-link to="/">
-              <img alt="sbrp-logo" src="@/assets/logo/sbrp_logo_default.png" width="100" class="m-3" />
-          </router-link>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
+      <div class="collapse navbar-collapse row m-0" id="navbarSupportedContent">
+        <div class="col-12 col-sm">
+          <ul class="navbar-nav ms-4 me-auto mt-4 mb-lg-0 navbarItems">
+            <li v-for="(link, index) in navLinks" :key="index" class="nav-item mb-3">
+              <router-link :class="navbarItemClass(link.to, link.views)" :to="link.to">{{
+                link.text
+              }}</router-link>
+            </li>
+          </ul>
+        </div>
 
-          <div class="collapse navbar-collapse row m-0" id="navbarSupportedContent">
-            <div class="col-12 col-sm">
-              <ul class="navbar-nav ms-4 me-auto mt-4 mb-lg-0 navbarItems">
-                  <li v-for="(link, index) in navLinks"
-                      :key="index"
-                      class="nav-item mb-3"
-                  >
-                      <router-link :class="navbarItemClass(link.to, link.views)" :to="link.to">{{ link.text }}</router-link>
-                  </li>
-              </ul>
-            </div>
-
-            <div class="col-12 col-sm d-flex justify-content-sm-end justify-content-center">
-              <!-- Profile Btn -->
-              <div class="profileContainer p-3 mb-3 bg-light rounded d-flex flex-row justify-content-center align-items-center">
-                <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block">
-                <p id="userProfileName" class="fw-bold m-0 ms-2 text-truncate">{{ username }}</p>
-              </div>
-            </div>
+        <div class="col-12 col-sm d-flex justify-content-sm-end justify-content-center">
+          <!-- Profile Btn -->
+          <div
+            class="profileContainer p-3 mb-3 bg-light rounded d-flex flex-row justify-content-center align-items-center"
+          >
+            <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block" />
+            <p id="userProfileName" class="fw-bold m-0 ms-2 text-truncate">{{ username }}</p>
           </div>
+        </div>
       </div>
+    </div>
   </nav>
 
   <!-- Left NavBar for MD and above -->
@@ -43,38 +51,61 @@
 
     <!-- Navbar Links -->
     <nav class="navbarItems">
-      <router-link v-for="(link, index) in navLinks"
-          :key="index"
-          :to="link.to"
-          :class="navbarItemClass(link.to, link.views)"
+      <router-link
+        v-for="(link, index) in navLinks"
+        :key="index"
+        :to="link.to"
+        :class="navbarItemClass(link.to, link.views)"
+        @click="link.text === 'Log Out' ? logoutUser() : null"
       >
-          {{ link.text }}
+        {{ link.text }}
       </router-link>
     </nav>
 
     <!-- Profile Btn -->
-    <div class="profileContainer p-3 bg-light rounded d-flex flex-row justify-content-center align-items-center">
-      <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block">
+    <div
+      class="profileContainer p-3 bg-light rounded d-flex flex-row justify-content-center align-items-center"
+    >
+      <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block" />
       <p id="userProfileName" class="fw-bold m-0 ms-2 text-truncate">{{ username }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { useAuthStore } from '../stores/authStore.js'
+
 export default {
+  setup() {
+    const auth = useAuthStore()
+
+    const logoutUser = () => {
+      auth.logout()
+    }
+
+    return { logoutUser }
+  },
   data() {
     return {
       // Titles & Links in navbar   note: views is a list of views names (copy directly from views folder but make first letter lowercase)
       navLinks: [
-          { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
-          { text: 'My Listings', to: '/editView', views: ['individualApplicant', 'myApplicants', 'editView'] },
-          { text: 'Log Out', to: '/', views: ['homePage'] },
+        { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
+        {
+          text: 'My Applications',
+          to: '/myapplications',
+          views: ['myapplications']
+        },
+        {
+          text: 'My Listings',
+          to: '/mylistings',
+          views: ['mylistings']
+        },
+        { text: 'Log Out', to: '/', views: ['loginPage'] }
       ],
-
       // For Profile Button
       username: 'Alice',
-      imgSrc: '../assets/profile_pics/user1.png',
-    };
+      imgSrc: '../assets/profile_pics/user1.png'
+    }
   },
   methods: {
     // Methods go here
@@ -82,7 +113,7 @@ export default {
       const currentRoute = this.$route
       const currentComponent = currentRoute.name
 
-      console.log("currentcomponent: " + currentComponent)
+      console.log('currentcomponent: ' + currentComponent)
 
       if (currentRoute.path === path) {
         return 'active text-dark'
@@ -95,16 +126,15 @@ export default {
       return 'text-light2'
     },
     getImageUrl(name) {
-        return new URL(name, import.meta.url).href
-    },
+      return new URL(name, import.meta.url).href
+    }
   },
-  
+
   mounted() {
     // Lifecycle hook: Code to run after the component is mounted
-  },
-};
+  }
+}
 </script>
-
 
 <style scoped>
 .navbarContainerLeft {
@@ -133,9 +163,9 @@ export default {
 }
 
 .navbarItems a.active::before {
-  content: "";
+  content: '';
   display: block;
-  background-color: #6A44D4;
+  background-color: #6a44d4;
   width: 4rem;
   height: 150%;
   position: absolute;
