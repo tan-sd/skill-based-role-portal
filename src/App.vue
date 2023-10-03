@@ -2,17 +2,15 @@
 // The code is importing various components and objects from different files.
 import { RouterLink, RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
-import ListingDetails from './components/ListingDetails.vue'
-import MyApplicants from './views/MyApplicants.vue';
-import IndividualApplicant from './views/IndividualApplicant.vue';
-import Login from './components/Login.vue'
-import MyJobListings from './components/MyJobListings.vue';
+import { useAuthStore } from './stores/authStore.js';
+
+const auth = useAuthStore()
 
 </script>
 
 <template>
   <div class="app bg-light flex-column flex-md-row">
-    <div id="appVueNavbar">
+    <div id="appVueNavbar" v-if="auth.isLoggedIn">
       <NavBar />
     </div>
     <RouterView id="appVueRouter" />
