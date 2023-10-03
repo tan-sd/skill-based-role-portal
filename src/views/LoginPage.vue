@@ -73,6 +73,7 @@ export default {
         const objectData = Object.values(data)
         for (let i = 0; i < objectData.length; i++) {
           if (objectData[i].email === email.value) {
+            localStorage.setItem('accessRights', objectData[i].accessrights)
             return true
           }
         }
@@ -177,10 +178,6 @@ export default {
 
   .logo_container {
     margin: 50px 0 50px 0;
-  }
-
-  .login_container {
-    height: 500px;
   }
 
   #logo {
