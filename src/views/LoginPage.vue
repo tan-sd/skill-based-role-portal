@@ -48,6 +48,11 @@ export default {
     const isMissing = ref(false)
     const auth = useAuthStore()
 
+    if (auth.isLoggedIn) {
+      // Redirect to home page if user is already logged in
+      router.push('/discoverJobs')
+    }
+
     const loginUser = async () => {
       if (!email.value || !password.value) {
         console.log(email.value)
@@ -59,7 +64,7 @@ export default {
       } else if (await validateLogin(email)) {
         console.log('Valid login')
         auth.login()
-        router.push('/StyleGuide')
+        router.push('/discoverJobs')
       } else {
         console.log('Invalid login')
         isMissing.value = false

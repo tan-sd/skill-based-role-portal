@@ -84,7 +84,11 @@ export default {
     const auth = useAuthStore()
     const accessRights = ref(localStorage.getItem('accessRights'))
     const navLinks = ref([
-      { text: 'Discover Jobs', to: '/discoverJobs', views: ['discoverJobs'] },
+      { 
+        text: 'Discover Jobs',
+        to: '/discoverJobs', 
+        views: ['discoverJobs', 'listingDetails']
+      },
       {
         text: 'My Applications',
         to: '/myapplications',
@@ -94,9 +98,13 @@ export default {
       {
         text: 'My Listings',
         to: '/mylistings',
-        views: ['mylistings']
+        views: ['mylistings', 'myApplicants', 'individualApplicant']
       },
-      { text: 'Log Out', to: '/', views: ['loginPage'] }
+      { 
+        text: 'Log Out', 
+        to: '/', 
+        views: ['loginPage']
+      }
     ])
 
     const filteredNavLinks = computed(() => {
