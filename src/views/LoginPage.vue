@@ -79,6 +79,7 @@ export default {
         for (let i = 0; i < objectData.length; i++) {
           if (objectData[i].email === email.value) {
             localStorage.setItem('accessRights', objectData[i].accessrights)
+            localStorage.setItem('id', Object.keys(data)[i])
             return true
           }
         }

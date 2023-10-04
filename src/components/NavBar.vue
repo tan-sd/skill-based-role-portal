@@ -84,9 +84,9 @@ export default {
     const auth = useAuthStore()
     const accessRights = ref(localStorage.getItem('accessRights'))
     const navLinks = ref([
-      { 
+      {
         text: 'Discover Jobs',
-        to: '/discoverJobs', 
+        to: '/discoverJobs',
         views: ['discoverJobs', 'listingDetails']
       },
       {
@@ -100,9 +100,9 @@ export default {
         to: '/mylistings',
         views: ['mylistings', 'myApplicants', 'individualApplicant']
       },
-      { 
-        text: 'Log Out', 
-        to: '/', 
+      {
+        text: 'Log Out',
+        to: '/',
         views: ['loginPage']
       }
     ])
@@ -110,7 +110,7 @@ export default {
     const filteredNavLinks = computed(() => {
       return navLinks.value.filter((link) => {
         if (link.text === 'My Listings') {
-          return accessRights.value == '1'
+          return (accessRights.value == '1' || accessRights.value == '4')
         }
         return true
       })
@@ -215,7 +215,7 @@ export default {
 }
 
 .navbarItems a.active::before {
-  background-color: #6A44D4;
+  background-color: #6a44d4;
   opacity: 100%;
 }
 

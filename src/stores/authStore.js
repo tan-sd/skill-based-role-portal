@@ -15,7 +15,8 @@ export const useAuthStore = defineStore({
     logout() {
       this.isLoggedIn = false
       localStorage.setItem('isLoggedIn', 'false')
-      localStorage.setItem('accessRights', "")
+      localStorage.setItem('accessRights', '')
+      localStorage.setItem('id', '')
     }
   }
 })
