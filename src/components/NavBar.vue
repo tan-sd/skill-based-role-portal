@@ -192,10 +192,9 @@ export default {
   position: relative;
 }
 
-.navbarItems a.active::before {
+.navbarItems a::before {
   content: '';
   display: block;
-  background-color: #6a44d4;
   width: 4rem;
   height: 150%;
   position: absolute;
@@ -203,6 +202,13 @@ export default {
   transform: translateX(-135%) translateY(-15%);
   top: 0;
   border-radius: 0 0.75rem 0.75rem 0;
+  opacity: 0%;
+  transition: all 250ms ease-out;
+}
+
+.navbarItems a.active::before {
+  background-color: #6A44D4;
+  opacity: 100%;
 }
 
 .profileContainer {
