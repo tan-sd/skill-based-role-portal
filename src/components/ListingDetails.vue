@@ -1,13 +1,17 @@
+<script setup>
+import { individualListingData } from '../firebase/CRUD_database'
+</script>
+
 <template>
   <div class="listingContainer">
     <div class="listingInnerContainer">
       <div class="listingHeader">Job Description</div>
-      <div class="listingText">{{ jobDescription }}</div>
+      <div class="listingText">{{ listingDetails.description }}</div>
 
       <div class="listingHeader">Job Requirements</div>
       <div class="listingText">
         <ul>
-          <li :key="index" v-for="(req, index) in jobRequirements">
+          <li :key="index" v-for="(req, index) in listingDetails.responsibilities">
             {{ req }}
           </li>
         </ul>
@@ -33,18 +37,32 @@
 
 <script>
 export default {
+  created() {
+    this.fetchIndividualListingData()
+  },
   data() {
     return {
-      jobDescription:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi ab odio incidunt omnis rerum architecto, id quo voluptatum repellendus, suscipit nisi aut beatae temporibus, labore maiores provident ipsum quasi quia! Repellendus placeat quibusdam architecto debitis veritatis ducimus sed. Excepturi, sed eligendi! Rem ducimus suscipit iste dolores animi eveniet tempora earum ut quod quas ratione architecto, vero illum doloribus neque, delectus deleniti aut. Veritatis sapiente quo minus, repellendus aspernatur nemo laborum ducimus accusamus eaque natus mollitia in explicabo deserunt animi placeat voluptate impedit repudiandae quibusdam obcaecati eius. Laboriosam consectetur incidunt praesentium dolores sapiente adipisci, harum eligendi ipsam ut expedita tempora eos.',
-      jobRequirements: [
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?'
-      ],
-      roleSkillSets: ['Figma', 'Wireframing', 'HTML', 'CSS', 'JavaScript', 'React'],
-      applicantSkillSets: ['Figma', 'Wireframing', 'HTML', 'CSS']
+      listingDetails: []
+      // jobDescription:
+      //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi ab odio incidunt omnis rerum architecto, id quo voluptatum repellendus, suscipit nisi aut beatae temporibus, labore maiores provident ipsum quasi quia! Repellendus placeat quibusdam architecto debitis veritatis ducimus sed. Excepturi, sed eligendi! Rem ducimus suscipit iste dolores animi eveniet tempora earum ut quod quas ratione architecto, vero illum doloribus neque, delectus deleniti aut. Veritatis sapiente quo minus, repellendus aspernatur nemo laborum ducimus accusamus eaque natus mollitia in explicabo deserunt animi placeat voluptate impedit repudiandae quibusdam obcaecati eius. Laboriosam consectetur incidunt praesentium dolores sapiente adipisci, harum eligendi ipsam ut expedita tempora eos.',
+      // jobRequirements: [
+      //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
+      //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
+      //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?',
+      //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, earum?'
+      // ],
+      // roleSkillSets: ['Figma', 'Wireframing', 'HTML', 'CSS', 'JavaScript', 'React'],
+      // applicantSkillSets: ['Figma', 'Wireframing', 'HTML', 'CSS']
+    }
+  },
+  methods: {
+    async fetchIndividualListingData() {
+      try {
+        const data = await individualListingData(this.$route.params.id)
+        this.listingDetails = data
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
     }
   }
 }
