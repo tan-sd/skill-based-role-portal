@@ -7,6 +7,7 @@ import LoginPage from '../views/LoginPage.vue'
 import MyListings from '../components/MyListings.vue'
 import MyApplications from '../components/MyApplications.vue'
 import DiscoverJobs from '../components/DiscoverJobs.vue'
+import ListingDetails from '../components/ListingDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,7 +47,12 @@ const router = createRouter({
       name: 'editView',
       component: EditView
     },
-
+    {
+      path: '/listingdetails/:id',
+      name: 'listingDetails',
+      component: ListingDetails,
+      props: (route) => ({details: route.params.details})
+    },
     {
       path: '/individualApplicant/:name/:id',
       name: 'individualApplicant',
