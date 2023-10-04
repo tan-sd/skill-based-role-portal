@@ -1,5 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { allListingData } from '../firebase/CRUD_database'
 </script>
 <template>
   <div>
@@ -13,56 +14,17 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
     <!-- Container for Cards -->
     <div class="container">
-      <!-- Card 1 -->
-      <div class="card" @click="handleCardClick(0)">
+      <!-- Card content here -->
+      <div v-for="(list, index) in listing" :key="index" class="card" @click="handleCardClick(0)">
         <div class="border"></div>
         <div class="details">
-          <div class="name">{{ job[0].name }}</div>
-          <div class="position">{{ job[0].position }}</div>
+          <div class="name">{{ list.title }}</div>
+          <div class="position">{{ list.position }}</div>
         </div>
         <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2" />
-        <div class="applicantsCount">{{ job[0].applicantsCount }} Applicants</div>
+        <div class="applicantsCount">{{ list.applicants.length }} Applicants</div>
         <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
-        <div class="dateDue">{{ job[0].dateDue }}</div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="card" @click="handleCardClick(1)">
-        <div class="border"></div>
-        <div class="details">
-          <div class="name">{{ job[1].name }}</div>
-          <div class="position">{{ job[1].position }}</div>
-        </div>
-        <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2" />
-        <div class="applicantsCount">{{ job[1].applicantsCount }} Applicants</div>
-        <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
-        <div class="dateDue">{{ job[1].dateDue }}</div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card" @click="handleCardClick(2)">
-        <div class="border"></div>
-        <div class="details">
-          <div class="name">{{ job[2].name }}</div>
-          <div class="position">{{ job[2].position }}</div>
-        </div>
-        <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2" />
-        <div class="applicantsCount">{{ job[2].applicantsCount }} Applicants</div>
-        <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
-        <div class="dateDue">{{ job[2].dateDue }}</div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="card" @click="handleCardClick(3)">
-        <div class="border"></div>
-        <div class="details">
-          <div class="name">{{ job[3].name }}</div>
-          <div class="position">{{ job[3].position }}</div>
-        </div>
-        <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2" />
-        <div class="applicantsCount">{{ job[3].applicantsCount }} Applicants</div>
-        <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
-        <div class="dateDue">{{ job[3].dateDue }}</div>
+        <div class="dateDue">{{ list.deadline }}</div>
       </div>
     </div>
   </div>
@@ -70,40 +32,36 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 <script>
 export default {
+  created() {
+    this.filteredListingData()
+  },
   data() {
     return {
-      job: [
-        {
-          name: 'Sales Lead',
-          position: 'Sales Dept.',
-          applicantsCount: 5,
-          dateDue: '15 Oct 2023'
-        },
-        {
-          name: 'AI Specialist',
-          position: 'Robotics Dept.',
-          applicantsCount: 9,
-          dateDue: '15 Oct 2023'
-        },
-        {
-          name: 'UI/UX Expert',
-          position: 'Design Dept.',
-          applicantsCount: 0,
-          dateDue: '29 Sep 2023'
-        },
-        {
-          name: 'Lepak Lead',
-          position: 'One Corner Dept.',
-          applicantsCount: 4,
-          dateDue: '29 Sep 2024'
-        }
-      ]
+      listing: []
     }
   },
   methods: {
     handleCardClick(index) {
       // Handle card click event, e.g., navigate to applicant's details page
       console.log(`Clicked on card ${index}`)
+    },
+    async filteredListingData() {
+      try {
+        const data = await allListingData()
+        for (let i = 0; i < Object.values(data).length; i++) {
+          // console.log(localStorage.getItem('id'))
+          // console.log(Object.values(data)[i].createdby)
+          if (Object.values(data)[i].createdby == localStorage.getItem('id')) {
+            this.listing.push(Object.values(data)[i])
+          }
+        }
+        // this.listing = Object.values(data)
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
+    },
+    navigateToDetails(index) {
+      this.$router.push({ name: 'listingDetails', params: { id: index } })
     }
   }
 }
