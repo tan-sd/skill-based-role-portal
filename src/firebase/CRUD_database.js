@@ -32,10 +32,22 @@ const sbrp = initializeApp({
 // const auth = getAuth(sbrp)
 const db = getDatabase(sbrp)
 
-export const staffData = async() => {
+export const staffData = async () => {
   const data = ref(db, `/staff`)
   const snapshot = await get(data)
   return snapshot.val()
+}
+
+export const allListingData = async () => {
+  const data = ref(db, '/listing')
+  const snapshot = await get(data)
+  return snapshot.val()
+}
+
+export const individualListingData = async(index) => {
+  const data = ref(db, `/listing/${index}`);
+  const snapshot = await get(data);
+  return snapshot.val();
 }
 
 // EDIT HERE
