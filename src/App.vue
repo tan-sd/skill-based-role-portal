@@ -1,6 +1,7 @@
 <script setup>
 // The code is importing various components and objects from different files.
 import { RouterLink, RouterView } from 'vue-router'
+import router from './router'
 import NavBar from './components/NavBar.vue'
 import { useAuthStore } from './stores/authStore.js';
 
@@ -16,6 +17,19 @@ const auth = useAuthStore()
     <RouterView id="appVueRouter" />
   </div>
 </template>
+
+<script>
+
+export default {
+  created() {
+    router.beforeEach((to, from) => {
+      if (!useAuthStore().isLoggedIn && to.name != 'login') {
+        return { name: 'login' }
+      }
+    })
+  },
+}
+</script>
 
 <style scoped>
 .app {
