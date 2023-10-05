@@ -16,7 +16,7 @@ const showModal=() =>{
 
 <template>
     <div>
-        <button class="btn btn-secondary applyButton" @click="showModal()">Apply u mofo</button>
+        <button class="btn btn-secondary applyButton" @click="showModal()">Apply</button>
         <ModalResume></ModalResume>
     </div>
 </template>
