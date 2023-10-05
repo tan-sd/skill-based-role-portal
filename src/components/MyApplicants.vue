@@ -1,10 +1,8 @@
 <script setup>
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import { useRoute } from 'vue-router'
-  import {read_staff_data, read_listing_data} from '../firebase/myApplicants_CRUD'
-
-
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 </script>
+
 <template>
   <div>
     <!-- Header -->

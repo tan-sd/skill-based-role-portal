@@ -1,7 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useRoute } from 'vue-router'
-import { read_staff_data, read_listing_data } from '../firebase/individualApplicant_CRUD'
+import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 </script>
 
 <template>

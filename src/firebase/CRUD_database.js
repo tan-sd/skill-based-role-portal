@@ -50,6 +50,22 @@ export const individualListingData = async(index) => {
   return snapshot.val();
 }
 
+export const read_staff_data= async(name) =>
+{
+    const data_to_be_read = ref(db, `/staff/${name}`);
+    const snapshot = await get(data_to_be_read)
+    return snapshot.val()
+
+}
+
+export const read_listing_data= async(id) =>
+{
+    const data_to_be_read1 = ref(db, `/listing/${id}`);
+    const snapshot1 = await get(data_to_be_read1)
+    return snapshot1.val()
+
+}
+
 export const writeToFirebase = async (formData) => {
   console.log('Writing data into database...');
 
