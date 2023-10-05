@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StyleGuide from '../views/StyleGuide.vue'
-import EditView from '../views/EditView.vue'
+import JobListingView from '../views/JobListingView.vue'
 import IndividualApplicant from '../components/IndividualApplicant.vue'
 import MyApplicants from '../components/MyApplicants.vue'
 import LoginPage from '../views/LoginPage.vue'
@@ -43,9 +43,9 @@ const router = createRouter({
 
     //Test if the data is received after HR submit the job listing form
     {
-      path: '/editView',
-      name: 'editView',
-      component: EditView
+      path: '/jobListingForm',
+      name: 'jobListingForm',
+      component: JobListingView
     },
     {
       path: '/listingdetails/:id',

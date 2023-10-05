@@ -50,24 +50,13 @@ export const individualListingData = async(index) => {
   return snapshot.val();
 }
 
-export const writeToFirebase = async (formData) => {
-  console.log('Writing data into database...');
-
-  const databasePath = '/listing';
-
-  try {
-    
-    set(ref(db, databasePath), formData);
-    console.log('Data written to the database successfully');
-  } catch (error) {
-    // Handle errors and display an error message
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const failed_message = `Write Operation Unsuccessful. Error Code ${errorCode}: ${errorMessage}`;
-    alert(failed_message);
-    console.error(failed_message);
+export function updateJobListing(jobListingKey, updatedJobListing) {
+    const jobListingsRef = database.ref('listings'); // Assuming 'listings' is the key where job listings are stored in your Firebase database
+  
+    return jobListingsRef.child(jobListingKey).set(updatedJobListing);
   }
-}
+
+
 // EDIT HERE
 // Vue.js data variables
 // Input whatever data variables you need, and edit the HTML file to have a v-model, etc.

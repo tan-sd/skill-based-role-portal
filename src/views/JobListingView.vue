@@ -2,7 +2,7 @@
 <script setup>
 import { ref } from "vue";
 import { uid } from "uid";
-import EditTest from "../components/EditTest.vue";
+import JobListingForm from "../components/JobListingForm.vue";
 import PostItemTest from "../components/PostItemTest.vue";
 const newPost = ref([]);
 
@@ -22,7 +22,7 @@ const createPost = (jobTitle) => {
 
 <template>
   <div>
-    <EditTest @create-listing="createPost"/>
+    <JobListingForm @create-listing="createPost"/>
 
     <PostItemTest v-for="post in newPost" v-bind:key="post.id" :post="post"/>
   </div>

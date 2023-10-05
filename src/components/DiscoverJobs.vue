@@ -10,7 +10,7 @@ import { allListingData } from '../firebase/CRUD_database'
 
     <!-- Container for Cards -->
     <div class="container">
-      <div v-for="(list, index) in listing" :key="index" class="card" @click="navigateToDetails(index+1)">
+      <div v-for="(list, index) in listing" :key="index" class="card" @click="navigateToDetails(index)">
         <!-- Card content here -->
         <div class="border"></div>
         <div class="details">
