@@ -74,7 +74,6 @@ export const addNewListing = async (formData) =>
     // Calculate the next index
     const snapshot = await get(jobListingsRef);
     console.log(formData)
-    console.log(localStorage.getItem('id'))
     let currentIndex = 0;
     snapshot.forEach(() => {
       currentIndex++;
@@ -101,6 +100,7 @@ export const addNewListing = async (formData) =>
 
     await set(ref(db, newPath), newListingData);
     console.log('New listing added successfully');
+    return true
   } catch (error) {
     console.error('Error adding new listing:', error);
   }

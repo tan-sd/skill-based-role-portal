@@ -59,59 +59,65 @@
    }
 </style> -->
 
+<script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+</script>
+
 <template>
 
   <div class="container">
-      <div class="card">
+    <font-awesome-icon :icon="['fas', 'chevron-left']" size="2xl" @click="navigateBack" style="color: #080808; margin-top: 1em; margin-bottom: 1em; margin-left: 0.5em;" />
+      <div class="card card_sp">
         <div class="card-body">
-                <h2 class="card-title">
-                  Form
+                <h2 class="card-title title">
+                  Job Listing Form
                 </h2>
-                    <form @submit.prevent="submitForm">
+                    <form @submit.prevent="submitForm" class="general">
                       <div class="form-group">
                         <label for="jobTitle">Job Title</label>
                         <input type="text" class="form-control" id="jobTitle" v-model="jobListing.title" required>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="createdDate">Created Date</label>
                         <input type="date" class="form-control" id="createdDate" v-model="jobListing.createdate" required>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="deadline">Deadline</label>
                         <input type="date" class="form-control" id="deadline" v-model="jobListing.deadline" required>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="department">Department</label>
                         <input type="text" class="form-control" id="department" v-model="jobListing.department" required>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="description">Description</label>
                         <textarea class="form-control" id="description" v-model="jobListing.description" required></textarea>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="responsibilities">Responsibilities</label>
-                        <div v-for="(responsibility, index) in jobListing.responsibilities" :key="index">
-                          <input type="text" class="form-control" v-model="jobListing.responsibilities[index]" required>
-                          <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm">Remove</button>
+                        <div v-for="(responsibility, index) in jobListing.responsibilities" :key="index" class="d-flex align-items-center">
+                          <input type="text" class="form-control mb-1" v-model="jobListing.responsibilities[index]" required>
+                          <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
                         </div>
-                        <button @click="addResponsibility" class="btn btn-primary btn-sm">Add Responsibility</button>
+                        <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" >Add Responsibility</button>
                       </div>
   
-                      <div class="form-group">
+                      <div class="form-group" style="margin-top: 1em;">
                         <label for="skills">Skills</label>
-                        <div v-for="(skill, index) in jobListing.skills" :key="index">
-                          <input type="text" class="form-control" v-model="jobListing.skills[index]" required>
-                          <button @click="removeSkill(index)" class="btn btn-danger btn-sm">Remove</button>
+                        <div v-for="(skill, index) in jobListing.skills" :key="index" class="d-flex align-items-center">
+                          <input type="text" class="form-control mb-1" v-model="jobListing.skills[index]" required>
+                          <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" >Remove</button>
                         </div>
-                        <button @click="addSkill" class="btn btn-primary btn-sm">Add Skill</button>
+                        <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
                       </div>
-  
-                      <button type="submit" class="btn btn-primary">Submit</button>
+                      <div style="margin-top: 1em;"></div>
+                      <button @click="navigateBack" class="btn btn-dark">Cancel</button>
+                      <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
                     </form>
           </div>
       </div>
@@ -154,9 +160,16 @@
       submitForm() {
         // Call the Firebase function to write data
         console.log('Form Data:', this.jobListing);
-        addNewListing(this.jobListing);
+        const status = addNewListing(this.jobListing);
+        if(status){
+          this.clearForm();
+        }
       },
-  
+
+      navigateBack() {
+      this.$router.push('/mylistings');
+      },
+
       clearForm() {
       // Clear the form fields
         this.jobListing = {
@@ -165,10 +178,33 @@
           deadline: '',
           department: '',
           description: '',
-          responsibilities: [''],
-          skills: [''],
+          applicants: [''],
+          createdby: '',
+          responsibilities: [''], // Initialize with one empty item
+          skills: [''], // Initialize with one empty item
         };
       },
     },
   };
   </script>
+
+  
+<style>
+.title{
+  font-family:'montserrat-bold';
+  font-size: 2em;
+  margin: auto;
+  text-align: center;
+}
+.general{
+  font-family:'montserrat-bold';
+  font-size: 1em;
+  margin: auto;
+  margin-top: 1em;
+}
+.card_sp{
+  margin-bottom: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+</style>
