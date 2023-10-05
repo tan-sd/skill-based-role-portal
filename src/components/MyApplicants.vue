@@ -2,7 +2,6 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 </script>
-
 <template>
   <div>
     <!-- Header -->
@@ -38,7 +37,7 @@ import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
       </div>
       <!-- Display a loading message if newAppList is empty -->
       <div v-else>
-        Loading...
+        There is no such listing available
       </div>
     </div>
   </div>
