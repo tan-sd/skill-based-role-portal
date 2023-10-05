@@ -8,8 +8,8 @@ import { allListingData } from '../firebase/CRUD_database'
     <div class="header-container">
       <!-- Header -->
       <div class="header">Manage your listings!</div>
-      <!-- Apply Now button -->
-      <button class="btn btn-secondary createButton">+ Create Listing</button>
+      <!-- Apply Now button => direct to list creating page -->
+      <button @click="navigateToForm" class="btn btn-secondary createButton">+ Create Listing</button>
     </div>
 
     <!-- Container for Cards -->
@@ -60,8 +60,8 @@ export default {
         console.log('Error fetching data from Firebase:', error)
       }
     },
-    navigateToDetails(index) {
-      this.$router.push({ name: 'listingDetails', params: { id: index } })
+    navigateToForm() {
+      this.$router.push('/jobListingForm');
     }
   }
 }

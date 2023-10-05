@@ -15,7 +15,7 @@ import {
   ref,
   onValue,
   set,
-  get
+  get,
 } from 'https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js'
 
 // Our Firebase Project Configuration
@@ -66,24 +66,46 @@ export const read_listing_data= async(id) =>
 
 }
 
-export const writeToFirebase = async (formData) => {
-  console.log('Writing data into database...');
-
-  const databasePath = '/listing';
-
+export const addNewListing = async (formData) => 
+{
+  const jobListingsRef = ref(db, '/listing');
+  
   try {
-    
-    set(ref(db, databasePath), formData);
-    console.log('Data written to the database successfully');
+    // Calculate the next index
+    const snapshot = await get(jobListingsRef);
+    console.log(formData)
+    console.log(localStorage.getItem('id'))
+    let currentIndex = 0;
+    snapshot.forEach(() => {
+      currentIndex++;
+    });
+    const newIndex = currentIndex;
+
+    // Path to new index
+    const newPath = `/listing/${newIndex}`;
+
+    const createdBy = localStorage.getItem('id')
+
+    // Transform
+    const newListingData = {
+      createdate: formData.createdate,
+      createdby: createdBy,
+      deadline: formData.deadline,
+      department: formData.department,
+      description: formData.description,
+      responsibilities: formData.responsibilities || [],
+      skills: formData.skills || [],
+      applicants: formData.applicants || [],
+      title: formData.title
+    };
+
+    await set(ref(db, newPath), newListingData);
+    console.log('New listing added successfully');
   } catch (error) {
-    // Handle errors and display an error message
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const failed_message = `Write Operation Unsuccessful. Error Code ${errorCode}: ${errorMessage}`;
-    alert(failed_message);
-    console.error(failed_message);
+    console.error('Error adding new listing:', error);
   }
-}
+};
+
 // EDIT HERE
 // Vue.js data variables
 // Input whatever data variables you need, and edit the HTML file to have a v-model, etc.
