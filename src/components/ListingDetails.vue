@@ -1,5 +1,7 @@
 <script setup>
 import { individualListingData } from '../firebase/CRUD_database'
+import ResumeDropOffButton from './ResumeDropOffButton.vue';
+import '../main.js'
 </script>
 
 <template>
@@ -30,7 +32,8 @@ import { individualListingData } from '../firebase/CRUD_database'
           {{ skill }}
         </div>
       </div>
-      <button class="btn btn-secondary applyButton">Apply Now</button>
+      <!-- <button class="btn btn-secondary applyButton">Apply Now</button> -->
+      <ResumeDropOffButton></ResumeDropOffButton>
     </div>
   </div>
 </template>
