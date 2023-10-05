@@ -1,3 +1,7 @@
+<script setup>
+import {read_staff_data } from '../firebase/CRUD_database'
+
+</script>
 
 <template>
     <!-- Modal -->
@@ -5,7 +9,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">Lead Product Designer</h4></h4>
+                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">{{ jobTitle }}</h4></h4>
                 <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal">
                
                 </button>
@@ -20,8 +24,8 @@
                             <h5><img class="profilePic" src="applicant.profilePicture" /> </h5>
                         </div>
                         <div class="col-9 pt-2" style="font-family: Montserrat">
-                            <p>Alice</p>
-                            <p>Alice@gmail.com</p>
+                            <p>{{firstName}} {{ lastName }}</p>
+                            <p>{{email}}</p>
                         </div>
                     </div>
                     <div class="pt-4">
@@ -40,6 +44,37 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props:['job'],
+    created() {
+        this.fetch_read_staff_data()
+        
+    },
+    data() {
+        return {
+            firstName:'',
+            lastName:'',
+            email:'',
+            jobTitle:this.job,
+        }
+    },
+    methods: {
+        async fetch_read_staff_data(){
+        
+            const data = await read_staff_data(localStorage.getItem('id'))
+            this.firstName = data.firstname 
+            this.lastName = data.lastname 
+            this.email = data.email
+        
+        },
+    getJob(job){
+        this.job = job
+    }
+    }
+}
+</script>
 
 <style>
 .profilePic {

@@ -32,8 +32,8 @@ import '../main.js'
           {{ skill }}
         </div>
       </div>
-      <!-- <button class="btn btn-secondary applyButton">Apply Now</button> -->
-      <ResumeDropOffButton></ResumeDropOffButton>
+      <!-- here need to change xx to however we retrieve listing title -->
+      <ResumeDropOffButton :job="listingDetails.title" :key="listingDetails.title"></ResumeDropOffButton>
     </div>
   </div>
 </template>
@@ -45,7 +45,8 @@ export default {
   },
   data() {
     return {
-      listingDetails: []
+      listingDetails: [],
+
       // jobDescription:
       //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi ab odio incidunt omnis rerum architecto, id quo voluptatum repellendus, suscipit nisi aut beatae temporibus, labore maiores provident ipsum quasi quia! Repellendus placeat quibusdam architecto debitis veritatis ducimus sed. Excepturi, sed eligendi! Rem ducimus suscipit iste dolores animi eveniet tempora earum ut quod quas ratione architecto, vero illum doloribus neque, delectus deleniti aut. Veritatis sapiente quo minus, repellendus aspernatur nemo laborum ducimus accusamus eaque natus mollitia in explicabo deserunt animi placeat voluptate impedit repudiandae quibusdam obcaecati eius. Laboriosam consectetur incidunt praesentium dolores sapiente adipisci, harum eligendi ipsam ut expedita tempora eos.',
       // jobRequirements: [
