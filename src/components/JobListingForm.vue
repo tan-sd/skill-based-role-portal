@@ -60,149 +60,190 @@
 </style> -->
 
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import TopNavBar from './TopNavBar.vue'
 </script>
 
 <template>
-
+  <TopNavBar />
   <div class="container">
-    <font-awesome-icon :icon="['fas', 'chevron-left']" size="2xl" @click="navigateBack" style="color: #080808; margin-top: 1em; margin-bottom: 1em; margin-left: 0.5em;" />
-      <div class="card card_sp">
-        <div class="card-body">
-                <h2 class="card-title title">
-                  Job Listing Form
-                </h2>
-                    <form @submit.prevent="submitForm" class="general">
-                      <div class="form-group">
-                        <label for="jobTitle">Job Title</label>
-                        <input type="text" class="form-control" id="jobTitle" v-model="jobListing.title" required>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="createdDate">Created Date</label>
-                        <input type="date" class="form-control" id="createdDate" v-model="jobListing.createdate" required>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="deadline">Deadline</label>
-                        <input type="date" class="form-control" id="deadline" v-model="jobListing.deadline" required>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="department">Department</label>
-                        <input type="text" class="form-control" id="department" v-model="jobListing.department" required>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" v-model="jobListing.description" required></textarea>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="responsibilities">Responsibilities</label>
-                        <div v-for="(responsibility, index) in jobListing.responsibilities" :key="index" class="d-flex align-items-center">
-                          <input type="text" class="form-control mb-1" v-model="jobListing.responsibilities[index]" required>
-                          <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
-                        </div>
-                        <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" >Add Responsibility</button>
-                      </div>
-  
-                      <div class="form-group" style="margin-top: 1em;">
-                        <label for="skills">Skills</label>
-                        <div v-for="(skill, index) in jobListing.skills" :key="index" class="d-flex align-items-center">
-                          <input type="text" class="form-control mb-1" v-model="jobListing.skills[index]" required>
-                          <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" >Remove</button>
-                        </div>
-                        <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
-                      </div>
-                      <div style="margin-top: 1em;"></div>
-                      <button @click="navigateBack" class="btn btn-dark">Cancel</button>
-                      <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
-                    </form>
+    <div class="card card_sp">
+      <div class="card-body">
+        <h2 class="card-title title">Job Listing Form</h2>
+        <form @submit.prevent="submitForm" class="general">
+          <div class="form-group">
+            <label for="jobTitle">Job Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="jobTitle"
+              v-model="jobListing.title"
+              required
+            />
           </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="createdDate">Created Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="createdDate"
+              v-model="jobListing.createdate"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="deadline">Deadline</label>
+            <input
+              type="date"
+              class="form-control"
+              id="deadline"
+              v-model="jobListing.deadline"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="department">Department</label>
+            <input
+              type="text"
+              class="form-control"
+              id="department"
+              v-model="jobListing.department"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="description">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              v-model="jobListing.description"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="responsibilities">Responsibilities</label>
+            <div
+              v-for="(responsibility, index) in jobListing.responsibilities"
+              :key="index"
+              class="d-flex align-items-center"
+            >
+              <input
+                type="text"
+                class="form-control mb-1"
+                v-model="jobListing.responsibilities[index]"
+                required
+              />
+              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">
+                Remove
+              </button>
+            </div>
+            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1">
+              Add Responsibility
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="skills">Skills</label>
+            <div
+              v-for="(skill, index) in jobListing.skills"
+              :key="index"
+              class="d-flex align-items-center"
+            >
+              <input
+                type="text"
+                class="form-control mb-1"
+                v-model="jobListing.skills[index]"
+                required
+              />
+              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
+            </div>
+            <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
+          </div>
+          <div style="margin-top: 1em"></div>
+          <button @click="navigateBack" class="btn btn-dark">Cancel</button>
+          <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
+        </form>
       </div>
-  </div>           
-  
-  </template>
-  
-  <script>
-  import { addNewListing } from '../firebase/CRUD_database.js';
-  
-  export default {
-    data() {
-      return {
-        jobListing: {
-          title: '',
-          createdate: '',
-          deadline: '',
-          department: '',
-          description: '',
-          applicants: [''],
-          createdby: '',
-          responsibilities: [''], // Initialize with one empty item
-          skills: [''], // Initialize with one empty item
-        },
-      };
+    </div>
+  </div>
+</template>
+
+<script>
+import { addNewListing } from '../firebase/CRUD_database.js'
+
+export default {
+  data() {
+    return {
+      jobListing: {
+        title: '',
+        createdate: '',
+        deadline: '',
+        department: '',
+        description: '',
+        applicants: [''],
+        createdby: '',
+        responsibilities: [''], // Initialize with one empty item
+        skills: [''] // Initialize with one empty item
+      }
+    }
+  },
+  methods: {
+    addResponsibility() {
+      this.jobListing.responsibilities.push('')
     },
-    methods: {
-      addResponsibility() {
-        this.jobListing.responsibilities.push('');
-      },
-      removeResponsibility(index) {
-        this.jobListing.responsibilities.splice(index, 1);
-      },
-      addSkill() {
-        this.jobListing.skills.push('');
-      },
-      removeSkill(index) {
-        this.jobListing.skills.splice(index, 1);
-      },
-      submitForm() {
-        // Call the Firebase function to write data
-        console.log('Form Data:', this.jobListing);
-        const status = addNewListing(this.jobListing);
-        if(status){
-          this.clearForm();
-        }
-      },
-
-      navigateBack() {
-      this.$router.push('/mylistings');
-      },
-
-      clearForm() {
+    removeResponsibility(index) {
+      this.jobListing.responsibilities.splice(index, 1)
+    },
+    addSkill() {
+      this.jobListing.skills.push('')
+    },
+    removeSkill(index) {
+      this.jobListing.skills.splice(index, 1)
+    },
+    submitForm() {
+      // Call the Firebase function to write data
+      console.log('Form Data:', this.jobListing)
+      const status = addNewListing(this.jobListing)
+      if (status) {
+        this.clearForm()
+      }
+    },
+    clearForm() {
       // Clear the form fields
-        this.jobListing = {
-          title: '',
-          createdate: '',
-          deadline: '',
-          department: '',
-          description: '',
-          applicants: [''],
-          createdby: '',
-          responsibilities: [''], // Initialize with one empty item
-          skills: [''], // Initialize with one empty item
-        };
-      },
-    },
-  };
-  </script>
+      this.jobListing = {
+        title: '',
+        createdate: '',
+        deadline: '',
+        department: '',
+        description: '',
+        applicants: [''],
+        createdby: '',
+        responsibilities: [''], // Initialize with one empty item
+        skills: [''] // Initialize with one empty item
+      }
+    }
+  }
+}
+</script>
 
-  
 <style>
-.title{
-  font-family:'montserrat-bold';
+.title {
+  font-family: 'montserrat-bold';
   font-size: 2em;
   margin: auto;
   text-align: center;
 }
-.general{
-  font-family:'montserrat-bold';
+.general {
+  font-family: 'montserrat-bold';
   font-size: 1em;
   margin: auto;
   margin-top: 1em;
 }
-.card_sp{
+.card_sp {
   margin-bottom: 2em;
   margin-left: 1em;
   margin-right: 1em;
