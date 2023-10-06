@@ -25,9 +25,8 @@ const showModal=() =>{
 <style>
 .applyButton {
   position: absolute;
-  right: 0;
+  right: 1rem;
   bottom: 0;
-  margin: 0 50px 50px 0;
   color: #ffffff;
 }
 </style>

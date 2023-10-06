@@ -32,16 +32,17 @@ import '../main.js'
           </div>
         </div>
         
-        <div class="col-5">
+        <div class="col-5 position-relative">
           <!-- Application Period -->
           <p>
             <span class="fw-bold add-border-right">Application Period</span>
             {{ toHumanReadbleDate(listingDetails.createdate) }} to {{ toHumanReadbleDate(listingDetails.deadline) }}
-          </p>    
+          </p>
+
+          <!-- here need to change xx to however we retrieve listing title -->
+          <ResumeDropOffButton :job="listingDetails.title" :key="listingDetails.title"></ResumeDropOffButton>
         </div>
       </div>
-      <!-- here need to change xx to however we retrieve listing title -->
-      <ResumeDropOffButton :job="listingDetails.title" :key="listingDetails.title"></ResumeDropOffButton>
     </div>
   </div>
 </template>
