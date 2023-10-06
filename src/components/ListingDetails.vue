@@ -5,31 +5,39 @@ import '../main.js'
 </script>
 
 <template>
-  <div class="listingContainer">
-    <div class="listingInnerContainer">
-      <div class="listingHeader">Job Description</div>
-      <div class="listingText">{{ listingDetails.description }}</div>
 
-      <div class="listingHeader">Job Requirements</div>
-      <div class="listingText">
-        <ul>
-          <li :key="index" v-for="(req, index) in listingDetails.responsibilities">
-            {{ req }}
-          </li>
-        </ul>
-      </div>
+<!--
+  listingDetails.description ,
+  <li :key="index" v-for="(req, index) in listingDetails.responsibilities"> {{ req }}</li>
+-->
 
-      <div class="listingHeader">Required Skills</div>
-      <div class="skillSetsContainer">
-        <div
-          class="skillSet"
-          v-for="(skill, index) in roleSkillSets"
-          :key="index"
-          :class="{
-            active: applicantSkillSets.includes(skill)
-          }"
-        >
-          {{ skill }}
+  <div class="w-100">
+    <div class="bg-white rounded m-3 p-4">
+      <div class="row">
+        <div class="col-7">
+          <!-- Job Description -->
+          <h5 class="fw-bold">Job Description</h5>
+          <p>{{ listingDetails.description }}</p>
+
+          <!-- Job Requirements -->
+          <h5 class="fw-bold mt-4">Job Requirements</h5>
+          <ul>
+            <li :key="index" v-for="(req, index) in listingDetails.responsibilities"> {{ req }}</li>
+          </ul>
+
+          <!-- Required Skills -->
+          <h5 class="fw-bold">Required Skills</h5>
+          <div v-for="e_skill in listingDetails.skills" class="bg-primary mb-1 me-2 p-1 px-2 text-white rounded d-inline-block">
+            {{ e_skill }}
+          </div>
+        </div>
+        
+        <div class="col-5">
+          <!-- Application Period -->
+          <p>
+            <span class="fw-bold add-border-right">Application Period</span>
+            {{ toHumanReadbleDate(listingDetails.createdate) }} to {{ toHumanReadbleDate(listingDetails.deadline) }}
+          </p>    
         </div>
       </div>
       <!-- here need to change xx to however we retrieve listing title -->
@@ -67,62 +75,22 @@ export default {
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
       }
-    }
+    },
+
+    toHumanReadbleDate(date) {
+      const dateObj = new Date(date)
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      return dateObj.toLocaleDateString('en-US', options);
+    },
   }
 }
 </script>
 
-<style scoped>
-.listingContainer {
-  position: relative;
-  margin: 0 5vw 0 5vw;
-  background-color: #ffffff;
-  border-radius: 10px;
-  width: 75vw;
-  height: 85vh;
-}
-
-.listingInnerContainer {
-  margin: 25px 25px 25px 25px;
-}
-
-.listingHeader {
-  font-family: 'montserrat-bold';
-  font-size: 20px;
-}
-
-.listingText {
-  margin-bottom: 25px;
-  width: 600px;
-  font-size: 15px;
-}
-
-.applyButton {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  margin: 0 50px 50px 0;
-  color: #ffffff;
-}
-
-.skillSetsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  width: 600px;
-}
-
-.skillSet {
-  display: inline;
-  padding: 2px 20px 2px 20px;
-  border-radius: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  background-color: #b3b3b3;
-  color: #ffffff;
-  font-family: 'montserrat-bold';
-}
-
-.skillSet.active {
-  background-color: #6a44d4;
-}
+<style>
+  .add-border-right::after {
+    content: "";
+    border: solid 0.125rem #6A44D4;
+    border-radius: 1rem;
+    margin-left: 0.35rem;
+  }
 </style>
