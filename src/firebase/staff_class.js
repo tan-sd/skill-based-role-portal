@@ -4,7 +4,7 @@ import {
 } from './CRUD_database.js'
 
 import {
-    getprofilePicURL,
+    getProfilePicURL,
 } from './storage.js'
 
 // Settings [START] ============================================================
@@ -37,7 +37,7 @@ class Staff {
     async init(id) {
         try {
             const staff_data = await read_staff_data(id)
-            const profilePic = await getprofilePicURL(id)
+            const profilePic = await getProfilePicURL(id)
 
             this.id = parseInt(id, 10)
             this.fname = staff_data.firstname

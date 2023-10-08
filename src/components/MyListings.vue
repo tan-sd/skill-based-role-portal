@@ -5,26 +5,37 @@ import { allListingData } from '../firebase/CRUD_database'
 <template>
   <div>
     <!-- Flex container for header and button -->
-    <div class="header-container">
+    <div class="header-container px-4 py-4">
       <!-- Header -->
-      <div class="header">Manage your listings!</div>
+      <h3 class="fw-bold">Manage your listings!</h3>
       <!-- Apply Now button => direct to list creating page -->
-      <button @click="navigateToForm" class="btn btn-secondary createButton">+ Create Listing</button>
+      <button @click="navigateToForm" class="btn btn-secondary text-white"><font-awesome-icon icon="fa-solid fa-plus" /> Create Listing</button>
     </div>
 
     <!-- Container for Cards -->
-    <div class="container">
+    <div class="container-fluid px-4">
       <!-- Card content here -->
-      <div v-for="(list, index) in listing" :key="index" class="card" @click="navigateToApplicants(list.listingId)">
-        <div class="border"></div>
-        <div class="details">
-          <div class="name">{{ list.title }}</div>
-          <div class="position">{{ list.position }}</div>
+      <div v-for="(list, index) in listing" :key="index" class="card border-0 my-3 p-3 bg-white flex-col flex-sm-row listing-card justify-content-start" @click="navigateToApplicants(list.listingId)">
+        <div class="add-border-left me-3 d-none d-sm-block"></div>
+        
+        <div class="me-sm-5 constrain-width w-100">
+          <div class="add-border-left me-2 d-inline d-sm-none"></div>
+          <p class="name m-0 text-truncate d-inline d-sm-block">{{ list.title }}</p>
+          <p class="department m-0 text-truncate d-inline d-sm-block ms-3 ms-sm-0">{{ list.department }}</p>
         </div>
-        <font-awesome-icon icon="fa-solid fa-user-group" size="7px" class="me-2" />
-        <div class="applicantsCount">{{ list.applicants.length }} Applicants</div>
-        <font-awesome-icon icon="fa-solid fa-calendar" size="7px" class="me-2" />
-        <div class="dateDue">{{ list.deadline }}</div>
+
+        <div class="d-none d-sm-block me-sm-5 constrain-width">
+            <h5 class="fw-bold text-truncate"><font-awesome-icon icon="fa-solid fa-user-group" class="me-2 text-primary card-icon" />{{ list.applicants.length }} Applicant{{ list.applicants.length > 1 ? 's' : '' }}</h5>
+        </div>
+
+        <div class="d-none d-sm-block constrain-width">
+          <h5 class="fw-bold text-truncate"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h5>
+        </div>
+
+        <div class="d-flex d-sm-none justify-content-start w-100 px-3 mt-4">
+          <h6 class="fw-bold text-truncate d-inline me-4"><font-awesome-icon icon="fa-solid fa-user-group" class="me-2 text-primary card-icon" />{{ list.applicants.length }} Applicants</h6>
+          <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h6>
+        </div>
       </div>
     </div>
   </div>
@@ -66,7 +77,12 @@ export default {
     navigateToApplicants(id) {
       // this.$router.push({ name: 'listingDetails', params: { id: index } })
       this.$router.push(`${id}/myapplicants`);
-    }
+    },
+    toHumanReadbleDate(date) {
+      const dateObj = new Date(date)
+      const options = { day: '2-digit', month: 'short', year: 'numeric' }
+      return dateObj.toLocaleDateString('en-US', options)
+    },
   }
 }
 </script>
@@ -76,69 +92,37 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 40px;
 }
 
-.header {
-  font-family: 'montserrat-bold';
-  font-size: 30px;
-  padding: 10px;
-}
-
-.createButton {
-  color: #ffffff;
-  font-family: 'montserrat-bold';
-}
-
-.container {
-  position: relative;
-  margin: 0 2vw 0 2vw;
-  border-radius: 10px;
-  width: 75vw;
-  height: 85vh;
-  flex-wrap: wrap; /* Allow cards to wrap when container width is reduced */
-}
-
-.card {
-  display: flex;
-  flex-direction: row;
+.listing-card {
   align-items: center;
-  margin: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  border-radius: 5px;
-  flex: 1;
-  width: 100%;
-  height: 15%;
   transition:
-    background-color 0.3s,
-    color 0.3s;
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
   cursor: pointer;
-  color: black;
-  position: relative;
+  width: 100%;
+}
+
+.constrain-width {
+  min-width: 0;
+  flex: 1 0 0px;
 }
 
 .card:hover {
-  background-color: #6a44d4;
+  background-color: #6A44D4 !important;
   color: #ffffff;
 }
 
-.card:hover .position {
-  color: #ffffffdc;
+.department, .card-icon {
+  transition: color 0.3s ease-in-out;
 }
 
-.border {
-  width: 5px;
-  height: 40px;
-  border-radius: 5px;
-  background-color: #6a44d4;
+.card:hover .department {
+  color: #dcdcdc !important;
 }
 
-.details {
-  flex: 1;
-  margin-left: 10px;
-  margin-right: 10px;
+.card:hover .card-icon {
+  color: #ffffff !important;
 }
 
 .name {
@@ -146,38 +130,19 @@ export default {
   font-family: 'montserrat-bold';
 }
 
-.position {
+.department {
   font-size: 14px;
   color: #857f95;
 }
 
-.applicantsCount {
-  font-size: 20px;
-  font-family: 'montserrat-bold';
-  margin-right: 15%;
+.add-border-left::before {
+  content: '';
+  border: solid 0.125rem #6a44d4;
+  border-radius: 1rem;
+  transition: color 0.3s ease-in-out;
 }
 
-.dateDue {
-  font-size: 20px;
-  font-family: 'montserrat-bold';
-  margin-right: 30%;
-}
-
-.edit-button {
-  margin-left: auto;
-  background-color: #6a44d4;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.me-2 {
-  color: #6a44d4;
-}
-
-.card:hover .me-2 {
-  color: #ffffff;
+.card:hover .add-border-left::before {
+  border: solid 0.125rem #ffffff;
 }
 </style>

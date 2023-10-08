@@ -78,6 +78,7 @@
 <script>
 import { ref, computed } from 'vue'
 import { useAuthStore } from '../stores/authStore.js'
+import { getStaffObj } from '../firebase/staff_class.js'
 
 export default {
   setup() {
@@ -124,24 +125,8 @@ export default {
   },
   data() {
     return {
-      // Titles & Links in navbar   note: views is a list of views names (copy directly from views folder but make first letter lowercase)
-      // navLinks: [
-      //   { text: 'Discover Jobs', to: '/styleGuide', views: ['styleGuide'] },
-      //   {
-      //     text: 'My Applications',
-      //     to: '/myapplications',
-      //     views: ['myapplications'],
-      //     accessRights: ''
-      //   },
-      //   {
-      //     text: 'My Listings',
-      //     to: '/mylistings',
-      //     views: ['mylistings']
-      //   },
-      //   { text: 'Log Out', to: '/', views: ['loginPage'] }
-      // ],
       // For Profile Button
-      username: 'Alice',
+      username: 'Perry',
       imgSrc: '../assets/profile_pics/user1.png'
     }
   },
@@ -168,8 +153,12 @@ export default {
     }
   },
 
-  mounted() {
-    // Lifecycle hook: Code to run after the component is mounted
+  async mounted() {
+    const user_id = localStorage.getItem('id')
+    const staffObj = await getStaffObj(user_id)
+
+    this.imgSrc = await staffObj.getprofilePic()
+    this.username = await staffObj.getFullName()
   }
 }
 </script>
