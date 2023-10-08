@@ -1,10 +1,12 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
+import TopNavBar from './TopNavBar.vue'
 </script>
 
 <template>
   <div class="d-flex flex-column align-items-center w-100">
+    <TopNavBar />
     <div class="header w-100">Future header up here</div>
     <div style="width: 85%">
       <!-- Header -->
