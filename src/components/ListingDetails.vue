@@ -46,11 +46,17 @@ import { read_staff_data } from '../firebase/CRUD_database'
             {{ toHumanReadbleDate(listingDetails.deadline) }}
           </p>
 
-          <!-- here need to change xx to however we retrieve listing title -->
-          <ResumeDropOffButton
+          <div v-if="!applied.includes(parseInt(this.$route.params.id))">
+            <ResumeDropOffButton
             :job="listingDetails.title"
             :key="listingDetails.title"
           ></ResumeDropOffButton>
+          </div>
+          <div v-else>
+             <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -60,12 +66,14 @@ import { read_staff_data } from '../firebase/CRUD_database'
 <script>
 export default {
   created() {
-    this.fetchIndividualListingData()
+    this.fetchIndividualListingData(),
+    this.fetch_read_staff_data()
   },
   data() {
     return {
       listingDetails: [],
-      userSkills: []
+      userSkills: [],
+      applied:[],
     }
   },
   methods: {
@@ -95,7 +103,15 @@ export default {
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
       }
-    }
+    },
+    async fetch_read_staff_data(){
+        const data = await read_staff_data(localStorage.getItem('id'))
+        this.applied = data.listingsapplied
+        // console.log(this.applied)
+        // console.log(data.listingsapplied.includes(parseInt(this.$route.params.id)))
+
+        // console.log(parseInt(this.$route.params.id))
+    },
   },
   mounted() {
     this.getUserSkills()

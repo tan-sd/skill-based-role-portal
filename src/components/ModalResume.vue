@@ -31,19 +31,28 @@ import {uploadFiles } from '../firebase/storage'
                     <div class="pt-4">
                     <h5>Resume</h5>
                     <p style="font-family: Montserrat" >Please include an updated resume</p>
-                    <div>
+
+                    <!-- <div>
                         <input type="file" @change="uFile" ref="file">
                         <button @click="submitFile">Upload!</button>
+                    </div> -->
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label btn btn-outline-secondary border-3" style="font-family: Montserrat">
+                            <input type="file" @change="uFile" ref="file" class="form-control" id="formFile" style="display:none">
+                            <div v-if="resume==null">
+                                Upload Resume
+                            </div>
+                            <div v-if="resume!=null">
+                                {{resume.name}}
+                            </div>
+                        </label>
                     </div>
-                    <button type="button" class="btn btn-outline-secondary border-3">
-                        <span style="font-family: Montserrat">Upload Resume</span>
-                    </button>
-                
+
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" >Submit</button>
+                <button type="button" class="btn btn-primary" @click="submitFile" data-bs-dismiss="modal">Submit</button>
             </div>
             </div>
         </div>
@@ -63,6 +72,7 @@ export default {
             lastName:'',
             email:'',
             jobTitle:this.job,
+            resume: null,
         }
     },
     methods: {
