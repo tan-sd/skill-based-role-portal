@@ -15,7 +15,7 @@ import { allListingData } from '../firebase/CRUD_database'
     <!-- Container for Cards -->
     <div class="container">
       <!-- Card content here -->
-      <div v-for="(list, index) in listing" :key="index" class="card" @click="handleCardClick(0)">
+      <div v-for="(list, index) in listing" :key="index" class="card" @click="navigateToApplicants(list.listingId)">
         <div class="border"></div>
         <div class="details">
           <div class="name">{{ list.title }}</div>
@@ -62,6 +62,10 @@ export default {
     },
     navigateToForm() {
       this.$router.push('/jobListingForm');
+    },
+    navigateToApplicants(id) {
+      // this.$router.push({ name: 'listingDetails', params: { id: index } })
+      this.$router.push(`${id}/myapplicants`);
     }
   }
 }
