@@ -1,6 +1,6 @@
 <script setup>
 import {read_staff_data } from '../firebase/CRUD_database'
-
+import {uploadFiles } from '../firebase/storage'
 </script>
 
 <template>
@@ -31,9 +31,14 @@ import {read_staff_data } from '../firebase/CRUD_database'
                     <div class="pt-4">
                     <h5>Resume</h5>
                     <p style="font-family: Montserrat" >Please include an updated resume</p>
+                    <div>
+                        <input type="file" @change="uFile" ref="file">
+                        <button @click="submitFile">Upload!</button>
+                    </div>
                     <button type="button" class="btn btn-outline-secondary border-3">
                         <span style="font-family: Montserrat">Upload Resume</span>
                     </button>
+                
                     </div>
                 </div>
             </div>
@@ -67,10 +72,17 @@ export default {
             this.firstName = data.firstname 
             this.lastName = data.lastname 
             this.email = data.email
+            this.resume = null
         
         },
     getJob(job){
         this.job = job
+    },
+    uFile(){
+        this.resume = this.$refs.file.files[0]
+    },
+    async submitFile(){
+        const resp = await uploadFiles(this.resume.name, this.resume)
     }
     }
 }
