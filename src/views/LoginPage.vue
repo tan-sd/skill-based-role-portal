@@ -39,6 +39,7 @@ import { ref } from 'vue'
 import router from '../router'
 import { useAuthStore } from '../stores/authStore.js'
 import { staffData } from '../firebase/CRUD_database.js'
+import { getStaffObj } from '../firebase/staff_class.js'
 
 export default {
   setup() {
@@ -91,6 +92,13 @@ export default {
       }
     }
     return { loginUser, email, password, isIncorrect, isMissing }
+  },
+
+  async mounted() {
+    var staff1 = await getStaffObj(2)
+
+    console.log(staff1)
+    console.log(await staff1.getListingsCreated())
   }
 }
 </script>

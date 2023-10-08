@@ -35,6 +35,21 @@ export const allListingData = async () => {
   return snapshot.val()
 }
 
+export const listingDataByCreator = async (id) => {
+  const listingData = await allListingData()
+  var res = []
+
+  for (let i=0; i<listingData.length; i++) {
+    var listing = listingData[i]
+
+    if (listing.createdby == id) {
+      res.push(listing)
+    }
+  }
+
+  return res
+}
+
 export const individualListingData = async(index) => {
   const data = ref(db, `/listing/${index}`);
   const snapshot = await get(data);
