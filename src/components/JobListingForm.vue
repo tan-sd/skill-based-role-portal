@@ -61,11 +61,30 @@
 
 <script setup>
 import TopNavBar from './TopNavBar.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 </script>
+
 
 <template>
   <TopNavBar />
   <div class="container">
+
+    <div
+      class="alert alert-success alert-dismissible fade show general mb-3"
+      v-if="successMessage"
+      >
+      {{ successMessage }}
+      <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearSuccessMessage"/>
+    </div>
+
+    <div
+    class="alert alert-danger alert-dismissible fade show general mb-3"
+    v-if="failureMessage"
+  >
+    {{ failureMessage }}
+    <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearFailureMessage"/>
+    </div>
+
     <div class="card card_sp">
       <div class="card-body">
         <h2 class="card-title title">Job Listing Form</h2>
@@ -188,7 +207,9 @@ export default {
         createdby: '',
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
-      }
+      },
+      successMessage: '',
+      failureMessage: ''
     }
   },
   methods: {
@@ -209,7 +230,11 @@ export default {
       console.log('Form Data:', this.jobListing)
       const status = addNewListing(this.jobListing)
       if (status) {
+        this.failureMessage = '';
+        this.successMessage = 'Listing has been successfully added!';
         this.clearForm()
+      } else {
+        this.failureMessage = 'Failed to add the listing. Please try again.'
       }
     },
     clearForm() {
@@ -225,6 +250,17 @@ export default {
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       }
+    },
+    navigateBack() {
+      this.$router.go(-1)
+    },
+    clearSuccessMessage() {
+      // Clear the success message
+      this.successMessage = '';
+    },
+    clearFailureMessage() {
+      // Clear the failure message
+      this.failureMessage = '';
     }
   }
 }
