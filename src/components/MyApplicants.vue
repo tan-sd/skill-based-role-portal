@@ -6,7 +6,10 @@ import TopNavBar from './TopNavBar.vue'
   <div>
     <TopNavBar />
     <!-- Header -->
-    <div class="header">My Applicants</div>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="header">My Applicants</div>
+      <button class="btn btn-secondary me-5 text-white px-5" type="button" @click="edit_clicked()">Edit</button>
+    </div>
 
     <!-- Container for Cards -->
     <div class="container">
@@ -108,7 +111,12 @@ export default {
           radial-gradient(closest-side, white 79%, transparent 80% 100%),
           conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
-    }
+    },
+
+    edit_clicked() {
+      var listing_id = this.$router.currentRoute.value.params.id
+      // this.$router.push(`/jobListingForm`) // Note to Ling Xiao from Adam: U can find a way to pass the listing id to the form page
+    },
   },
   computed: {
     getMatchPercentage() {
