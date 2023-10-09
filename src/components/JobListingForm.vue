@@ -61,7 +61,6 @@
 
 <script setup>
 import TopNavBar from './TopNavBar.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 </script>
 
 

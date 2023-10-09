@@ -1,5 +1,4 @@
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { allListingData } from '../firebase/CRUD_database'
 </script>
 <template>

@@ -1,34 +1,39 @@
 <template>
-  <!-- left-hand side logo -->
-  <div class="container">
-    <div class="logo_container">
+  <div class="d-flex flex-column flex-sm-row">
+    <!-- left-hand side logo -->
+    <div class="logo_container my-4 mt-5 mt-sm-4">
       <img id="logo" src="../assets/logo/sbrp_logo_default.png" />
-      <div id="bar" class="mt-4 mb-4"></div>
-      <div id="slogan">Discover New Horizons</div>
+      <div id="bar" class="my-2 my-sm-4"></div>
+      <h6 class="fw-bold">Discover New Horizons</h6>
     </div>
 
     <!-- right-hand side login container -->
-    <div class="login_container">
-      <div class="welcome_msg">Welcome Back!</div>
+    <div class="login_container p-3">
+      <div class="bg-primary rounded-4 login_holder">
+        <h1 class="d-none d-sm-block text-white fw-bold text-center">Welcome Back!</h1>
+        <h3 class="d-block d-sm-none text-white fw-bold text-center mb-4">Welcome Back!</h3>
 
-      <div class="login_inputs">
-        <form class="login_form">
-          <div>Email</div>
-          <input type="text" class="login_input mb-4" v-model="email" @keyup.enter="loginUser" />
-          <div>Password</div>
-          <input type="password" class="login_input" v-model="password" @keyup.enter="loginUser" />
-        </form>
-        <div v-if="isIncorrect" class="mt-4 border rounded bg-warning p-2">
-          Incorrect Email or Password
+        <div class="login_inputs text-white">
+          <form class="">
+            <h6>Email</h6>
+            <input type="text" class="form-control rounded-3 border-0 w-100 mb-4" v-model="email" @keyup.enter="loginUser" />
+            
+            <h6>Password</h6>
+            <input type="password" class="form-control rounded-3 border-0 w-100" v-model="password" @keyup.enter="loginUser" />
+          </form>
+
+          <div v-if="isIncorrect || isMissing" class="mt-3 text-warning">
+            <small v-if="isIncorrect" class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Incorrect Email or Password</small>
+            <small v-if="isMissing" class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Missing Email or Password</small>
+          </div>
         </div>
-        <div v-if="isMissing" class="mt-4 border rounded bg-warning p-2">
-          Missing Email or Password
+
+        <div class="d-flex justify-content-center mt-4">
+          <button class="btn btn-secondary text-white px-5" @click="loginUser">
+            Login
+          </button>
         </div>
-      </div>
-      <div class="button_container">
-        <button id="login_button" class="btn btn-secondary applyButton" @click="loginUser">
-          Login
-        </button>
+     
       </div>
     </div>
   </div>
@@ -96,103 +101,54 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-}
-.login_container {
-  position: relative;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: auto;
-  padding: 10px;
-  background-color: #6a44d4;
-  border-radius: 10px;
-  width: 100%;
-  height: 600px;
-}
-.login_inputs {
+.logo_container {
   display: flex;
   flex-direction: column;
-  color: white;
-  font-family: 'montserrat-bold';
   justify-content: center;
   align-items: center;
+  flex: 1 0 0px
 }
 
-.login_form input {
-  position: relative;
-  padding: 10px;
-  border-radius: 10px;
-  width: 300px;
+.login_container {
+  flex: 1 0 0px;
 }
 
-.welcome_msg {
-  color: white;
-  font-family: 'montserrat-bold';
-  font-size: 3em;
-  margin: auto;
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-.button_container {
-  margin: auto;
-  text-align: center;
-}
-
-.logo_container {
-  position: relative;
-  margin-top: auto;
-  margin-bottom: auto;
+.login_holder {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-family: 'montserrat-bold';
-  font-size: 1em;
-  width: 100%;
-  margin-right: 10px;
+  justify-content: space-between;
+  padding: 3rem 4rem;
 }
 
 #logo {
   width: 70%;
-  height: auto;
 }
 
 #bar {
   width: 70%;
-  height: 7.5px;
+  height: 0.45rem;
   border-radius: 10px;
-  background-color: #000000;
+  background-color: #160B32;
 }
 
-#slogan {
-  font-size: 20px;
+.warning-msg {
+  font-size: 0.65rem;
 }
 
-#login_button {
-  color: white;
-  padding-left: 2em;
-  padding-right: 2em;
-  margin-top: 2em;
-}
-
-@media only screen and (max-width: 992px) {
-  .container {
-    display: block;
-  }
-
-  .logo_container {
-    margin: 50px 0 50px 0;
-  }
-
+@media only screen and (max-width: 576px) {
   #logo {
-    width: 50%;
-    height: auto;
+    width: 35%;
   }
 
   #bar {
-    width: 50%;
+    width: 35%;
+    height: 0.3rem;
+  }
+
+  .login_holder {
+    padding: 1rem 1.5rem;
   }
 }
 </style>

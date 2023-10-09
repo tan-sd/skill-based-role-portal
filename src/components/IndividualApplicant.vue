@@ -1,5 +1,4 @@
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import TopNavBar from './TopNavBar.vue'
 </script>

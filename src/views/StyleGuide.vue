@@ -1,7 +1,3 @@
-<script setup>
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-</script>
-
 <template>
     <div class="d-flex flex-column">
         <!-- main title -->
