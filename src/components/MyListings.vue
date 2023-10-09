@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { allListingData } from '../firebase/CRUD_database'
 </script>
 <template>
-  <div>
+  <div class="d-flex flex-column">
     <!-- Flex container for header and button -->
     <div class="header-container px-4 py-4">
       <!-- Header -->
@@ -13,7 +13,7 @@ import { allListingData } from '../firebase/CRUD_database'
     </div>
 
     <!-- Container for Cards -->
-    <div class="container-fluid px-4">
+    <div class="body-container container-fluid px-4">
       <!-- Card content here -->
       <div v-for="(list, index) in listing" :key="index" class="card border-0 my-3 p-3 bg-white flex-col flex-sm-row listing-card justify-content-start" @click="navigateToApplicants(list.listingId)">
         <div class="add-border-left me-3 d-none d-sm-block"></div>
@@ -36,6 +36,11 @@ import { allListingData } from '../firebase/CRUD_database'
           <h6 class="fw-bold text-truncate d-inline me-4"><font-awesome-icon icon="fa-solid fa-user-group" class="me-2 text-primary card-icon" />{{ list.applicants.length }} Applicants</h6>
           <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h6>
         </div>
+      </div>
+
+      <div v-if="listing.length == 0" class="d-flex flex-column align-items-center justify-content-center h-100">
+        <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
+        <h4 class="fw-bold">OOPS! Looks like you haven't made any listings yet...</h4>
       </div>
     </div>
   </div>
@@ -92,6 +97,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex: 0 0 0px;
+}
+
+.body-container {
+  flex: 1 0 0px;
 }
 
 .listing-card {
