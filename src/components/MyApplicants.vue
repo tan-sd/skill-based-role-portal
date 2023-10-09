@@ -115,7 +115,7 @@ export default {
 
     edit_clicked() {
       var listing_id = this.$router.currentRoute.value.params.id
-      // this.$router.push(`/jobListingForm`) // Note to Ling Xiao from Adam: U can find a way to pass the listing id to the form page
+      this.$router.push(`/jobListingForm`) // Note to Ling Xiao from Adam: U can find a way to pass the listing id to the form page
     },
   },
   computed: {
