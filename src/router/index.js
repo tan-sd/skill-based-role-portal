@@ -8,6 +8,7 @@ import MyListings from '../components/MyListings.vue'
 import MyApplications from '../components/MyApplications.vue'
 import DiscoverJobs from '../components/DiscoverJobs.vue'
 import ListingDetails from '../components/ListingDetails.vue'
+import JobEditingView from '../views/JobEditingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/mylistings',
       name: 'myListings',
       component: MyListings
+    },
+    {
+      path: '/editListing/:id',
+      name: 'editListing',
+      component: JobEditingView,
+      props: true, // Pass route params as props
     },
     {
       path: '/myapplications',
