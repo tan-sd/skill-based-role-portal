@@ -107,6 +107,7 @@ import TopNavBar from './TopNavBar.vue'
               id="createdDate"
               v-model="jobListing.createdate"
               required
+              disabled
             />
           </div>
 
@@ -195,10 +196,12 @@ import { addNewListing } from '../firebase/CRUD_database.js'
 
 export default {
   data() {
+    const currentDate = new Date().toISOString().substr(0, 10);
+
     return {
       jobListing: {
         title: '',
-        createdate: '',
+        createdate: currentDate,
         deadline: '',
         department: '',
         description: '',
