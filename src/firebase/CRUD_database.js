@@ -118,10 +118,11 @@ export const updateJobListing = async (id, formData) =>
       deadline: formData.deadline,
       department: formData.department,
       description: formData.description,
-      responsibilities: formData.responsibilities || [],
-      skills: formData.skills || [],
-      applicants: formData.applicants || [],
-      title: formData.title
+      responsibilities: formData.responsibilities.length == 0 ? "" : formData.responsibilities || "",
+      skills: formData.skills.length == 0 ? "" : formData.skills || "",
+      applicants: formData.applicants.length == 0 ? "" : formData.applicants || "",
+      title: formData.title,
+      listingId: formData.listingId
     };
     //set new dataset
     await set(jobListingsRef, newListingData);
