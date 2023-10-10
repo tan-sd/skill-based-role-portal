@@ -1,0 +1,224 @@
+<script setup>
+import TopNavBar from './TopNavBar.vue'
+</script>
+
+
+<template>
+  <TopNavBar />
+  <div class="container">
+
+    <div class="card card_sp">
+      <div class="card-body">
+        <h2 class="card-title title">Current Listing Details</h2>
+        <form @submit.prevent="submitForm" class="general">
+          <div class="form-group">
+            <label for="jobTitle">Job Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="jobTitle"
+              v-model="jobListing.title"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="createdDate">Created Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="createdDate"
+              v-model="jobListing.createdate"
+              required
+              disabled 
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="deadline">Deadline</label>
+            <input
+              type="date"
+              class="form-control"
+              id="deadline"
+              v-model="jobListing.deadline"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="department">Department</label>
+            <input
+              type="text"
+              class="form-control"
+              id="department"
+              v-model="jobListing.department"
+              required
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="description">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              v-model="jobListing.description"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="responsibilities">Responsibilities</label>
+            <div
+              v-for="(responsibility, index) in jobListing.responsibilities"
+              :key="index"
+              class="d-flex align-items-center"
+            >
+              <input
+                type="text"
+                class="form-control mb-1"
+                v-model="jobListing.responsibilities[index]"
+                required
+              />
+              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">
+                Remove
+              </button>
+            </div>
+            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1">
+              Add Responsibility
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
+            <label for="skills">Skills</label>
+            <div
+              v-for="(skill, index) in jobListing.skills"
+              :key="index"
+              class="d-flex align-items-center"
+            >
+              <input
+                type="text"
+                class="form-control mb-1"
+                v-model="jobListing.skills[index]"
+                required
+              />
+              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
+            </div>
+            <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
+          </div>
+          <div style="margin-top: 1em"></div>
+          <button @click="navigateBack" class="btn btn-dark">Cancel</button>
+          <button type="submit" class="btn btn-primary ms-2">Update Job Listing</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { addNewListing } from '../firebase/CRUD_database.js'
+import { individualListingData } from '../firebase/CRUD_database'
+
+export default {
+  created() {
+    this.fetchIndividualListingData()
+  },
+  data() {
+    return {
+      jobListing: {
+        title: '',
+        createdate: '',
+        deadline: '',
+        department: '',
+        description: '',
+        applicants: [''],
+        createdby: '',
+        responsibilities: [''], // Initialize with one empty item
+        skills: [''] // Initialize with one empty item
+      },
+      successMessage: '',
+      failureMessage: ''
+    }
+  },
+
+  methods: {
+    async fetchIndividualListingData() {
+      try {
+        const data = await individualListingData(this.$route.params.id)
+        this.jobListing = data
+        console.log(this.jobListing)
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
+    },
+    addResponsibility() {
+      this.jobListing.responsibilities.push('')
+    },
+    removeResponsibility(index) {
+      this.jobListing.responsibilities.splice(index, 1)
+    },
+    addSkill() {
+      this.jobListing.skills.push('')
+    },
+    removeSkill(index) {
+      this.jobListing.skills.splice(index, 1)
+    },
+    submitForm() {
+      // Call the Firebase function to write data
+      console.log('Form Data:', this.jobListing)
+      const status = addNewListing(this.jobListing)
+      if (status) {
+        this.failureMessage = '';
+        this.successMessage = 'Listing has been successfully added!';
+        this.clearForm()
+      } else {
+        this.failureMessage = 'Failed to add the listing. Please try again.'
+      }
+    },
+    clearForm() {
+      // Clear the form fields
+      this.jobListing = {
+        title: '',
+        createdate: '',
+        deadline: '',
+        department: '',
+        description: '',
+        applicants: [''],
+        createdby: '',
+        responsibilities: [''], // Initialize with one empty item
+        skills: [''] // Initialize with one empty item
+      }
+    },
+    navigateBack() {
+      this.$router.go(-1)
+    },
+    clearSuccessMessage() {
+      // Clear the success message
+      this.successMessage = '';
+    },
+    clearFailureMessage() {
+      // Clear the failure message
+      this.failureMessage = '';
+    }
+  }
+}
+</script>
+
+<style>
+.title {
+  font-family: 'montserrat-bold';
+  font-size: 2em;
+  margin: auto;
+  text-align: center;
+}
+.general {
+  font-family: 'montserrat-bold';
+  font-size: 1em;
+  margin: auto;
+  margin-top: 1em;
+}
+.card_sp {
+  margin-bottom: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+</style>
