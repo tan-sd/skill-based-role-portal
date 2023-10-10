@@ -14,7 +14,7 @@
         <h3 class="d-block d-sm-none text-white fw-bold text-center mb-4">Welcome Back!</h3>
 
         <div class="login_inputs text-white">
-          <form class="">
+          <form>
             <h6>Email</h6>
             <input type="text" class="form-control rounded-3 border-0 w-100 mb-4" v-model="email" @keyup.enter="loginUser" />
             

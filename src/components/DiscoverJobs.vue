@@ -32,7 +32,6 @@ import { getStaffObj } from '../firebase/staff_class'
             <h5 class="fw-bold text-truncate">
               <font-awesome-icon
                 icon="fa-solid fa-calendar"
-                size="7px"
                 class="me-2 text-primary card-icon"
               />
               {{ toHumanReadbleDate(list.deadline) }}
@@ -143,8 +142,8 @@ export default {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
-    }
-  }
+    },
+  },
 }
 </script>
 

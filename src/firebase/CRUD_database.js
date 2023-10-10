@@ -56,35 +56,28 @@ export const individualListingData = async(index) => {
   return snapshot.val();
 }
 
-export const read_staff_data= async(name) =>
-{
+export const read_staff_data= async(name) => {
     const data_to_be_read = ref(db, `/staff/${name}`);
     const snapshot = await get(data_to_be_read)
     return snapshot.val()
 
 }
 
-export const read_listing_data= async(id) =>
-{
+export const read_listing_data= async(id) => {
     const data_to_be_read1 = ref(db, `/listing/${id}`);
     const snapshot1 = await get(data_to_be_read1)
     return snapshot1.val()
 
 }
 
-export const addNewListing = async (formData) => 
-{
+export const addNewListing = async (formData) => {
   const jobListingsRef = ref(db, '/listing');
   
   try {
     // Calculate the next index
     const snapshot = await get(jobListingsRef);
-    console.log(formData)
-    let currentIndex = 0;
-    snapshot.forEach(() => {
-      currentIndex++;
-    });
-    const newIndex = currentIndex;
+    const allIds = Object.keys(snapshot.val())
+    const newIndex = Math.max(...allIds) + 1
 
     // Path to new index
     const newPath = `/listing/${newIndex}`;
@@ -98,19 +91,51 @@ export const addNewListing = async (formData) =>
       deadline: formData.deadline,
       department: formData.department,
       description: formData.description,
-      responsibilities: formData.responsibilities || [],
-      skills: formData.skills || [],
-      applicants: formData.applicants || [],
-      title: formData.title
+      responsibilities: formData.responsibilities.length == 0 ? "" : formData.responsibilities || "",
+      skills: formData.skills.length == 0 ? "" : formData.skills || "",
+      applicants: formData.applicants.length == 0 ? "" : formData.applicants || "",
+      title: formData.title,
+      listingId: newIndex
     };
 
     await set(ref(db, newPath), newListingData);
     console.log('New listing added successfully');
+    return newIndex
+  } catch (error) {
+    console.error('Error adding new listing:', error);
+    return false
+  }
+};
+
+export const updateListing = async (id, formData) => {
+  try {
+    // Path to index
+    const newPath = `/listing/${id}`
+
+    // Transform
+    const newListingData = {
+      createdate: formData.createdate,
+      createdby: formData.createdby,
+      deadline: formData.deadline,
+      department: formData.department,
+      description: formData.description,
+      responsibilities: formData.responsibilities.length == 0 ? "" : formData.responsibilities || "",
+      skills: formData.skills.length == 0 ? "" : formData.skills || "",
+      applicants: formData.applicants.length == 0 ? "" : formData.applicants || "",
+      title: formData.title,
+      listingId: id
+    };
+
+    await set(ref(db, newPath), newListingData);
+    console.log(`isting ${id} updated successfully`);
     return true
   } catch (error) {
     console.error('Error adding new listing:', error);
+    return false
   }
 };
+
+
 
 // EDIT HERE
 // Vue.js data variables

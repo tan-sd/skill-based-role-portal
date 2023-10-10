@@ -136,8 +136,6 @@ export default {
       const currentRoute = this.$route
       const currentComponent = currentRoute.name
 
-      console.log('currentcomponent: ' + currentComponent)
-
       if (currentRoute.path === path) {
         return 'active text-dark'
       }
@@ -157,7 +155,7 @@ export default {
     const user_id = localStorage.getItem('id')
     const staffObj = await getStaffObj(user_id)
 
-    this.imgSrc = await staffObj.getprofilePic()
+    this.imgSrc = await staffObj.getProfilePic()
     this.username = await staffObj.getFullName()
   }
 }
