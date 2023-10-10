@@ -1,5 +1,5 @@
 <template>
-  <div class="navBarContainer mb-3">
+  <div class="navBarContainer mb-2">
     <div class="backButtonContainer">
       <font-awesome-icon
         :icon="['fas', 'chevron-left']"
