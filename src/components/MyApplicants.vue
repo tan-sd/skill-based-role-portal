@@ -5,44 +5,50 @@ import TopNavBar from './TopNavBar.vue'
 <template>
   <div>
     <TopNavBar />
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="header">My Applicants</div>
-      <button class="btn btn-secondary me-5 text-white px-5" type="button" @click="edit_clicked()">Edit</button>
-    </div>
-
-    <!-- Container for Cards -->
-    <div class="container">
-      <!-- Conditionally render loop if newAppList has data -->
-      <div v-if="newAppList.length > 0">
-        <router-link
-          v-for="applicant in newAppList"
-          :key="applicant.firstname"
-          :to="`/individualApplicant/${applicant.name}/${$route.params.id}`"
-          class="card"
-        >
-          <div class="profile-picture">
-            <img :src="applicant.profilePicture" alt="Profile Picture" />
-          </div>
-          <div class="details">
-            <div class="name">{{ applicant.firstname }} {{ applicant.lastname }}</div>
-            <div class="position">{{ applicant.position }}</div>
-          </div>
-          <!-- Only display the progress-bar when matchPercentage is defined -->
-          <div
-            class="progress-bar"
-            v-if="typeof applicant.matchPercentage === 'number'"
-            :style="getProgressBarStyle(applicant.matchPercentage)"
-          >
-            <div class="progress-text">
-              {{ Math.round(applicant.matchPercentage) }}%
-              <span class="match-text">Match</span>
-            </div>
-          </div>
-        </router-link>
+    <div class="d-flex flex-column">
+      <div class="header-container px-4 py-4">
+        <!-- Header -->
+        <h3 class="fw-bold">My Applicants</h3>
+        <button class="btn btn-secondary text-white px-5" type="button" @click="edit_clicked()">
+          Edit
+        </button>
       </div>
-      <!-- Display a loading message if newAppList is empty -->
-      <div v-else>There is no such listing available</div>
+
+      <!-- Container for Cards -->
+      <div class="body-container container-fluid px-4">
+        <!-- Conditionally render loop if newAppList has data -->
+        <div v-if="newAppList.length > 0">
+          <router-link
+            v-for="applicant in newAppList"
+            :key="applicant.firstname"
+            :to="`/individualApplicant/${applicant.name}/${$route.params.id}`"
+            class="card border-0 my-3 p-3 bg-white flex-col flex-row listing-card justify-content-start"
+          >
+            <div class="add-border-left me-3 d-none d-sm-block"></div>
+
+              <div class="profile-picture">
+                <img :src="applicant.profilePicture" alt="Profile Picture" />
+              </div>
+              <div class="details d-inline">
+                <div class="name">{{ applicant.firstname }} {{ applicant.lastname }}</div>
+                <div class="position">{{ applicant.position }}</div>
+              </div>
+            <!-- Only display the progress-bar when matchPercentage is defined -->
+            <div
+              class="progress-bar"
+              v-if="typeof applicant.matchPercentage === 'number'"
+              :style="getProgressBarStyle(applicant.matchPercentage)"
+            >
+              <div class="progress-text">
+                {{ Math.round(applicant.matchPercentage) }}%
+                <span class="match-text">Match</span>
+              </div>
+            </div>
+          </router-link>
+        </div>
+        <!-- Display a loading message if newAppList is empty -->
+        <div v-else>There is no such listing available</div>
+      </div>
     </div>
   </div>
 </template>
@@ -116,7 +122,7 @@ export default {
     edit_clicked() {
       var listing_id = this.$router.currentRoute.value.params.id
       this.$router.push(`/jobListingForm`) // Note to Ling Xiao from Adam: U can find a way to pass the listing id to the form page
-    },
+    }
   },
   computed: {
     getMatchPercentage() {
@@ -136,47 +142,43 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  font-family: 'montserrat-bold';
-  font-size: 30px;
-  margin-left: 40px;
-  padding: 10px;
-}
-
-.container {
-  position: relative;
-  margin: 0 2vw 0 2vw;
-  border-radius: 10px;
-  width: 75vw;
-  height: 85vh;
-}
-
-.card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  border-radius: 5px;
-  flex: 1;
-  width: 100%;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-  cursor: pointer;
-  color: black;
+a {
   text-decoration: none;
 }
 
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 0px;
+}
+
+.body-container {
+  flex: 1 0 0px;
+}
+
 .card:hover {
-  background-color: #6a44d4;
-  color: #ffffff; /* Text color on hover */
+  background-color: #6a44d4 !important;
+  color: #ffffff;
+}
+
+.listing-card {
+  align-items: center;
 }
 
 .card:hover .progress-bar {
-  border: 2px solid #ffffff; /* Progress bar border color on hover */
+  border: 2px solid #ffffff;
+}
+
+.add-border-left::before {
+  content: '';
+  border: solid 0.125rem #6a44d4;
+  border-radius: 1rem;
+  transition: color 0.3s ease-in-out;
+}
+
+.card:hover .add-border-left::before {
+  border: solid 0.125rem #ffffff;
 }
 
 .profile-picture {
