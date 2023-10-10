@@ -2,10 +2,25 @@
 import TopNavBar from './TopNavBar.vue'
 </script>
 
-
 <template>
   <TopNavBar />
   <div class="container">
+
+    <div
+      class="alert alert-success alert-dismissible fade show general mb-3"
+      v-if="successMessage"
+      >
+      {{ successMessage }}
+      <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearSuccessMessage"/>
+    </div>
+
+    <div
+    class="alert alert-danger alert-dismissible fade show general mb-3"
+    v-if="failureMessage"
+  >
+    {{ failureMessage }}
+    <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearFailureMessage"/>
+    </div>
 
     <div class="card card_sp">
       <div class="card-body">
@@ -115,7 +130,7 @@ import TopNavBar from './TopNavBar.vue'
 </template>
 
 <script>
-import { addNewListing } from '../firebase/CRUD_database.js'
+import { updateJobListing } from '../firebase/CRUD_database'
 import { individualListingData } from '../firebase/CRUD_database'
 
 export default {
@@ -165,13 +180,12 @@ export default {
     submitForm() {
       // Call the Firebase function to write data
       console.log('Form Data:', this.jobListing)
-      const status = addNewListing(this.jobListing)
+      const status = updateJobListing(this.$route.params.id, this.jobListing)
       if (status) {
         this.failureMessage = '';
-        this.successMessage = 'Listing has been successfully added!';
-        this.clearForm()
+        this.successMessage = 'Listing has been successfully updated!';
       } else {
-        this.failureMessage = 'Failed to add the listing. Please try again.'
+        this.failureMessage = 'Failed to update the listing. Please try again!'
       }
     },
     clearForm() {

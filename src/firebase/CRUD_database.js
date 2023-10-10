@@ -107,33 +107,32 @@ export const addNewListing = async (formData) => {
   }
 };
 
-export const updateListing = async (id, formData) => {
+export const updateJobListing = async (id, formData) => 
+{
+  const jobListingsRef = ref(db, `/listing/${id}`);
+  
   try {
-    // Path to index
-    const newPath = `/listing/${id}`
-
-    // Transform
     const newListingData = {
       createdate: formData.createdate,
       createdby: formData.createdby,
       deadline: formData.deadline,
       department: formData.department,
       description: formData.description,
-      responsibilities: formData.responsibilities.length == 0 ? "" : formData.responsibilities || "",
-      skills: formData.skills.length == 0 ? "" : formData.skills || "",
-      applicants: formData.applicants.length == 0 ? "" : formData.applicants || "",
-      title: formData.title,
-      listingId: id
+      responsibilities: formData.responsibilities || [],
+      skills: formData.skills || [],
+      applicants: formData.applicants || [],
+      title: formData.title
     };
-
-    await set(ref(db, newPath), newListingData);
-    console.log(`isting ${id} updated successfully`);
+    //set new dataset
+    await set(jobListingsRef, newListingData);
+    console.log('New listing added successfully');
     return true
+
   } catch (error) {
     console.error('Error adding new listing:', error);
-    return false
   }
 };
+
 
 
 
