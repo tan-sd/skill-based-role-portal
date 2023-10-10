@@ -1,6 +1,6 @@
-import { allListingData, individualListingData, addNewListing, updateListing } from './CRUD_database.js'
+import { allListingData, individualListingData, addNewListing } from './CRUD_database.js'
 
-export class Listing {
+export default class Listing {
     #title
     #department
     #deadline
@@ -95,6 +95,8 @@ export class Listing {
         this.#createdby = loadedListing.createdby
         this.#listingId = loadedListing.listingId
         this.#buildMethod = 'load'
+
+        return loadedListing;
     }
 
     async getAllListings() {
