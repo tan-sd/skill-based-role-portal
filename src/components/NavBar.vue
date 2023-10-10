@@ -111,7 +111,7 @@ export default {
     const filteredNavLinks = computed(() => {
       return navLinks.value.filter((link) => {
         if (link.text === 'My Listings') {
-          return (accessRights.value == '1' || accessRights.value == '4')
+          return accessRights.value == '1' || accessRights.value == '4'
         }
         return true
       })
