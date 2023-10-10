@@ -1,68 +1,6 @@
-<!-- For testing the job listing edit function
-<script setup>
-  import {ref} from "vue"
-
-  const emit = defineEmits(["create-listing"])
-
-  const jobTitle = ref("")
-
-  const createListing = () => {
-    emit("create-listing", jobTitle.value)
-  }
-</script> -->
-
-<!-- <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-              <h2 class="card-title">
-                Form
-              </h2>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Title of the Job</label>
-                <input v-model="jobTitle" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-              </div>
-
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-              </div>
-
-              <button @click="createListing" type="submit" class="btn btn-primary">Create</button>
-
-      </div>
-    </div>
-  </div>
-</template> -->
-
-<!-- <style lang="scss" scoped>
-  .container {
-    margin: 0 5vw 0 5vw;
-    background-color: #ffffff;
-    border-radius: 10px;
-  }
-   .card {
-     display: flex;
-     flex-direction: row;
-     align-items: center;
-     margin: 10px;
-     padding: 20px;
-     border: 1px solid #ccc;
-     background-color: #ffffff;
-     border-radius: 5px;
-     flex: 1;
-     width: 100%;
-     transition: background-color 0.3s, color 0.3s;
-     color: black;
-     border-color: #ffffff;
-   }
-</style> -->
-
 <script setup>
 import TopNavBar from './TopNavBar.vue'
 </script>
-
 
 <template>
   <TopNavBar />
@@ -86,7 +24,7 @@ import TopNavBar from './TopNavBar.vue'
 
     <div class="card card_sp">
       <div class="card-body">
-        <h2 class="card-title title">Job Listing Form</h2>
+        <h2 class="card-title title">Current Listing Details</h2>
         <form @submit.prevent="submitForm" class="general">
           <div class="form-group">
             <label for="jobTitle">Job Title</label>
@@ -107,7 +45,7 @@ import TopNavBar from './TopNavBar.vue'
               id="createdDate"
               v-model="jobListing.createdate"
               required
-              disabled
+              disabled 
             />
           </div>
 
@@ -184,7 +122,7 @@ import TopNavBar from './TopNavBar.vue'
           </div>
           <div style="margin-top: 1em"></div>
           <button @click="navigateBack" class="btn btn-dark">Cancel</button>
-          <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
+          <button type="submit" class="btn btn-primary ms-2">Update Job Listing</button>
         </form>
       </div>
     </div>
@@ -192,16 +130,18 @@ import TopNavBar from './TopNavBar.vue'
 </template>
 
 <script>
-import { addNewListing } from '../firebase/CRUD_database.js'
+import { updateJobListing } from '../firebase/CRUD_database'
+import { individualListingData } from '../firebase/CRUD_database'
 
 export default {
+  created() {
+    this.fetchIndividualListingData()
+  },
   data() {
-    const currentDate = new Date().toISOString().substr(0, 10);
-
     return {
       jobListing: {
         title: '',
-        createdate: currentDate,
+        createdate: '',
         deadline: '',
         department: '',
         description: '',
@@ -214,7 +154,17 @@ export default {
       failureMessage: ''
     }
   },
+
   methods: {
+    async fetchIndividualListingData() {
+      try {
+        const data = await individualListingData(this.$route.params.id)
+        this.jobListing = data
+        console.log(this.jobListing)
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
+    },
     addResponsibility() {
       this.jobListing.responsibilities.push('')
     },
@@ -230,13 +180,12 @@ export default {
     submitForm() {
       // Call the Firebase function to write data
       console.log('Form Data:', this.jobListing)
-      const status = addNewListing(this.jobListing)
+      const status = updateJobListing(this.$route.params.id, this.jobListing)
       if (status) {
         this.failureMessage = '';
-        this.successMessage = 'Listing has been successfully added!';
-        this.clearForm()
+        this.successMessage = 'Listing has been successfully updated!';
       } else {
-        this.failureMessage = 'Failed to add the listing. Please try again.'
+        this.failureMessage = 'Failed to update the listing. Please try again!'
       }
     },
     clearForm() {

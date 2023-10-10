@@ -87,7 +87,7 @@ import TopNavBar from './TopNavBar.vue'
             <div class="col">
               <button type="button" class="btn btn-secondary w-50 text-light">
                 <span class="text-light" style="font-weight: bold">
-                  <font-awesome-icon icon="fa-solid fa-download" size="7px" class="me-2" /> Download
+                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> Download
                   Resume
                 </span>
               </button>

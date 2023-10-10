@@ -10,7 +10,7 @@ import TopNavBar from './TopNavBar.vue'
         <!-- Header -->
         <h3 class="fw-bold">My Applicants</h3>
         <button class="btn btn-secondary text-white px-5" type="button" @click="edit_clicked()">
-          Edit
+          Edit Listing
         </button>
       </div>
 
@@ -121,7 +121,7 @@ export default {
 
     edit_clicked() {
       var listing_id = this.$router.currentRoute.value.params.id
-      this.$router.push(`/jobListingForm`) // Note to Ling Xiao from Adam: U can find a way to pass the listing id to the form page
+      this.$router.push({ name: 'editListing', params: { id: listing_id } })
     }
   },
   computed: {
