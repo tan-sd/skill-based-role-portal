@@ -25,7 +25,9 @@ import { getStaffObj } from '../firebase/staff_class'
           <div class="me-sm-5 constrain-width w-100">
             <div class="add-border-left me-2 d-inline d-sm-none"></div>
             <p class="name m-0 text-truncate d-inline d-sm-block">{{ list.title }}</p>
-            <!-- <div class="position">{{ list.position }}</div> -->
+            <p class="department m-0 text-truncate d-inline d-sm-block ms-3 ms-sm-0">
+              {{ list.department }}
+            </p>
           </div>
 
           <div class="d-none d-sm-block me-sm-5 constrain-width">
@@ -229,6 +231,11 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   font-family: 'montserrat-bold';
+}
+
+.department {
+  font-size: 14px;
+  color: #857f95;
 }
 
 .card:hover .me-2 {
