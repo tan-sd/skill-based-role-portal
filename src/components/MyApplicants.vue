@@ -26,13 +26,13 @@ import TopNavBar from './TopNavBar.vue'
           >
             <div class="add-border-left me-3 d-none d-sm-block"></div>
 
-              <div class="profile-picture">
-                <img :src="applicant.profilePicture" alt="Profile Picture" />
-              </div>
-              <div class="details d-inline">
-                <div class="name">{{ applicant.firstname }} {{ applicant.lastname }}</div>
-                <div class="position">{{ applicant.position }}</div>
-              </div>
+            <div class="profile-picture">
+              <img :src="applicant.profilePicture" alt="Profile Picture" />
+            </div>
+            <div class="details d-inline">
+              <div class="name">{{ applicant.firstname }} {{ applicant.lastname }}</div>
+              <div class="position">{{ applicant.position }}</div>
+            </div>
             <!-- Only display the progress-bar when matchPercentage is defined -->
             <div
               class="progress-bar"
