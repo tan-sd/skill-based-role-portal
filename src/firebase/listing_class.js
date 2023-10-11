@@ -1,4 +1,4 @@
-import { allListingData, individualListingData, addNewListing } from './CRUD_database.js'
+import { allListingData, individualListingData, addNewListing, updateJobListing } from './CRUD_database.js'
 
 export default class Listing {
     #title
@@ -156,7 +156,7 @@ export default class Listing {
 
             if (deadlineValid == false) {
                 var error = new Error(deadlineDateStr)
-                console.log(`Error in updateListingInDB: ${error}`)
+                console.log(`Error in updateListing: ${error}`)
                 throw error
             }
 
@@ -170,7 +170,7 @@ export default class Listing {
         if (newListingData.hasOwnProperty('responsibilities')) {
             if (!Array.isArray(newListingData.responsibilities)) {
                 var error = new Error('Responsibilities must be an array')
-                console.log(`Error in updateListingInDB: ${error}`)
+                console.log(`Error in updateListing: ${error}`)
                 throw error
             }
 
@@ -180,7 +180,7 @@ export default class Listing {
         if (newListingData.hasOwnProperty('skills')) {
             if (!Array.isArray(newListingData.skills)) {
                 var error = new Error('Skills must be an array')
-                console.log(`Error in updateListingInDB: ${error}`)
+                console.log(`Error in updateListing: ${error}`)
                 throw error
             }
 
@@ -193,15 +193,15 @@ export default class Listing {
 
         if (!this.#checkReadyToSave()) {
             var error = new Error('Not all required attributes are set')
-            console.log(`Error in updateListingInDB: ${error}`)
+            console.log(`Error in pushUpdatedListingToDB: ${error}`)
             throw error
         } else if (this.#buildMethod == 'new') {
             var error = new Error('Cannot update a new listing. Use saveNewListingToDB() instead')
-            console.log(`Error in updateListingInDB: ${error}`)
+            console.log(`Error in pushUpdatedListingToDB: ${error}`)
             throw error
         } else if (this.#buildMethod == null) {
             var error = new Error('Cannot update a listing that has not been loaded. Use loadListing() first')
-            console.log(`Error in updateListingInDB: ${error}`)
+            console.log(`Error in pushUpdatedListingToDB: ${error}`)
             throw error
         }
 
@@ -218,10 +218,10 @@ export default class Listing {
         }
 
         try {
-            await updateListing(this.#listingId, updatedListingObj)
+            await updateJobListing(this.#listingId, updatedListingObj)
             return true
         } catch (error) {
-            console.log(`Error in updateListingInDB: ${error}`)
+            console.log(`Error in pushUpdatedListingToDB: ${error}`)
             throw error
         }
     }
@@ -295,9 +295,13 @@ export default class Listing {
     #checkValidDeadline(datestr) {
         var deadlineDateObj = new Date(datestr)
 
+        const today = new Date();
+        const prevDay = new Date(today);
+        prevDay.setDate(today.getDate() - 1); 
+
         if (deadlineDateObj == 'Invalid Date') {
             return [false, 'Invalid deadline date']
-        } else if (deadlineDateObj < new Date()) {
+        } else if (deadlineDateObj < prevDay) {
             return [false, 'Deadline cannot be before today']
         }
 

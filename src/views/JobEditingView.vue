@@ -5,7 +5,7 @@ import JobEditingForm from "../components/JobEditingForm.vue";
 
 <template>
   <div>
-    <JobEditingForm @create-listing="createPost"/>
+    <JobEditingForm />
   </div>
 </template>
 

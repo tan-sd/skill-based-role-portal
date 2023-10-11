@@ -1,71 +1,4 @@
-<!-- For testing the job listing edit function
-<script setup>
-  import {ref} from "vue"
-
-  const emit = defineEmits(["create-listing"])
-
-  const jobTitle = ref("")
-
-  const createListing = () => {
-    emit("create-listing", jobTitle.value)
-  }
-</script> -->
-
-<!-- <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-              <h2 class="card-title">
-                Form
-              </h2>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Title of the Job</label>
-                <input v-model="jobTitle" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-              </div>
-
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-              </div>
-
-              <button @click="createListing" type="submit" class="btn btn-primary">Create</button>
-
-      </div>
-    </div>
-  </div>
-</template> -->
-
-<!-- <style lang="scss" scoped>
-  .container {
-    margin: 0 5vw 0 5vw;
-    background-color: #ffffff;
-    border-radius: 10px;
-  }
-   .card {
-     display: flex;
-     flex-direction: row;
-     align-items: center;
-     margin: 10px;
-     padding: 20px;
-     border: 1px solid #ccc;
-     background-color: #ffffff;
-     border-radius: 5px;
-     flex: 1;
-     width: 100%;
-     transition: background-color 0.3s, color 0.3s;
-     color: black;
-     border-color: #ffffff;
-   }
-</style> -->
-
-<script setup>
-import TopNavBar from './TopNavBar.vue'
-</script>
-
-
 <template>
-  <TopNavBar />
   <div class="container">
 
     <div
@@ -105,7 +38,7 @@ import TopNavBar from './TopNavBar.vue'
               type="date"
               class="form-control"
               id="createdDate"
-              v-model="jobListing.createdate"
+              v-model="createdate"
               required
               disabled
             />
@@ -119,6 +52,7 @@ import TopNavBar from './TopNavBar.vue'
               id="deadline"
               v-model="jobListing.deadline"
               required
+              :min="getMinDate()"
             />
           </div>
 
@@ -155,12 +89,14 @@ import TopNavBar from './TopNavBar.vue'
                 class="form-control mb-1"
                 v-model="jobListing.responsibilities[index]"
                 required
+                pattern=".*\S+.*"
+                title="Please enter at least one non-whitespace character"
               />
-              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">
+              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1" type="button">
                 Remove
               </button>
             </div>
-            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1">
+            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" type="button">
               Add Responsibility
             </button>
           </div>
@@ -177,13 +113,15 @@ import TopNavBar from './TopNavBar.vue'
                 class="form-control mb-1"
                 v-model="jobListing.skills[index]"
                 required
+                pattern=".*\S+.*"
+                title="Please enter at least one non-whitespace character"
               />
-              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
+              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" type="button">Remove</button>
             </div>
-            <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
+            <button @click="addSkill" class="btn btn-primary btn-sm mt-1" type="button">Add Skill</button>
           </div>
           <div style="margin-top: 1em"></div>
-          <button @click="navigateBack" class="btn btn-dark">Cancel</button>
+          <button @click="navigateBack" class="btn btn-dark" type="button">Cancel</button>
           <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
         </form>
       </div>
@@ -192,21 +130,18 @@ import TopNavBar from './TopNavBar.vue'
 </template>
 
 <script>
-import { addNewListing } from '../firebase/CRUD_database.js'
+import Listing from '../firebase/listing_class.js'
 
 export default {
   data() {
-    const currentDate = new Date().toISOString().substr(0, 10);
-
     return {
+      createdate: new Date().toISOString().substr(0, 10),
+
       jobListing: {
         title: '',
-        createdate: currentDate,
         deadline: '',
         department: '',
         description: '',
-        applicants: [''],
-        createdby: '',
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       },
@@ -227,28 +162,22 @@ export default {
     removeSkill(index) {
       this.jobListing.skills.splice(index, 1)
     },
-    submitForm() {
+    async submitForm() {
       // Call the Firebase function to write data
       console.log('Form Data:', this.jobListing)
-      const status = addNewListing(this.jobListing)
-      if (status) {
-        this.failureMessage = '';
-        this.successMessage = 'Listing has been successfully added!';
-        this.clearForm()
-      } else {
-        this.failureMessage = 'Failed to add the listing. Please try again.'
-      }
+      
+      var curr = this.jobListing
+      var new_listing = new Listing(curr.title, curr.department, curr.deadline, curr.description, curr.responsibilities, curr.skills)
+      console.log("new listing", new_listing)
+      await new_listing.saveNewListingToDB()
     },
     clearForm() {
       // Clear the form fields
       this.jobListing = {
         title: '',
-        createdate: '',
         deadline: '',
         department: '',
         description: '',
-        applicants: [''],
-        createdby: '',
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       }
@@ -263,7 +192,12 @@ export default {
     clearFailureMessage() {
       // Clear the failure message
       this.failureMessage = '';
-    }
+    },
+    getMinDate() {
+      const today = new Date(); // Get the current date and time
+
+      return today.toISOString().split('T')[0]
+    },
   }
 }
 </script>

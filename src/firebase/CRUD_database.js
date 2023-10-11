@@ -122,7 +122,7 @@ export const updateJobListing = async (id, formData) =>
       skills: formData.skills.length == 0 ? "" : formData.skills || "",
       applicants: formData.applicants.length == 0 ? "" : formData.applicants || "",
       title: formData.title,
-      listingId: formData.listingId
+      listingId: id
     };
     //set new dataset
     await set(jobListingsRef, newListingData);

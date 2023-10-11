@@ -47,7 +47,7 @@ import TopNavBar from './TopNavBar.vue'
           </router-link>
         </div>
         <!-- Display a loading message if newAppList is empty -->
-        <div v-else>There is no such listing available</div>
+        <div v-else>There are no applicants yet!</div>
       </div>
     </div>
   </div>

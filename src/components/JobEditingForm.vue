@@ -57,6 +57,7 @@ import TopNavBar from './TopNavBar.vue'
               id="deadline"
               v-model="jobListing.deadline"
               required
+              :min="getMinDate()"
             />
           </div>
 
@@ -94,11 +95,11 @@ import TopNavBar from './TopNavBar.vue'
                 v-model="jobListing.responsibilities[index]"
                 required
               />
-              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1">
+              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1" type="button">
                 Remove
               </button>
             </div>
-            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1">
+            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" type="button">
               Add Responsibility
             </button>
           </div>
@@ -116,12 +117,12 @@ import TopNavBar from './TopNavBar.vue'
                 v-model="jobListing.skills[index]"
                 required
               />
-              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1">Remove</button>
+              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" type="button">Remove</button>
             </div>
-            <button @click="addSkill" class="btn btn-primary btn-sm mt-1">Add Skill</button>
+            <button @click="addSkill" class="btn btn-primary btn-sm mt-1" type="button">Add Skill</button>
           </div>
           <div style="margin-top: 1em"></div>
-          <button @click="navigateBack" class="btn btn-dark">Cancel</button>
+          <button @click="navigateBack" class="btn btn-dark" type="button">Cancel</button>
           <button type="submit" class="btn btn-primary ms-2">Update Job Listing</button>
         </form>
       </div>
@@ -130,8 +131,7 @@ import TopNavBar from './TopNavBar.vue'
 </template>
 
 <script>
-import { updateJobListing } from '../firebase/CRUD_database'
-import { individualListingData } from '../firebase/CRUD_database'
+import Listing from '../firebase/listing_class'
 
 export default {
   created() {
@@ -146,7 +146,6 @@ export default {
         department: '',
         description: '',
         applicants: [''],
-        createdby: '',
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       },
@@ -158,9 +157,17 @@ export default {
   methods: {
     async fetchIndividualListingData() {
       try {
-        const data = await individualListingData(this.$route.params.id)
-        this.jobListing = data
-        console.log(this.jobListing)
+        var listing = new Listing()
+        await listing.loadListing(this.$route.params.id)
+
+        this.jobListing.title = listing.getTitle()
+        this.jobListing.createdate = listing.getCreateDate()
+        this.jobListing.deadline = listing.getDeadline()
+        this.jobListing.department = listing.getDepartment()
+        this.jobListing.description = listing.getDescription()
+        this.jobListing.applicants = listing.getApplicants()
+        this.jobListing.responsibilities = listing.getResponsibilities()
+        this.jobListing.skills = listing.getSkills()
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
       }
@@ -177,29 +184,18 @@ export default {
     removeSkill(index) {
       this.jobListing.skills.splice(index, 1)
     },
-    submitForm() {
+    async submitForm() {
       // Call the Firebase function to write data
-      console.log('Form Data:', this.jobListing)
-      const status = updateJobListing(this.$route.params.id, this.jobListing)
+      var listing = new Listing()
+      await listing.loadListing(this.$route.params.id)
+      listing.updateListing(this.jobListing)
+      var status = await listing.pushUpdatedListingToDB()
+
       if (status) {
         this.failureMessage = '';
         this.successMessage = 'Listing has been successfully updated!';
       } else {
         this.failureMessage = 'Failed to update the listing. Please try again!'
-      }
-    },
-    clearForm() {
-      // Clear the form fields
-      this.jobListing = {
-        title: '',
-        createdate: '',
-        deadline: '',
-        department: '',
-        description: '',
-        applicants: [''],
-        createdby: '',
-        responsibilities: [''], // Initialize with one empty item
-        skills: [''] // Initialize with one empty item
       }
     },
     navigateBack() {
@@ -212,7 +208,12 @@ export default {
     clearFailureMessage() {
       // Clear the failure message
       this.failureMessage = '';
-    }
+    },
+    getMinDate() {
+      const today = new Date(); // Get the current date and time
+
+      return today.toISOString().split('T')[0]
+    },
   }
 }
 </script>
