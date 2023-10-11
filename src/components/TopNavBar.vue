@@ -11,14 +11,27 @@ import Listing from '../firebase/listing_class.js'
         style="color: #ffffff"
       />
     </div>
-    <div class="spacer"></div>
-    <div class="titleContainer d-flex flex-col justify-content-center align-items-center">
+    <div v-if="!isJobListingForm && !isEditListing" class="spacer"></div>
+    <div
+      v-if="!isJobListingForm && !isEditListing"
+      class="titleContainer d-flex flex-col justify-content-center align-items-center"
+    >
       <div class="jobTitle">
         {{ this.jobTitle }}
       </div>
       <div class="add-border-left ms-3 me-3"></div>
       <div class="jobDepartment">
         {{ this.jobDepartment }}
+      </div>
+    </div>
+    <div v-if="isMyApplicants" class="d-flex flex-row applicantDetails">
+      <div>
+        <font-awesome-icon icon="fa-solid fa-user-group" class="ms-5 me-1 text-primary card-icon" />
+        {{ this.applicantNum }} Applicants
+      </div>
+      <div>
+        <font-awesome-icon icon="fa-solid fa-calendar" class="ms-5 me-1 text-primary card-icon" />
+        {{ toHumanReadbleDate(this.deadline) }}
       </div>
     </div>
   </div>
@@ -30,16 +43,37 @@ export default {
     const listingObj = await new Listing().loadListing(this.$route.params.id)
     this.jobTitle = listingObj.title
     this.jobDepartment = listingObj.department
+    this.applicantNum = listingObj.applicants.length
+    this.deadline = listingObj.deadline
+    console.log(this.$route.name)
   },
   data() {
     return {
       jobTitle: '',
-      jobDepartment: ''
+      jobDepartment: '',
+      applicantNum: '',
+      deadline: ''
     }
   },
   methods: {
     navigateBack() {
       this.$router.go(-1)
+    },
+    toHumanReadbleDate(date) {
+      const dateObj = new Date(date)
+      const options = { day: '2-digit', month: 'short', year: 'numeric' }
+      return dateObj.toLocaleDateString('en-US', options)
+    }
+  },
+  computed: {
+    isJobListingForm() {
+      return this.$route.name === 'jobListingForm'
+    },
+    isEditListing() {
+      return this.$route.name === 'editListing'
+    },
+    isMyApplicants() {
+      return this.$route.name === 'myApplicants'
     }
   }
 }
@@ -79,5 +113,10 @@ export default {
 .jobDepartment {
   font-size: 18px;
   color: #efe7ef;
+}
+
+.applicantDetails {
+  font-size: 18px;
+  font-family: 'montserrat-bold';
 }
 </style>
