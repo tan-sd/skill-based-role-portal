@@ -46,4 +46,12 @@ export default {
   flex: 1 0 0px;
   overflow: scroll;
 }
+
+::-webkit-scrollbar {
+    width: 0.1rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
 </style>
