@@ -119,4 +119,16 @@ export default {
   font-size: 18px;
   font-family: 'montserrat-bold';
 }
+
+@media only screen and (max-width: 933px) {
+  .jobTitle,
+  .jobDepartment,
+  .applicantDetails {
+    font-size: 10px;
+  }
+
+  .applicantDetails {
+    display: block !important; 
+  }
+}
 </style>
