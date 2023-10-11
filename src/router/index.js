@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StyleGuide from '../views/StyleGuide.vue'
-import JobListingView from '../views/JobListingView.vue'
 import IndividualApplicant from '../components/IndividualApplicant.vue'
 import MyApplicants from '../components/MyApplicants.vue'
 import LoginPage from '../views/LoginPage.vue'
@@ -8,7 +7,8 @@ import MyListings from '../components/MyListings.vue'
 import MyApplications from '../components/MyApplications.vue'
 import DiscoverJobs from '../components/DiscoverJobs.vue'
 import ListingDetails from '../components/ListingDetails.vue'
-import JobEditingView from '../views/JobEditingView.vue'
+import jobListingForm from '../views/joblistingform.vue'
+import JobEditingForm from '../views/JobEditingForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,7 +34,7 @@ const router = createRouter({
     {
       path: '/editListing/:id',
       name: 'editListing',
-      component: JobEditingView,
+      component: JobEditingForm,
       props: true, // Pass route params as props
     },
     {
@@ -50,7 +50,7 @@ const router = createRouter({
     {
       path: '/jobListingForm',
       name: 'jobListingForm',
-      component: JobListingView
+      component: jobListingForm
     },
 
     //Test if the data is received after HR submit the job listing form

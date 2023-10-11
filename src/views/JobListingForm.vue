@@ -17,7 +17,16 @@
     <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearFailureMessage"/>
     </div>
 
-    <div class="card card_sp">
+    <div class="p-3">
+      <font-awesome-icon
+        :icon="['fas', 'chevron-left']"
+        size="2xl"
+        @click="navigateBack"
+        class="btn-back"
+      />
+    </div>
+
+    <div class="card card_sp border-0 rounded-3">
       <div class="card-body">
         <h2 class="card-title title">Job Listing Form</h2>
         <form @submit.prevent="submitForm" class="general">
@@ -219,5 +228,8 @@ export default {
   margin-bottom: 2em;
   margin-left: 1em;
   margin-right: 1em;
+}
+.btn-back {
+  cursor: pointer;
 }
 </style>
