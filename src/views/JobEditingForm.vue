@@ -195,9 +195,9 @@ export default {
       listing.updateListing(this.jobListing)
       var status = await listing.pushUpdatedListingToDB()
 
-      if (status) {
+      try {
         this.$refs.formSucModal.showSuccessModal('Listing Successfully Updated!')
-      } else {
+      } catch (error) {
         this.$refs.formSucModal.showErrorModal(error)
       }
     },
