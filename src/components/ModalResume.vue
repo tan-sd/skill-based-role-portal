@@ -1,6 +1,7 @@
 <script setup>
 import {read_staff_data } from '../firebase/CRUD_database'
 import {uploadFiles } from '../firebase/storage'
+import {getStaffObj} from '../firebase/staff_class'
 </script>
 
 <template>
@@ -24,7 +25,7 @@ import {uploadFiles } from '../firebase/storage'
                             <h5><img class="profilePic" src="applicant.profilePicture" /> </h5>
                         </div>
                         <div class="col-9 pt-2" style="font-family: Montserrat">
-                            <p>{{firstName}} {{ lastName }}</p>
+                            <p>{{fullname }}</p>
                             <p>{{email}}</p>
                         </div>
                     </div>
@@ -62,29 +63,36 @@ import {uploadFiles } from '../firebase/storage'
 <script>
 export default {
     props:['job'],
-    created() {
-        this.fetch_read_staff_data()
+    // created() {
+    //     this.fetch_read_staff_data()
         
-    },
+    // },
+
     data() {
         return {
-            firstName:'',
-            lastName:'',
+            fullname:'',
             email:'',
             jobTitle:this.job,
             resume: null,
         }
     },
+    async mounted(){
+        var staffid = localStorage.getItem('id')
+        var staff1= await getStaffObj(staffid)
+        this.fullname = await staff1.getFullName()
+        this.email = await staff1.getEmail()
+    },
     methods: {
-        async fetch_read_staff_data(){
+        // async fetch_read_staff_data(){
         
-            const data = await read_staff_data(localStorage.getItem('id'))
-            this.firstName = data.firstname 
-            this.lastName = data.lastname 
-            this.email = data.email
-            this.resume = null
+        //     const data = await read_staff_data(localStorage.getItem('id'))
+        //     this.firstName = data.firstname 
+        //     this.lastName = data.lastname 
+        //     this.email = data.email
+        //     this.resume = null
         
-        },
+        // },
+   
     getJob(job){
         this.job = job
     },

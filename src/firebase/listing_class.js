@@ -305,6 +305,6 @@ export default class Listing {
             return [false, 'Deadline cannot be before today']
         }
 
-        return [true, deadlineDateObj.getFullYear()+'-'+(deadlineDateObj.getMonth()+1)+'-'+deadlineDateObj.getDate()]
+        return [true, deadlineDateObj.getFullYear()+'-'+String(deadlineDateObj.getMonth()+1).padStart(2, '0')+'-'+String(deadlineDateObj.getDate()).padStart(2, '0')]
     }
 }

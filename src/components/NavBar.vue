@@ -14,6 +14,7 @@
         aria-controls="navbarSupportedContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        id="navbarTogglerBtn"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -157,6 +158,16 @@ export default {
 
     this.imgSrc = await staffObj.getProfilePic()
     this.username = await staffObj.getFullName()
+
+    const navbar_collapse_btn = document.getElementById('navbarTogglerBtn')
+    const navbar_collapse = document.getElementById('navbarSupportedContent')
+
+    navbar_collapse_btn.addEventListener('click', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+
+      navbar_collapse.classList.toggle('test')
+    })
   }
 }
 </script>
