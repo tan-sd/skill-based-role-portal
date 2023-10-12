@@ -193,7 +193,7 @@ export default {
       var listing = new Listing()
       await listing.loadListing(this.$route.params.id)
       listing.updateListing(this.jobListing)
-      var status = await listing.pushUpdatedListingToDB()
+      await listing.pushUpdatedListingToDB()
 
       try {
         this.$refs.formSucModal.showSuccessModal('Listing Successfully Updated!')
