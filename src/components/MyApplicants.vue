@@ -5,7 +5,7 @@ import TopNavBar from './TopNavBar.vue'
 <template>
   <div>
     <TopNavBar />
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column h-100">
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">My Applicants</h3>
@@ -47,7 +47,13 @@ import TopNavBar from './TopNavBar.vue'
           </router-link>
         </div>
         <!-- Display a loading message if newAppList is empty -->
-        <div v-else>There are no applicants yet!</div>
+        <div
+          v-else
+          class="d-flex flex-column align-items-center justify-content-center h-100"
+        >
+          <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
+          <h4 class="fw-bold">OOPS! Looks like you have no applicants yet...</h4>
+        </div>
       </div>
     </div>
   </div>

@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+skill-net-1311-firebase-admin-key.json
 .env
 .DS_Store
 dist
