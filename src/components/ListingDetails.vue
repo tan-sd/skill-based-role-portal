@@ -1,16 +1,12 @@
 <script setup>
-import { individualListingData } from '../firebase/CRUD_database'
+import Listing from '../firebase/listing_class'
 import ResumeDropOffButton from './ResumeDropOffButton.vue'
 import '../main.js'
 import TopNavBar from './TopNavBar.vue'
-import { read_staff_data } from '../firebase/CRUD_database'
+import { getStaffObj } from '../firebase/staff_class'
 </script>
 
 <template>
-  <!--
-  listingDetails.description ,
-  <li :key="index" v-for="(req, index) in listingDetails.responsibilities"> {{ req }}</li>
--->
   <div class="w-100">
     <TopNavBar />
 
@@ -30,7 +26,7 @@ import { read_staff_data } from '../firebase/CRUD_database'
           <!-- Required Skills -->
           <h5 class="fw-bold">Required Skills</h5>
           <div
-            v-for="e_skill in listingDetails.skills"
+            v-for="(e_skill, index) in listingDetails.skills" :key="index"
             class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
             :class="userSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
           >
@@ -48,15 +44,13 @@ import { read_staff_data } from '../firebase/CRUD_database'
 
           <div v-if="!applied.includes(parseInt(this.$route.params.id))">
             <ResumeDropOffButton
-            :job="listingDetails.title"
-            :key="listingDetails.title"
-          ></ResumeDropOffButton>
+              :job="listingDetails.title"
+              :key="listingDetails.title"
+            ></ResumeDropOffButton>
           </div>
           <div v-else>
-             <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
+            <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
           </div>
-
-
         </div>
       </div>
     </div>
@@ -66,20 +60,19 @@ import { read_staff_data } from '../firebase/CRUD_database'
 <script>
 export default {
   created() {
-    this.fetchIndividualListingData(),
-    this.fetch_read_staff_data()
+    this.fetchIndividualListingData(), this.fetch_read_staff_data()
   },
   data() {
     return {
       listingDetails: [],
       userSkills: [],
-      applied:[],
+      applied: []
     }
   },
   methods: {
     async fetchIndividualListingData() {
       try {
-        const data = await individualListingData(this.$route.params.id)
+        const data = await new Listing().loadListing(this.$route.params.id)
         this.listingDetails = data
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
@@ -96,7 +89,7 @@ export default {
       const user_id = localStorage.getItem('id')
 
       try {
-        const user_data = await read_staff_data(user_id)
+        const user_data = await getStaffObj(user_id)
         const user_skills = user_data.skillsets
 
         this.userSkills = user_skills
@@ -104,14 +97,10 @@ export default {
         console.log('Error fetching data from Firebase:', error)
       }
     },
-    async fetch_read_staff_data(){
-        const data = await read_staff_data(localStorage.getItem('id'))
-        this.applied = data.listingsapplied
-        // console.log(this.applied)
-        // console.log(data.listingsapplied.includes(parseInt(this.$route.params.id)))
-
-        // console.log(parseInt(this.$route.params.id))
-    },
+    async fetch_read_staff_data() {
+      const data = await getStaffObj(localStorage.getItem('id'))
+      this.applied = data.listingsapplied
+    }
   },
   mounted() {
     this.getUserSkills()
