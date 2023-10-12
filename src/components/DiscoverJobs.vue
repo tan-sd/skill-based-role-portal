@@ -4,7 +4,6 @@ import { getStaffObj } from '../firebase/staff_class'
 </script>
 <template>
   <div class="d-flex flex-column">
-    <div>
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">Find your next opportunity!</h3>
@@ -32,10 +31,7 @@ import { getStaffObj } from '../firebase/staff_class'
 
           <div class="d-none d-sm-block me-sm-5 constrain-width">
             <h5 class="fw-bold text-truncate">
-              <font-awesome-icon
-                icon="fa-solid fa-calendar"
-                class="me-2 text-primary card-icon"
-              />
+              <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
               {{ toHumanReadbleDate(list.deadline) }}
             </h5>
           </div>
@@ -70,8 +66,15 @@ import { getStaffObj } from '../firebase/staff_class'
             </div>
           </div>
         </div>
+        <div
+          v-if="listing.length == 0"
+          class="d-flex flex-column align-items-center justify-content-center h-100"
+        >
+          <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
+          <h4 class="fw-bold">OOPS! Looks like you haven't made any listings yet...</h4>
+        </div>
       </div>
-    </div>
+
   </div>
 </template>
 
@@ -144,8 +147,8 @@ export default {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
-    },
-  },
+    }
+  }
 }
 </script>
 
