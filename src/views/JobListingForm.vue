@@ -1,21 +1,11 @@
+<script setup>
+  import FormSuccessModal from '../components/FormSuccessModal.vue';
+</script>
+
 <template>
   <div class="container">
 
-    <div
-      class="alert alert-success alert-dismissible fade show general mb-3"
-      v-if="successMessage"
-      >
-      {{ successMessage }}
-      <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearSuccessMessage"/>
-    </div>
-
-    <div
-    class="alert alert-danger alert-dismissible fade show general mb-3"
-    v-if="failureMessage"
-  >
-    {{ failureMessage }}
-    <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearFailureMessage"/>
-    </div>
+    <FormSuccessModal id="formSuccessModal" ref="formSucModal" />
 
     <div class="p-3">
       <font-awesome-icon
@@ -28,7 +18,8 @@
 
     <div class="card card_sp border-0 rounded-3">
       <div class="card-body">
-        <h2 class="card-title title">Job Listing Form</h2>
+        <h4 class="card-title text-center">Create a New Listing</h4>
+
         <form @submit.prevent="submitForm" class="general">
           <div class="form-group">
             <label for="jobTitle">Job Title</label>
@@ -91,23 +82,27 @@
             <div
               v-for="(responsibility, index) in jobListing.responsibilities"
               :key="index"
-              class="d-flex align-items-center"
+              class="input-group mb-2"
             >
               <input
                 type="text"
-                class="form-control mb-1"
+                class="form-control"
                 v-model="jobListing.responsibilities[index]"
                 required
                 pattern=".*\S+.*"
                 title="Please enter at least one non-whitespace character"
               />
-              <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1" type="button">
-                Remove
+              <div class="input-group-text btn btn-light2" v-if="jobListing.responsibilities.length > 1" @click="removeResponsibility(index)">
+                <button type="button" class="btn-remove-styling">
+                  <font-awesome-icon icon="fa-solid fa-trash" />
+                </button>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1 rounded-circle" type="button">
+                <font-awesome-icon icon="fa-solid fa-plus" />
               </button>
             </div>
-            <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" type="button">
-              Add Responsibility
-            </button>
           </div>
 
           <div class="form-group" style="margin-top: 1em">
@@ -115,19 +110,27 @@
             <div
               v-for="(skill, index) in jobListing.skills"
               :key="index"
-              class="d-flex align-items-center"
+              class="input-group mb-2"
             >
               <input
                 type="text"
-                class="form-control mb-1"
+                class="form-control"
                 v-model="jobListing.skills[index]"
                 required
                 pattern=".*\S+.*"
                 title="Please enter at least one non-whitespace character"
               />
-              <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" type="button">Remove</button>
+              <div class="input-group-text btn btn-light2" v-if="jobListing.skills.length > 1" @click="removeSkill(index)">
+                <button type="button" class="btn-remove-styling">
+                  <font-awesome-icon icon="fa-solid fa-trash" />
+                </button>
+              </div>
             </div>
-            <button @click="addSkill" class="btn btn-primary btn-sm mt-1" type="button">Add Skill</button>
+            <div class="d-flex justify-content-center">
+              <button @click="addSkill" class="btn btn-primary btn-sm mt-1 rounded-circle" type="button">
+                <font-awesome-icon icon="fa-solid fa-plus" />
+              </button>
+            </div>
           </div>
           <div style="margin-top: 1em"></div>
           <button @click="navigateBack" class="btn btn-dark" type="button">Cancel</button>
@@ -154,8 +157,6 @@ export default {
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       },
-      successMessage: '',
-      failureMessage: ''
     }
   },
   methods: {
@@ -173,12 +174,16 @@ export default {
     },
     async submitForm() {
       // Call the Firebase function to write data
-      console.log('Form Data:', this.jobListing)
-      
       var curr = this.jobListing
       var new_listing = new Listing(curr.title, curr.department, curr.deadline, curr.description, curr.responsibilities, curr.skills)
       console.log("new listing", new_listing)
-      await new_listing.saveNewListingToDB()
+
+      try {
+        await new_listing.saveNewListingToDB()
+        this.$refs.formSucModal.showSuccessModal('Listing Successfully Added!')
+      } catch (error) {
+        this.$refs.formSucModal.showErrorModal(error)
+      }
     },
     clearForm() {
       // Clear the form fields
@@ -211,13 +216,7 @@ export default {
 }
 </script>
 
-<style>
-.title {
-  font-family: 'montserrat-bold';
-  font-size: 2em;
-  margin: auto;
-  text-align: center;
-}
+<style scoped>
 .general {
   font-family: 'montserrat-bold';
   font-size: 1em;
@@ -231,5 +230,8 @@ export default {
 }
 .btn-back {
   cursor: pointer;
+}
+.btn-remove-styling {
+  all: unset;
 }
 </style>

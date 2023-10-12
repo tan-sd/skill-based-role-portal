@@ -1,31 +1,19 @@
 <script setup>
 import TopNavBar from '../components/TopNavBar.vue'
+import FormSuccessModal from '../components/FormSuccessModal.vue';
 </script>
 
 <template>
   <div>
     <TopNavBar />
-    <div class="container">
-  
-      <div
-        class="alert alert-success alert-dismissible fade show general mb-3"
-        v-if="successMessage"
-        >
-        {{ successMessage }}
-        <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearSuccessMessage"/>
-      </div>
-  
-      <div
-      class="alert alert-danger alert-dismissible fade show general mb-3"
-      v-if="failureMessage"
-    >
-      {{ failureMessage }}
-      <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="close float-end" data-dismiss="alert" @click="clearFailureMessage"/>
-      </div>
+    
+    <div class="container mt-4">
+
+      <FormSuccessModal id="formSuccessModal" ref="formSucModal" />
   
       <div class="card card_sp">
         <div class="card-body">
-          <h2 class="card-title title">Current Listing Details</h2>
+          <h4 class="card-title text-center">Edit Listing</h4>
           <form @submit.prevent="submitForm" class="general">
             <div class="form-group">
               <label for="jobTitle">Job Title</label>
@@ -88,21 +76,27 @@ import TopNavBar from '../components/TopNavBar.vue'
               <div
                 v-for="(responsibility, index) in jobListing.responsibilities"
                 :key="index"
-                class="d-flex align-items-center"
+                class="input-group mb-2"
               >
                 <input
                   type="text"
-                  class="form-control mb-1"
+                  class="form-control"
                   v-model="jobListing.responsibilities[index]"
                   required
+                  pattern=".*\S+.*"
+                  title="Please enter at least one non-whitespace character"
                 />
-                <button @click="removeResponsibility(index)" class="btn btn-danger btn-sm ms-1" type="button">
-                  Remove
+                <div class="input-group-text btn btn-light2" v-if="jobListing.responsibilities.length > 1" @click="removeResponsibility(index)">
+                  <button type="button" class="btn-remove-styling">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                  </button>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center">
+                <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1 rounded-circle" type="button">
+                  <font-awesome-icon icon="fa-solid fa-plus" />
                 </button>
               </div>
-              <button @click="addResponsibility" class="btn btn-primary btn-sm mt-1" type="button">
-                Add Responsibility
-              </button>
             </div>
   
             <div class="form-group" style="margin-top: 1em">
@@ -110,17 +104,27 @@ import TopNavBar from '../components/TopNavBar.vue'
               <div
                 v-for="(skill, index) in jobListing.skills"
                 :key="index"
-                class="d-flex align-items-center"
+                class="input-group mb-2"
               >
                 <input
                   type="text"
-                  class="form-control mb-1"
+                  class="form-control"
                   v-model="jobListing.skills[index]"
                   required
+                  pattern=".*\S+.*"
+                  title="Please enter at least one non-whitespace character"
                 />
-                <button @click="removeSkill(index)" class="btn btn-danger btn-sm ms-1" type="button">Remove</button>
+                <div class="input-group-text btn btn-light2" v-if="jobListing.skills.length > 1" @click="removeSkill(index)">
+                  <button type="button" class="btn-remove-styling">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                  </button>
+                </div>
               </div>
-              <button @click="addSkill" class="btn btn-primary btn-sm mt-1" type="button">Add Skill</button>
+              <div class="d-flex justify-content-center">
+                <button @click="addSkill" class="btn btn-primary btn-sm mt-1 rounded-circle" type="button">
+                  <font-awesome-icon icon="fa-solid fa-plus" />
+                </button>
+              </div>
             </div>
             <div style="margin-top: 1em"></div>
             <button @click="navigateBack" class="btn btn-dark" type="button">Cancel</button>
@@ -151,8 +155,6 @@ export default {
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       },
-      successMessage: '',
-      failureMessage: ''
     }
   },
 
@@ -194,10 +196,9 @@ export default {
       var status = await listing.pushUpdatedListingToDB()
 
       if (status) {
-        this.failureMessage = '';
-        this.successMessage = 'Listing has been successfully updated!';
+        this.$refs.formSucModal.showSuccessModal('Listing Successfully Updated!')
       } else {
-        this.failureMessage = 'Failed to update the listing. Please try again!'
+        this.$refs.formSucModal.showErrorModal(error)
       }
     },
     navigateBack() {
@@ -220,13 +221,7 @@ export default {
 }
 </script>
 
-<style>
-.title {
-  font-family: 'montserrat-bold';
-  font-size: 2em;
-  margin: auto;
-  text-align: center;
-}
+<style scoped>
 .general {
   font-family: 'montserrat-bold';
   font-size: 1em;
@@ -237,5 +232,8 @@ export default {
   margin-bottom: 2em;
   margin-left: 1em;
   margin-right: 1em;
+}
+.btn-remove-styling {
+  all: unset;
 }
 </style>

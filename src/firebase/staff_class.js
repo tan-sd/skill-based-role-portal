@@ -49,7 +49,7 @@ class Staff {
     async #init(id) {
         try {
             const staff_data = await read_staff_data(id)
-            const profilePic = await getProfilePicURL(id)
+            // const profilePic = await getProfilePicURL(id)
 
             this.#id = parseInt(id, 10)
             this.#fname = staff_data.firstname
@@ -58,7 +58,7 @@ class Staff {
             this.#skillset = staff_data.skillsets
             this.#email = staff_data.email
             this.#accessRights = staff_data.accessRights
-            this.#profilePic = profilePic
+            this.#profilePic = "https://vignette.wikia.nocookie.net/btb-2015/images/7/76/Bob.png/revision/latest?cb=20160630024047" // Change this with diff profile pics
             this.#listingsApp = staff_data.listingsapplied
             this.#role = roleMapping[staff_data.accessRights]
         } catch (error) {

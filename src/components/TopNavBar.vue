@@ -2,7 +2,7 @@
 import Listing from '../firebase/listing_class.js'
 </script>
 <template>
-  <div class="navBarContainer mb-2">
+  <div class="navBarContainer mb-2 sticky-top">
     <div class="backButtonContainer">
       <font-awesome-icon
         :icon="['fas', 'chevron-left']"

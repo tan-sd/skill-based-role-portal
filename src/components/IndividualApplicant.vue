@@ -4,33 +4,32 @@ import TopNavBar from './TopNavBar.vue'
 </script>
 
 <template>
-  <div class="d-flex flex-column align-items-center w-100">
+  <div>
     <TopNavBar />
-    <div class="header w-100">Future header up here</div>
-    <div style="width: 85%">
-      <!-- Header -->
+    <div class="header w-100 ps-5">Future header up here</div>
 
-      <div class="card">
+    <div class="px-3 px-md-5 pb-3">
+      <div class="card m-0">
         <div class="card-body">
           <div class="row pb-5 align-items-center">
             <div class="col-2">
               <img class="profilePic" src="applicant.profilePicture" />
             </div>
-
+  
             <div class="col-3">
               <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
                 {{ applicant.firstname }} {{ applicant.lastname }}
               </h3>
               <p class="m-0">{{ applicant.email }}</p>
             </div>
-
+  
             <div class="col-1 d-flex justify-content-end">
               <div
                 class="vr bg-secondary opacity-100"
                 style="width: 5px; height: 60px; border-radius: 3px"
               ></div>
             </div>
-
+  
             <div class="col-6">
               <h5 class="card-title">{{ applicant.position }}</h5>
               <div class="row">
@@ -40,7 +39,7 @@ import TopNavBar from './TopNavBar.vue'
               </div>
             </div>
           </div>
-
+  
           <div class="row pb-3">
             <div class="col-6">
               <div class="pb-4">
@@ -82,7 +81,7 @@ import TopNavBar from './TopNavBar.vue'
               </div>
             </div>
           </div>
-
+  
           <div class="row pt-5 mb-5">
             <div class="col">
               <button type="button" class="btn btn-secondary w-50 text-light">
@@ -163,7 +162,6 @@ export default {
 .header {
   font-family: 'montserrat';
   font-size: 30px;
-  margin-left: 40px;
   padding: 10px;
 }
 
