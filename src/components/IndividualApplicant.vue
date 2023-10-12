@@ -1,6 +1,8 @@
 <script setup>
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import TopNavBar from './TopNavBar.vue'
+import {getStaffObj} from '../firebase/staff_class'
+
 </script>
 
 <template>
@@ -104,8 +106,7 @@ export default {
   data() {
     return {
       applicant: {
-        firstname: '',
-        lastname: '',
+        fullname:'',
         email: '',
         position: '',
         profilePicture: 'profile.jpg',
@@ -118,20 +119,27 @@ export default {
         jobSkills: []
       }
     }
-  },
-  async created() {
-    const response = await read_staff_data(this.$route.params.name)
-    this.applicant.firstname = response.firstname
-    this.applicant.lastname = response.lastname
-    this.applicant.email = response.email
-    this.applicant.position = response.position
-    this.applicant.department = response.department
-    this.applicant.country = response.country
-    this.job.applicantSkills = response.skillsets
+  },    async mounted(){
+        var staffid = localStorage.getItem('id')
+        var staff1= await getStaffObj(staffid)
+        this.fullname = await staff1.getFullName()
+        this.email = await staff1.getEmail()
+        this.position = await staff1.getPosition()
+        this.country = await staff1.getCountry()
+    },
+  // async created() {
+  //   const response = await read_staff_data(this.$route.params.name)
+  //   this.applicant.firstname = response.firstname
+  //   this.applicant.lastname = response.lastname
+  //   this.applicant.email = response.email
+  //   this.applicant.position = response.position
+  //   this.applicant.department = response.department
+  //   this.applicant.country = response.country
+  //   this.job.applicantSkills = response.skillsets
 
-    const response1 = await read_listing_data(this.$route.params.id)
-    this.job.jobSkills = response1.skills
-  },
+  //   const response1 = await read_listing_data(this.$route.params.id)
+  //   this.job.jobSkills = response1.skills
+  // },
   methods: {
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
