@@ -10,7 +10,7 @@ import {getStaffObj} from '../firebase/staff_class'
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">{{ jobTitle }}</h4></h4>
+                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">{{ job }}</h4></h4>
                 <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal">
                
                 </button>
@@ -62,7 +62,10 @@ import {getStaffObj} from '../firebase/staff_class'
 
 <script>
 export default {
-    props:['job'],
+    props:{
+        job: String,
+        listing: String
+    },
     // created() {
     //     this.fetch_read_staff_data()
         
@@ -72,15 +75,17 @@ export default {
         return {
             fullname:'',
             email:'',
-            jobTitle:this.job,
             resume: null,
         }
     },
     async mounted(){
         var staffid = localStorage.getItem('id')
         var staff1= await getStaffObj(staffid)
-        this.fullname = await staff1.getFullName()
-        this.email = await staff1.getEmail()
+        await staff1.init()
+        this.fullname = staff1.getFullName()
+        this.email = staff1.getEmail()
+        console.log(this.job)
+        console.log(this.listing)
     },
     methods: {
         // async fetch_read_staff_data(){
@@ -92,15 +97,12 @@ export default {
         //     this.resume = null
         
         // },
-   
-    getJob(job){
-        this.job = job
-    },
+
     uFile(){
         this.resume = this.$refs.file.files[0]
     },
     async submitFile(){
-        const resp = await uploadFiles(this.resume.name, this.resume)
+        const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
     }
     }
 }

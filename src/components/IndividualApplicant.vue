@@ -147,7 +147,7 @@ export default {
 
       const response1 = await read_listing_data(this.$route.params.id)
       this.job.jobSkills = response1.skills
-      this.applicant.resumeDLlink = await getFile("Seth_Yap_Resume_2023.pdf")
+      this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
     }
   },
   computed: {
