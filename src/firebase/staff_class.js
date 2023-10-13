@@ -125,6 +125,7 @@ class Staff {
 
 class HRStaff extends Staff {
     #initPromiseHR
+    #listings_created
 
     constructor (id) {
         super(id);
@@ -136,7 +137,7 @@ class HRStaff extends Staff {
         try {
             const listings_created = await listingDataByCreator(id)
             
-            this.listings_created = listings_created
+            this.#listings_created = listings_created
         } catch (error) {
             console.log(`Error in HRStaff constructor for id ${id}: ${error}`)
             throw error
@@ -146,7 +147,7 @@ class HRStaff extends Staff {
     async getListingsCreated () {
         await this.#initPromiseHR;
 
-        return this.listings_created;
+        return this.#listings_created;
     }
 }
 
