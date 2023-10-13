@@ -2,6 +2,7 @@
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import TopNavBar from './TopNavBar.vue'
 import {getStaffObj} from '../firebase/staff_class'
+import {getFile} from '../firebase/storage'
 
 </script>
 
@@ -88,8 +89,9 @@ import {getStaffObj} from '../firebase/staff_class'
             <div class="col">
               <button type="button" class="btn btn-secondary w-50 text-light">
                 <span class="text-light" style="font-weight: bold">
-                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> Download
-                  Resume
+                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> 
+                  <a target="__blank" :href="applicant.resumeDLlink">Download
+                  Resume</a>
                 </span>
               </button>
             </div>
@@ -110,7 +112,8 @@ export default {
         position: '',
         profilePicture: 'profile.jpg',
         department: '',
-        country: ''
+        country: '',
+        resumeDLlink:'',
       },
 
       job: {
@@ -118,27 +121,10 @@ export default {
         jobSkills: []
       }
     }
-  },    async mounted(){
-        var staffid = localStorage.getItem('id')
-        var staff1= await getStaffObj(staffid)
-        this.fullname = await staff1.getFullName()
-        this.email = await staff1.getEmail()
-        this.position = await staff1.getPosition()
-        this.country = await staff1.getCountry()
-    },
-  // async created() {
-  //   const response = await read_staff_data(this.$route.params.name)
-  //   this.applicant.firstname = response.firstname
-  //   this.applicant.lastname = response.lastname
-  //   this.applicant.email = response.email
-  //   this.applicant.position = response.position
-  //   this.applicant.department = response.department
-  //   this.applicant.country = response.country
-  //   this.job.applicantSkills = response.skillsets
-
-  //   const response1 = await read_listing_data(this.$route.params.id)
-  //   this.job.jobSkills = response1.skills
-  // },
+  },    
+  created() {
+    this.loadData()
+  },
   methods: {
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
@@ -147,6 +133,21 @@ export default {
             radial-gradient(closest-side, white 79%, transparent 80% 100%),
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
+    },
+    async loadData(){
+      const staff = await getStaffObj(localStorage.getItem('id'))
+      await staff.init()
+      this.applicant.firstname = staff.getFirstName()
+      this.applicant.lastname =  staff.getLastName()
+      this.applicant.email =staff.getEmail()
+      this.applicant.position =staff.getPosition()
+      this.applicant.department = staff.getDepartment()
+      this.applicant.country =  staff.getCountry()
+      this.job.applicantSkills =  staff.getSkillset()
+
+      const response1 = await read_listing_data(this.$route.params.id)
+      this.job.jobSkills = response1.skills
+      this.applicant.resumeDLlink = await getFile("Seth_Yap_Resume_2023.pdf")
     }
   },
   computed: {

@@ -26,14 +26,16 @@ class Staff {
     #position
     #skillset
     #email
+    #department
     #accessRights
     #profilePic
     #listingsApp
     #initPromise
     #role
+    #country
 
     constructor (id) {
-        this.#id = null; // Initialize properties to null or default values
+        this.#id = id; // Initialize properties to null or default values
         this.#fname = null;
         this.#lname = null;
         this.#position = null;
@@ -42,16 +44,16 @@ class Staff {
         this.#accessRights = null;
         this.#profilePic = null;
         this.#listingsApp = null;
-
-        this.#initPromise = this.#init(id);
+        this.#country = null
+        this.#department = null
     }
 
-    async #init(id) {
+    async init() {
         try {
-            const staff_data = await read_staff_data(id)
+            const staff_data = await read_staff_data(this.#id)
             // const profilePic = await getProfilePicURL(id)
 
-            this.#id = parseInt(id, 10)
+            this.#id = parseInt(this.#id, 10)
             this.#fname = staff_data.firstname
             this.#lname = staff_data.lastname
             this.#position = staff_data.position
@@ -61,65 +63,64 @@ class Staff {
             this.#profilePic = "https://vignette.wikia.nocookie.net/btb-2015/images/7/76/Bob.png/revision/latest?cb=20160630024047" // Change this with diff profile pics
             this.#listingsApp = staff_data.listingsapplied
             this.#role = roleMapping[staff_data.accessRights]
+            this.#country = staff_data.country
+            this.#department= staff_data.department
         } catch (error) {
             console.log(`Error in Staff constructor for id ${id}: ${error}`)
             throw error
         }
     }
 
-    async getID () {
-        await this.#initPromise;
+    getID () {
         return this.#id;
     }
 
-    async getFirstName () {
-        await this.#initPromise;
+    getFirstName () {
         return this.#fname;
     }
 
-    async getLastName () {
-        await this.#initPromise;
+    getLastName () {
         return this.#lname;
     }
 
-    async getFullName () {
-        await this.#initPromise;
+    getFullName () {
         return `${this.#fname} ${this.#lname}`;
     }
 
-    async getPosition () {
-        await this.#initPromise;
+    getDepartment () {
+        return this.#department
+    }
+
+    getPosition () {
         return this.#position;
     }
 
-    async getSkillset () {
-        await this.#initPromise;
+    getSkillset () {
         return this.#skillset;
     }
 
-    async getEmail () {
-        await this.#initPromise;
+    getEmail () {
         return this.#email;
     }
 
-    async getAccessRights () {
-        await this.#initPromise;
+    getAccessRights () {
         return this.#accessRights;
     }
 
-    async getRole () {
-        await this.#initPromise;
+    getRole () {
         return this.#role;
     }
 
-    async getProfilePic () {
-        await this.#initPromise;
+    getProfilePic () {
         return this.#profilePic;
     }
 
-    async getListingsApplied () {
-        await this.#initPromise;
+     getListingsApplied () {
         return this.#listingsApp;
+    }
+
+    getCountry (){
+        return this.#country
     }
 }
 

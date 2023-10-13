@@ -126,7 +126,7 @@ export default class Listing {
             responsibilities: this.#responsibilities,
             skills: this.#skills,
             applicants: this.#applicants,
-            title: this.#title
+            title: this.#title,
         }
 
         try {
