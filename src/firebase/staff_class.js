@@ -158,21 +158,19 @@ class HRStaff extends Staff {
 
 export async function getStaffObj (id) {
     var staff_temp = new Staff();
-    var class_type = 'staff';
 
     try {
         await staff_temp.init(id)
     } catch (error) {
         if (error == "Staff ID does not exist") {
-            return [null, null]
+            return null
         }
     }
 
     if (createdAccess.includes(staff_temp.getAccessRights())) {
         staff_temp = new HRStaff();
         await staff_temp.init(id)
-        class_type = 'HRstaff';
     }
 
-    return [staff_temp, class_type];
+    return staff_temp;
 }
