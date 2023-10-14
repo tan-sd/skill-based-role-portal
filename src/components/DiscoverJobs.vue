@@ -116,6 +116,7 @@ export default {
         const data = await allListingData()
         this.listing = Object.values(data)
         this.getMatchPercentage()
+        
       } catch (error) {
         console.error('Error fetching data from Firebase:', error)
       }
@@ -128,10 +129,10 @@ export default {
         const data = this.listing
         const staff = await getStaffObj(localStorage.getItem('id'))
         const staffSkillset = await staff.getSkillset()
-        var skillMatch = 0
-
+        
         for (let index = 0; index < data.length; index++) {
           const listingSkills = data[index].skills
+          var skillMatch = 0
           for (const skill of listingSkills) {
             if (staffSkillset.includes(skill)) {
               skillMatch++
