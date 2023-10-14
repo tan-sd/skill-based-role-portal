@@ -27,7 +27,6 @@ import { faThinkPeaks } from '@fortawesome/free-brands-svg-icons';
             :to="`/individualApplicant/${applicant.id}`"
             class="card border-0 my-3 p-3 bg-white flex-col flex-row listing-card justify-content-start"
           >
-            <div class="add-border-left me-3 d-none d-sm-block"></div>
 
             <div class="profile-picture">
               <img :src="applicant.profilePic" alt="Profile Picture" />
