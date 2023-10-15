@@ -156,18 +156,8 @@ export default {
     const user_id = localStorage.getItem('id')
     const staffObj = await getStaffObj(user_id)
 
-    this.imgSrc = await staffObj.getProfilePic()
-    this.username = await staffObj.getFullName()
-
-    const navbar_collapse_btn = document.getElementById('navbarTogglerBtn')
-    const navbar_collapse = document.getElementById('navbarSupportedContent')
-
-    navbar_collapse_btn.addEventListener('click', (event) => {
-      event.preventDefault()
-      event.stopPropagation()
-
-      navbar_collapse.classList.toggle('test')
-    })
+    this.imgSrc = staffObj.getProfilePic()
+    this.username = staffObj.getFullName()
   }
 }
 </script>
