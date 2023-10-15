@@ -50,7 +50,7 @@ class Staff {
     async init(id) {
         try {
             const staff_data = await read_staff_data(id)
-            // const profilePic = await getProfilePicURL(id)
+            const profilePic = await getProfilePicURL(id)
 
             if (staff_data == null) {
                 var error = 'Staff ID does not exist'
@@ -65,7 +65,7 @@ class Staff {
             this.#skillset = staff_data.skillsets
             this.#email = staff_data.email
             this.#accessRights = parseInt(staff_data.accessrights, 10)
-            this.#profilePic = "https://vignette.wikia.nocookie.net/btb-2015/images/7/76/Bob.png/revision/latest?cb=20160630024047" // Change this with diff profile pics
+            this.#profilePic = profilePic
             this.#listingsApp = staff_data.listingsapplied
             this.#role = roleMapping[staff_data.accessrights]
             this.#country = staff_data.country

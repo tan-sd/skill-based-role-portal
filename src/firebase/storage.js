@@ -8,7 +8,7 @@ export const uploadFiles = async (filePath, file) => {
 }
 
 export const getProfilePicURL = async (id) => {
-    const profilePicRef = ref(storage, `profilepics/${id}.png`)
+    const profilePicRef = ref(storage, `images/${id}/profilepic.jpg`)
     const url = await getDownloadURL(profilePicRef)
 
     return url
