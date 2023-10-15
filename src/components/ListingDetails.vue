@@ -65,7 +65,14 @@ export default {
   },
   data() {
     return {
-      listingDetails: null,
+      listingDetails: {
+        title: '',
+        description: '',
+        skills: [],
+        responsibilities: [],
+        createdate: '',
+        deadline: ''
+      },
       userSkills: [],
       applied: []
     }
@@ -73,9 +80,9 @@ export default {
   methods: {
     async fetchIndividualListingData() {
       try {
-        const data = await new Listing().loadListing(this.$route.params.id)
-        this.listingDetails = data
-        console.log(data)
+        const newListing = new Listing()
+        await newListing.loadListing(this.$route.params.id)
+        this.listingDetails = newListing.getAllAtrr()
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
       }
@@ -92,7 +99,6 @@ export default {
 
       try {
         const staff = await getStaffObj(user_id)
-        await staff.init()
         const user_skills = staff.getSkillset()
 
         this.userSkills = user_skills
@@ -102,7 +108,6 @@ export default {
     },
     async fetch_read_staff_data() {
       const staff = await getStaffObj(localStorage.getItem('id'))
-      await staff.init()
       this.applied = staff.getListingsApplied()
     }
   },

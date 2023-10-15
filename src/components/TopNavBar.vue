@@ -40,12 +40,13 @@ import Listing from '../firebase/listing_class.js'
 <script>
 export default {
   async created() {
-    const listingObj = await new Listing().loadListing(this.$route.params.id)
-    this.jobTitle = listingObj.title
-    this.jobDepartment = listingObj.department
-    this.applicantNum = listingObj.applicants.length
-    this.deadline = listingObj.deadline
-    console.log(this.$route.name)
+    const listingObj = new Listing()
+    await listingObj.loadListing(this.$route.params.id)
+
+    this.jobTitle = listingObj.getTitle()
+    this.jobDepartment = listingObj.getDepartment()
+    this.applicantNum = listingObj.getApplicants().length
+    this.deadline = listingObj.getDeadline()
   },
   data() {
     return {

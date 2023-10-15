@@ -22,7 +22,7 @@ import {getStaffObj} from '../firebase/staff_class'
                     </div>
                     <div class="row">
                         <div class="col-3 float-right">
-                            <h5><img class="profilePic" src="applicant.profilePicture" /> </h5>
+                            <h5><img class="profilePic" :src="profilepic" /> </h5>
                         </div>
                         <div class="col-9 pt-2" style="font-family: Montserrat">
                             <p>{{fullname }}</p>
@@ -64,7 +64,7 @@ import {getStaffObj} from '../firebase/staff_class'
 export default {
     props:{
         job: String,
-        listing: String
+        listing: Number
     },
     // created() {
     //     this.fetch_read_staff_data()
@@ -76,34 +76,23 @@ export default {
             fullname:'',
             email:'',
             resume: null,
+            profilepic: null,
         }
     },
     async mounted(){
         var staffid = localStorage.getItem('id')
         var staff1= await getStaffObj(staffid)
-        await staff1.init()
         this.fullname = staff1.getFullName()
         this.email = staff1.getEmail()
-        console.log(this.job)
-        console.log(this.listing)
+        this.profilepic = staff1.getProfilePic()
     },
     methods: {
-        // async fetch_read_staff_data(){
-        
-        //     const data = await read_staff_data(localStorage.getItem('id'))
-        //     this.firstName = data.firstname 
-        //     this.lastName = data.lastname 
-        //     this.email = data.email
-        //     this.resume = null
-        
-        // },
-
-    uFile(){
-        this.resume = this.$refs.file.files[0]
-    },
-    async submitFile(){
-        const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
-    }
+        uFile(){
+            this.resume = this.$refs.file.files[0]
+        },
+        async submitFile(){
+            const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
+        }
     }
 }
 </script>
@@ -114,6 +103,7 @@ export default {
   height: 80px;
   width: 80px;
   float: center;
+  object-fit: cover;
 }
 
 #ModalInfo{
