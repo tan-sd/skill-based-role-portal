@@ -1,5 +1,4 @@
 <script setup>
-import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import TopNavBar from './TopNavBar.vue'
 import {getStaffObj} from '../firebase/staff_class'
 import {getFile} from '../firebase/storage'
@@ -9,7 +8,6 @@ import {getFile} from '../firebase/storage'
 <template>
   <div>
     <TopNavBar />
-    <div class="header w-100 ps-5">Future header up here</div>
 
     <div class="px-3 px-md-5 pb-3">
       <div class="card m-0">
@@ -21,7 +19,7 @@ import {getFile} from '../firebase/storage'
   
             <div class="col-3">
               <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
-                {{ applicant.firstname }} {{ applicant.lastname }}
+                {{ applicant.fullname }}
               </h3>
               <p class="m-0">{{ applicant.email }}</p>
             </div>
@@ -90,7 +88,7 @@ import {getFile} from '../firebase/storage'
               <button type="button" class="btn btn-secondary w-50 text-light">
                 <span class="text-light" style="font-weight: bold">
                   <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> 
-                  <a target="__blank" :href="applicant.resumeDLlink">Download
+                  <a style="color: white" target="__blank" :href="applicant.resumeDLlink">Download
                   Resume</a>
                 </span>
               </button>
@@ -114,6 +112,7 @@ export default {
         department: '',
         country: '',
         resumeDLlink:'',
+        profilepic:null
       },
 
       job: {
@@ -122,9 +121,24 @@ export default {
       }
     }
   },    
-  created() {
-    this.loadData()
-  },
+  // created() {
+  //   this.loadData()
+  // },
+  async mounted(){
+        var staffid = localStorage.getItem('id')
+        var staff1= await getStaffObj(staffid)
+
+        this.applicant.fullname = staff1.getFullName()
+        this.applicant.email = staff1.getEmail()
+        this.applicant.profilepic = staff1.getProfilePic()
+        this.applicant.department = staff1.getDepartment()
+        this.applicant.position = staff1.getPosition()
+        this.applicant.country = staff1.getCountry()
+        this.job.applicantSkills= staff1.getSkillset()
+
+        this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
+
+    },
   methods: {
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
@@ -134,21 +148,12 @@ export default {
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
     },
-    async loadData(){
-      const staff = await getStaffObj(localStorage.getItem('id'))
-      await staff.init()
-      this.applicant.firstname = staff.getFirstName()
-      this.applicant.lastname =  staff.getLastName()
-      this.applicant.email =staff.getEmail()
-      this.applicant.position =staff.getPosition()
-      this.applicant.department = staff.getDepartment()
-      this.applicant.country =  staff.getCountry()
-      this.job.applicantSkills =  staff.getSkillset()
-
-      const response1 = await read_listing_data(this.$route.params.id)
-      this.job.jobSkills = response1.skills
-      this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
-    }
+    // async loadData(){
+    //   const staff = await getStaffObj(localStorage.getItem('id'))
+    //   await staff.init()
+  
+    //   this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
+    // }
   },
   computed: {
     getMatchPercentage() {

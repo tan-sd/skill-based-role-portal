@@ -66,10 +66,6 @@ export default {
         job: String,
         listing: Number
     },
-    // created() {
-    //     this.fetch_read_staff_data()
-        
-    // },
 
     data() {
         return {
