@@ -82,7 +82,7 @@ export default {
         const data = await staffData()
         const objectData = Object.values(data)
         for (let i = 0; i < objectData.length; i++) {
-          if (objectData[i].email === email.value) {
+          if (objectData[i].email.toLowerCase() === email.value.toLowerCase()) {
             localStorage.setItem('accessRights', objectData[i].accessrights)
             localStorage.setItem('id', Object.keys(data)[i])
             return true
