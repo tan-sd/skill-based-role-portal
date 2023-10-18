@@ -43,16 +43,30 @@ import { getStaffObj } from '../firebase/staff_class'
             {{ toHumanReadbleDate(listingDetails.deadline) }}
           </p>
 
-          <div v-if="!applied.includes(parseInt(this.$route.params.id))">
+          <div v-if="id1== 3">
+            <button type="button" class="btn btn-secondary applyButton" disabled>You are ups already, don't need apply</button>
+          </div>
+
+          <div v-else-if="listingDepartment==userDepartment">
+            <button type="button" class="btn btn-secondary applyButton" disabled>You cannot apply to the same department</button>
+          </div>
+
+          <div v-else>
+            <div v-if="!applied.includes(parseInt(this.$route.params.id))">
             <ResumeDropOffButton
               :job="listingDetails.title"
               :listing="listingDetails.listingId"
               :key="listingDetails.title"
             ></ResumeDropOffButton>
+            </div>
+          
+            <div v-else>
+              <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
+            </div>
           </div>
-          <div v-else>
-            <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
-          </div>
+
+
+
         </div>
       </div>
     </div>
@@ -72,7 +86,10 @@ export default {
         skills: [],
         responsibilities: [],
         createdate: '',
-        deadline: ''
+        deadline: '',
+        userDepartment:'',
+        listingDepartment:'',
+        id1:''
       },
       userSkills: [],
       applied: [],
@@ -82,12 +99,21 @@ export default {
   methods: {
     async fetchIndividualListingData() {
       try {
+        
         const newListing = new Listing()
         await newListing.loadListing(this.$route.params.id)
         this.listingDetails = newListing.getAllAtrr()
         const user_id = localStorage.getItem('id')
         const staff = await getStaffObj(user_id)
         const user_skills = staff.getSkillset()
+
+        this.id1 = localStorage.getItem('id').toString()[1]
+        this.userDepartment= staff.getDepartment()
+        this.listingDepartment = newListing.getDepartment()
+
+        console.log("listing: ", this.listingDepartment,"user: ", this.userDepartment)
+        console.log(this.id1)
+
         this.listingDetails.skills.sort((a, b) => {
           if (user_skills.includes(a)) {
             return -1
@@ -110,6 +136,7 @@ export default {
 
     async getUserSkills() {
       const user_id = localStorage.getItem('id')
+
 
       try {
         const staff = await getStaffObj(user_id)
