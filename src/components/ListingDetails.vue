@@ -26,7 +26,8 @@ import { getStaffObj } from '../firebase/staff_class'
           <!-- Required Skills -->
           <h5 class="fw-bold">Required Skills</h5>
           <div
-            v-for="(e_skill, index) in listingDetails.skills" :key="index"
+            v-for="(e_skill, index) in listingDetails.skills"
+            :key="index"
             class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
             :class="userSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
           >
@@ -45,6 +46,7 @@ import { getStaffObj } from '../firebase/staff_class'
           <div v-if="!applied.includes(parseInt(this.$route.params.id))">
             <ResumeDropOffButton
               :job="listingDetails.title"
+              :listing="listingDetails.listingId"
               :key="listingDetails.title"
             ></ResumeDropOffButton>
           </div>
@@ -64,16 +66,37 @@ export default {
   },
   data() {
     return {
-      listingDetails: [],
+      listingDetails: {
+        title: '',
+        description: '',
+        skills: [],
+        responsibilities: [],
+        createdate: '',
+        deadline: ''
+      },
       userSkills: [],
-      applied: []
+      applied: [],
+      sortedSkills: []
     }
   },
   methods: {
     async fetchIndividualListingData() {
       try {
-        const data = await new Listing().loadListing(this.$route.params.id)
-        this.listingDetails = data
+        const newListing = new Listing()
+        await newListing.loadListing(this.$route.params.id)
+        this.listingDetails = newListing.getAllAtrr()
+        const user_id = localStorage.getItem('id')
+        const staff = await getStaffObj(user_id)
+        const user_skills = staff.getSkillset()
+        this.listingDetails.skills.sort((a, b) => {
+          if (user_skills.includes(a)) {
+            return -1
+          } else if (user_skills.includes(b)) {
+            return 1
+          } else {
+            return 0
+          }
+        })
       } catch (error) {
         console.log('Error fetching data from Firebase:', error)
       }
@@ -89,8 +112,8 @@ export default {
       const user_id = localStorage.getItem('id')
 
       try {
-        const user_data = await getStaffObj(user_id)
-        const user_skills = user_data.skillsets
+        const staff = await getStaffObj(user_id)
+        const user_skills = staff.getSkillset()
 
         this.userSkills = user_skills
       } catch (error) {
@@ -98,8 +121,8 @@ export default {
       }
     },
     async fetch_read_staff_data() {
-      const data = await getStaffObj(localStorage.getItem('id'))
-      this.applied = data.listingsapplied
+      const staff = await getStaffObj(localStorage.getItem('id'))
+      this.applied = staff.getListingsApplied()
     }
   },
   mounted() {

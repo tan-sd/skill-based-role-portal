@@ -26,14 +26,15 @@ class Staff {
     #position
     #skillset
     #email
+    #department
     #accessRights
     #profilePic
     #listingsApp
-    #initPromise
     #role
+    #country
 
-    constructor (id) {
-        this.#id = null; // Initialize properties to null or default values
+    constructor () {
+        this.#id = null;
         this.#fname = null;
         this.#lname = null;
         this.#position = null;
@@ -42,14 +43,20 @@ class Staff {
         this.#accessRights = null;
         this.#profilePic = null;
         this.#listingsApp = null;
-
-        this.#initPromise = this.#init(id);
+        this.#country = null
+        this.#department = null
     }
 
-    async #init(id) {
+    async init(id) {
         try {
             const staff_data = await read_staff_data(id)
-            // const profilePic = await getProfilePicURL(id)
+            const profilePic = await getProfilePicURL(id)
+
+            if (staff_data == null) {
+                var error = 'Staff ID does not exist'
+                console.log(`Error in Staff constructor for id ${id}: ${error}`)
+                throw error
+            }
 
             this.#id = parseInt(id, 10)
             this.#fname = staff_data.firstname
@@ -57,104 +64,112 @@ class Staff {
             this.#position = staff_data.position
             this.#skillset = staff_data.skillsets
             this.#email = staff_data.email
-            this.#accessRights = staff_data.accessRights
-            this.#profilePic = "https://vignette.wikia.nocookie.net/btb-2015/images/7/76/Bob.png/revision/latest?cb=20160630024047" // Change this with diff profile pics
+            this.#accessRights = parseInt(staff_data.accessrights, 10)
+            this.#profilePic = profilePic
             this.#listingsApp = staff_data.listingsapplied
-            this.#role = roleMapping[staff_data.accessRights]
+            this.#role = roleMapping[staff_data.accessrights]
+            this.#country = staff_data.country
+            this.#department= staff_data.department
         } catch (error) {
             console.log(`Error in Staff constructor for id ${id}: ${error}`)
             throw error
         }
     }
 
-    async getID () {
-        await this.#initPromise;
+    getID () {
         return this.#id;
     }
 
-    async getFirstName () {
-        await this.#initPromise;
+    getFirstName () {
         return this.#fname;
     }
 
-    async getLastName () {
-        await this.#initPromise;
+    getLastName () {
         return this.#lname;
     }
 
-    async getFullName () {
-        await this.#initPromise;
+    getFullName () {
         return `${this.#fname} ${this.#lname}`;
     }
 
-    async getPosition () {
-        await this.#initPromise;
+    getDepartment () {
+        return this.#department
+    }
+
+    getPosition () {
         return this.#position;
     }
 
-    async getSkillset () {
-        await this.#initPromise;
+    getSkillset () {
         return this.#skillset;
     }
 
-    async getEmail () {
-        await this.#initPromise;
+    getEmail () {
         return this.#email;
     }
 
-    async getAccessRights () {
-        await this.#initPromise;
+    getAccessRights () {
         return this.#accessRights;
     }
 
-    async getRole () {
-        await this.#initPromise;
+    getRole () {
         return this.#role;
     }
 
-    async getProfilePic () {
-        await this.#initPromise;
+    getProfilePic () {
         return this.#profilePic;
     }
 
-    async getListingsApplied () {
-        await this.#initPromise;
+    getListingsApplied () {
         return this.#listingsApp;
+    }
+
+    getCountry (){
+        return this.#country
     }
 }
 
 class HRStaff extends Staff {
-    #initPromiseHR
+    #listings_created
 
-    constructor (id) {
-        super(id);
-        
-        this.#initPromiseHR = this.#initHR(id);
+    constructor () {
+        super();
+
+        this.#listings_created = null;
     }
 
-    async #initHR(id) {
+    async init(id) {
+        await super.init(id);
+
         try {
             const listings_created = await listingDataByCreator(id)
             
-            this.listings_created = listings_created
+            this.#listings_created = listings_created
         } catch (error) {
             console.log(`Error in HRStaff constructor for id ${id}: ${error}`)
             throw error
         }
     }
 
-    async getListingsCreated () {
-        await this.#initPromiseHR;
-
-        return this.listings_created;
+    getListingsCreated () {
+        return this.#listings_created;
     }
 }
 
 export async function getStaffObj (id) {
-    const staff_temp = new Staff(id);
+    var staff_temp = new Staff();
 
-    if (createdAccess.includes(await staff_temp.getAccessRights())) {
-        return new HRStaff(id);
+    try {
+        await staff_temp.init(id)
+    } catch (error) {
+        if (error == "Staff ID does not exist") {
+            return null
+        }
+    }
+
+    if (createdAccess.includes(staff_temp.getAccessRights())) {
+        staff_temp = new HRStaff();
+        await staff_temp.init(id)
     }
 
     return staff_temp;

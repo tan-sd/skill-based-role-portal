@@ -10,7 +10,7 @@ import {getStaffObj} from '../firebase/staff_class'
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">{{ jobTitle }}</h4></h4>
+                <h4 class="modal-title" id="exampleModalLabel">Apply to: <h4 style="padding-left: 15px;display: inline-flex;">{{ job }}</h4></h4>
                 <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal">
                
                 </button>
@@ -22,7 +22,7 @@ import {getStaffObj} from '../firebase/staff_class'
                     </div>
                     <div class="row">
                         <div class="col-3 float-right">
-                            <h5><img class="profilePic" src="applicant.profilePicture" /> </h5>
+                            <h5><img class="profilePic" :src="profilepic" /> </h5>
                         </div>
                         <div class="col-9 pt-2" style="font-family: Montserrat">
                             <p>{{fullname }}</p>
@@ -62,46 +62,33 @@ import {getStaffObj} from '../firebase/staff_class'
 
 <script>
 export default {
-    props:['job'],
-    // created() {
-    //     this.fetch_read_staff_data()
-        
-    // },
+    props:{
+        job: String,
+        listing: Number
+    },
 
     data() {
         return {
             fullname:'',
             email:'',
-            jobTitle:this.job,
             resume: null,
+            profilepic: null,
         }
     },
     async mounted(){
         var staffid = localStorage.getItem('id')
         var staff1= await getStaffObj(staffid)
-        this.fullname = await staff1.getFullName()
-        this.email = await staff1.getEmail()
+        this.fullname = staff1.getFullName()
+        this.email = staff1.getEmail()
+        this.profilepic = staff1.getProfilePic()
     },
     methods: {
-        // async fetch_read_staff_data(){
-        
-        //     const data = await read_staff_data(localStorage.getItem('id'))
-        //     this.firstName = data.firstname 
-        //     this.lastName = data.lastname 
-        //     this.email = data.email
-        //     this.resume = null
-        
-        // },
-   
-    getJob(job){
-        this.job = job
-    },
-    uFile(){
-        this.resume = this.$refs.file.files[0]
-    },
-    async submitFile(){
-        const resp = await uploadFiles(this.resume.name, this.resume)
-    }
+        uFile(){
+            this.resume = this.$refs.file.files[0]
+        },
+        async submitFile(){
+            const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
+        }
     }
 }
 </script>
@@ -112,6 +99,7 @@ export default {
   height: 80px;
   width: 80px;
   float: center;
+  object-fit: cover;
 }
 
 #ModalInfo{

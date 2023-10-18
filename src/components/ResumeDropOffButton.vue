@@ -2,7 +2,7 @@
 import ModalResume from './ModalResume.vue'
 import { onMounted } from 'vue';
 import { Modal } from 'bootstrap'
-const props = defineProps(['job'])
+const props = defineProps(['job','listing'])
 
 let modalR;
 onMounted(()=>{
@@ -18,7 +18,7 @@ const showModal=() =>{
 <template>
     <div>
         <button class="btn btn-secondary applyButton" @click="showModal()">Apply</button>
-        <ModalResume :job=props.job></ModalResume>
+        <ModalResume :job=props.job :listing=props.listing></ModalResume>
     </div>
 </template>
 

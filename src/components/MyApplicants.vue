@@ -1,6 +1,9 @@
 <script setup>
 import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
+import { getStaffObj } from '../firebase/staff_class';
+import Listing from '../firebase/listing_class';
 import TopNavBar from './TopNavBar.vue'
+import { faThinkPeaks } from '@fortawesome/free-brands-svg-icons';
 </script>
 <template>
   <div>
@@ -20,17 +23,16 @@ import TopNavBar from './TopNavBar.vue'
         <div v-if="newAppList.length > 0">
           <router-link
             v-for="applicant in newAppList"
-            :key="applicant.firstname"
-            :to="`/individualApplicant/${applicant.name}/${$route.params.id}`"
+            :key="applicant.name"
+            :to="`/individualApplicant/${applicant.id}`"
             class="card border-0 my-3 p-3 bg-white flex-col flex-row listing-card justify-content-start"
           >
-            <div class="add-border-left me-3 d-none d-sm-block"></div>
 
             <div class="profile-picture">
-              <img :src="applicant.profilePicture" alt="Profile Picture" />
+              <img :src="applicant.profilePic" alt="Profile Picture" />
             </div>
             <div class="details d-inline">
-              <div class="name">{{ applicant.firstname }} {{ applicant.lastname }}</div>
+              <div class="name">{{ applicant.name}}</div>
               <div class="position">{{ applicant.position }}</div>
             </div>
             <!-- Only display the progress-bar when matchPercentage is defined -->
@@ -64,6 +66,9 @@ export default {
   data() {
     return {
       job: {
+        listingDetails: {
+
+        },
         jobSkills: [],
         applicantsList: []
       },
@@ -71,11 +76,49 @@ export default {
     }
   },
   async created() {
-    const response1 = await read_listing_data(this.$route.params.id)
-    this.job.jobSkills = response1.skills
-    this.job.applicantsList = response1.applicants
+    
+    const listing = await this.fetchIndividualListingData()
+    console.log("applicants length")
+    console.log(listing.getApplicants())
+    await this.fetch_read_staff_data(listing)
+    console.log(this.newAppList)
+    
 
-    function calculateMatchPercentage(reqs, skills) {
+
+    // Populate newAppList
+    
+  },
+  methods: {
+    async fetchIndividualListingData() {
+      try {
+        const listing = await new Listing()
+        await listing.loadListing(this.$route.params.id)
+        console.log("Listing :")
+        console.log(listing)
+        return listing
+
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
+    },
+    async fetch_read_staff_data(listing) {
+      for (let i = 0; i < listing.getApplicants().length; i++) {
+      const response = await getStaffObj(listing.getApplicants()[i])
+      console.log("get Response!")
+      console.log(response)
+      const tempObj = {
+        id: response.getID(),
+        name: response.getFullName(),
+        position: response.getPosition(),
+        applicantSkills: response.getSkillset(),  
+        profilePic: response.getProfilePic(),
+        matchPercentage: this.calculateMatchPercentage(listing.getSkills(), response.getSkillset())
+      }
+
+      this.newAppList.push(tempObj) // Push data to newAppList
+    }
+    },
+    calculateMatchPercentage(reqs, skills) {
       // Ensure both input arrays are non-empty
       if (reqs.length === 0 || skills.length === 0) {
         return 0 // No match if either array is empty
@@ -98,24 +141,7 @@ export default {
       const matchPercentage = (commonCount / reqs.length) * 100
 
       return matchPercentage
-    }
-
-    // Populate newAppList
-    for (let i = 0; i < this.job.applicantsList.length; i++) {
-      const response = await read_staff_data(this.job.applicantsList[i])
-      const tempObj = {
-        name: this.job.applicantsList[i],
-        firstname: response.firstname,
-        lastname: response.lastname,
-        position: response.position,
-        applicantSkills: response.skillsets,
-        matchPercentage: calculateMatchPercentage(this.job.jobSkills, response.skillsets)
-      }
-
-      this.newAppList.push(tempObj) // Push data to newAppList
-    }
-  },
-  methods: {
+    },
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
       return {

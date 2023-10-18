@@ -96,7 +96,7 @@ export default class Listing {
         this.#listingId = loadedListing.listingId
         this.#buildMethod = 'load'
 
-        return loadedListing;
+        return true
     }
 
     async getAllListings() {
@@ -126,7 +126,7 @@ export default class Listing {
             responsibilities: this.#responsibilities,
             skills: this.#skills,
             applicants: this.#applicants,
-            title: this.#title
+            title: this.#title,
         }
 
         try {
@@ -290,6 +290,21 @@ export default class Listing {
 
     getListingId() {
         return this.#listingId
+    }
+
+    getAllAtrr() {
+        return {
+            'title': this.#title,
+            'department': this.#department,
+            'deadline': this.#deadline,
+            'description': this.#description,
+            'responsibilities': this.#responsibilities,
+            'skills': this.#skills,
+            'applicants': this.#applicants,
+            'createdate': this.#createdate,
+            'createdby': this.#createdby,
+            'listingId': this.#listingId,
+        }
     }
 
     #checkValidDeadline(datestr) {

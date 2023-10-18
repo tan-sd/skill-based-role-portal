@@ -1,14 +1,13 @@
 <script setup>
-import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import TopNavBar from './TopNavBar.vue'
 import {getStaffObj} from '../firebase/staff_class'
+import {getFile} from '../firebase/storage'
 
 </script>
 
 <template>
   <div>
     <TopNavBar />
-    <div class="header w-100 ps-5">Future header up here</div>
 
     <div class="px-3 px-md-5 pb-3">
       <div class="card m-0">
@@ -20,7 +19,7 @@ import {getStaffObj} from '../firebase/staff_class'
   
             <div class="col-3">
               <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
-                {{ applicant.firstname }} {{ applicant.lastname }}
+                {{ applicant.fullname }}
               </h3>
               <p class="m-0">{{ applicant.email }}</p>
             </div>
@@ -88,8 +87,9 @@ import {getStaffObj} from '../firebase/staff_class'
             <div class="col">
               <button type="button" class="btn btn-secondary w-50 text-light">
                 <span class="text-light" style="font-weight: bold">
-                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> Download
-                  Resume
+                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> 
+                  <a style="color: white" target="__blank" :href="applicant.resumeDLlink">Download
+                  Resume</a>
                 </span>
               </button>
             </div>
@@ -110,7 +110,9 @@ export default {
         position: '',
         profilePicture: 'profile.jpg',
         department: '',
-        country: ''
+        country: '',
+        resumeDLlink:'',
+        profilepic:null
       },
 
       job: {
@@ -118,27 +120,25 @@ export default {
         jobSkills: []
       }
     }
-  },    async mounted(){
+  },    
+  // created() {
+  //   this.loadData()
+  // },
+  async mounted(){
         var staffid = localStorage.getItem('id')
         var staff1= await getStaffObj(staffid)
-        this.fullname = await staff1.getFullName()
-        this.email = await staff1.getEmail()
-        this.position = await staff1.getPosition()
-        this.country = await staff1.getCountry()
-    },
-  // async created() {
-  //   const response = await read_staff_data(this.$route.params.name)
-  //   this.applicant.firstname = response.firstname
-  //   this.applicant.lastname = response.lastname
-  //   this.applicant.email = response.email
-  //   this.applicant.position = response.position
-  //   this.applicant.department = response.department
-  //   this.applicant.country = response.country
-  //   this.job.applicantSkills = response.skillsets
 
-  //   const response1 = await read_listing_data(this.$route.params.id)
-  //   this.job.jobSkills = response1.skills
-  // },
+        this.applicant.fullname = staff1.getFullName()
+        this.applicant.email = staff1.getEmail()
+        this.applicant.profilepic = staff1.getProfilePic()
+        this.applicant.department = staff1.getDepartment()
+        this.applicant.position = staff1.getPosition()
+        this.applicant.country = staff1.getCountry()
+        this.job.applicantSkills= staff1.getSkillset()
+
+        this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
+
+    },
   methods: {
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
@@ -147,7 +147,13 @@ export default {
             radial-gradient(closest-side, white 79%, transparent 80% 100%),
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
-    }
+    },
+    // async loadData(){
+    //   const staff = await getStaffObj(localStorage.getItem('id'))
+    //   await staff.init()
+  
+    //   this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
+    // }
   },
   computed: {
     getMatchPercentage() {
