@@ -37,10 +37,10 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
       
                     <div class="dropdown_search_menu">
                       <div v-for="(e_title, index) in Object.keys(allRoles)">
-                        <div v-if="checkJobTitleSearchBar(e_title)" class="form-check mb-3 ms-2 me-4">
+                        <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover">
                           <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title">
           
-                          <label class="form-check-label no_wrap w-100" :for="`jobTitleRadioBtn${index}`">
+                          <label class="form-check-label no_wrap w-100 pb-3 pe-4" :for="`jobTitleRadioBtn${index}`">
                             {{ e_title }}
                           </label>
                         </div>
@@ -109,10 +109,10 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
 
                     <div class="dropdown_search_menu">
                       <div v-for="(e_title, index) in allDept">
-                        <div v-if="checkDeptSearchBar(e_title)" class="form-check mb-3 ms-2 me-4">
+                        <div v-if="checkDeptSearchBar(e_title)" class="form-check ms-2 list-elem-hover">
                           <input class="form-check-input" type="radio" :id="`deptRadioBtn${index}`" v-model="jobListing.department" name="deptRadioBtn" :value="e_title">
           
-                          <label class="form-check-label no_wrap w-100" :for="`deptRadioBtn${index}`">
+                          <label class="form-check-label no_wrap w-100 pb-3 pe-4" :for="`deptRadioBtn${index}`">
                             {{ e_title }}
                           </label>
                         </div>
@@ -326,5 +326,11 @@ export default {
 .dropdown_search_menu {
   max-height: 200px;
   overflow-y: scroll;
+}
+.list-elem-hover {
+  transition: all 200ms ease-in-out;
+}
+.list-elem-hover:hover {
+  color: #FF7649;
 }
 </style>
