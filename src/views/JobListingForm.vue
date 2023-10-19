@@ -23,13 +23,39 @@
         <form @submit.prevent="submitForm" class="general">
           <div class="form-group">
             <label for="jobTitle">Job Title</label>
-            <input
-              type="text"
-              class="form-control"
-              id="jobTitle"
-              v-model="jobListing.title"
-              required
-            />
+
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                id="jobTitle"
+                v-model="jobListing.title"
+                disabled
+              />
+    
+              <div class="dropdown">
+                <button class="btn btn-primary btn-input-group" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                </button>
+    
+                <ul class="dropdown-menu dropdown-menu-end px-3">
+                  <input class="form-control mb-2" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarVal">
+    
+                  <div class="job_title_search_menu">
+                    <div v-for="(e_title, index) in Object.keys(allRoles)">
+                      <div v-if="checkJobTitleSearchBar(e_title)" class="form-check mb-3 ms-2 me-4">
+                        <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title">
+        
+                        <label class="form-check-label job_title_radio_text" :for="`jobTitleRadioBtn${index}`">
+                          {{ e_title }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </ul>
+              </div>
+            </div>
+            
           </div>
 
           <div class="form-group" style="margin-top: 1em">
@@ -143,6 +169,7 @@
 
 <script>
 import Listing from '../firebase/listing_class.js'
+import { allRoleData } from '../firebase/CRUD_database.js'
 
 export default {
   data() {
@@ -157,6 +184,9 @@ export default {
         responsibilities: [''], // Initialize with one empty item
         skills: [''] // Initialize with one empty item
       },
+
+      allRoles: {},
+      searchBarVal: '',
     }
   },
   methods: {
@@ -212,6 +242,19 @@ export default {
 
       return today.toISOString().split('T')[0]
     },
+    async fetchRolesFromDB() {
+      this.allRoles = await allRoleData()
+    },
+    checkJobTitleSearchBar(my_job_title) {
+      if (my_job_title.toLowerCase().indexOf(this.searchBarVal.toLowerCase()) > -1) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  mounted() {
+    this.fetchRolesFromDB()
   }
 }
 </script>
@@ -233,5 +276,19 @@ export default {
 }
 .btn-remove-styling {
   all: unset;
+}
+
+.btn-input-group, .btn-input-group:hover {
+  transition: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.job_title_radio_text {
+  white-space: nowrap;
+}
+
+.job_title_search_menu {
+  max-height: 200px;
+  overflow-y: scroll;
 }
 </style>

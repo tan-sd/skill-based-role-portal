@@ -134,7 +134,11 @@ export const updateJobListing = async (id, formData) =>
   }
 };
 
-
+export const allRoleData = async () => {
+  const data = ref(db, '/role')
+  const snapshot = await get(data)
+  return snapshot.val()
+}
 
 
 // EDIT HERE
