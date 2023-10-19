@@ -78,8 +78,6 @@ export default {
   async created() {
     
     const listing = await this.fetchIndividualListingData()
-    console.log("applicants length")
-    console.log(listing.getApplicants())
     await this.fetch_read_staff_data(listing)
     console.log(this.newAppList)
     
@@ -93,8 +91,6 @@ export default {
       try {
         const listing = await new Listing()
         await listing.loadListing(this.$route.params.id)
-        console.log("Listing :")
-        console.log(listing)
         return listing
 
       } catch (error) {
@@ -104,8 +100,6 @@ export default {
     async fetch_read_staff_data(listing) {
       for (let i = 0; i < listing.getApplicants().length; i++) {
       const response = await getStaffObj(listing.getApplicants()[i])
-      console.log("get Response!")
-      console.log(response)
       const tempObj = {
         id: response.getID(),
         name: response.getFullName(),

@@ -59,6 +59,18 @@
           </div>
 
           <div class="form-group" style="margin-top: 1em">
+            <p class="mb-1">Skills</p>
+            <div v-if="jobListing.skills[0] !== ''">
+              <div v-for="(e_skill, index) in jobListing.skills" class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary fw-normal-custom">
+                {{ e_skill }} 
+              </div>
+            </div>
+            <div v-else>
+              <p class="fw-normal-custom text-light2"><font-awesome-icon icon="fa-solid fa-ghost" class="me-2" />No skills yet</p>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1em">
             <label for="createdDate">Created Date</label>
             <input
               type="date"
@@ -131,33 +143,6 @@
             </div>
           </div>
 
-          <div class="form-group" style="margin-top: 1em">
-            <label for="skills">Skills</label>
-            <div
-              v-for="(skill, index) in jobListing.skills"
-              :key="index"
-              class="input-group mb-2"
-            >
-              <input
-                type="text"
-                class="form-control"
-                v-model="jobListing.skills[index]"
-                required
-                pattern=".*\S+.*"
-                title="Please enter at least one non-whitespace character"
-              />
-              <div class="input-group-text btn btn-light2" v-if="jobListing.skills.length > 1" @click="removeSkill(index)">
-                <button type="button" class="btn-remove-styling">
-                  <font-awesome-icon icon="fa-solid fa-trash" />
-                </button>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <button @click="addSkill" class="btn btn-primary btn-sm mt-1 rounded-circle" type="button">
-                <font-awesome-icon icon="fa-solid fa-plus" />
-              </button>
-            </div>
-          </div>
           <div style="margin-top: 1em"></div>
           <button @click="navigateBack" class="btn btn-dark" type="button">Cancel</button>
           <button type="submit" class="btn btn-primary ms-2">Create Job Listing</button>
@@ -181,8 +166,8 @@ export default {
         deadline: '',
         department: '',
         description: '',
-        responsibilities: [''], // Initialize with one empty item
-        skills: [''] // Initialize with one empty item
+        responsibilities: [''],
+        skills: ['']
       },
 
       allRoles: {},
@@ -253,6 +238,18 @@ export default {
       }
     }
   },
+  watch: {
+    jobListing: {
+      handler(val) {
+        if (Object.keys(this.allRoles).length == 0) {
+          return
+        }
+
+        this.jobListing.skills = this.allRoles[val.title]['skillsets']
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.fetchRolesFromDB()
   }
@@ -265,6 +262,9 @@ export default {
   font-size: 1em;
   margin: auto;
   margin-top: 1em;
+}
+.fw-normal-custom {
+  font-family: 'montserrat';
 }
 .card_sp {
   margin-bottom: 2em;
