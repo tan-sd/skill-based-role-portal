@@ -185,7 +185,7 @@ export default {
 }
 
 .card:hover .progress-bar {
-  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 0 0.25rem #ffffff;
 }
 
 .add-border-left::before {
@@ -193,6 +193,10 @@ export default {
   border: solid 0.125rem #6a44d4 !important;
   border-radius: 1rem;
   transition: color 0.3s ease-in-out;
+}
+
+.card:hover .department {
+  color: #dcdcdc !important;
 }
 
 .card:hover .add-border-left::before {
@@ -227,6 +231,7 @@ export default {
   color: black;
   position: relative;
   margin-bottom: 5px;
+  transition: all 500ms ease-in-out;
 }
 
 .progress-text {

@@ -1,9 +1,7 @@
 <script setup>
-import { read_staff_data, read_listing_data } from '../firebase/CRUD_database'
 import { getStaffObj } from '../firebase/staff_class';
 import Listing from '../firebase/listing_class';
 import TopNavBar from './TopNavBar.vue'
-import { faThinkPeaks } from '@fortawesome/free-brands-svg-icons';
 </script>
 <template>
   <div>
@@ -190,10 +188,13 @@ a {
 
 .listing-card {
   align-items: center;
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
 }
 
 .card:hover .progress-bar {
-  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 0.25rem #ffffff;
 }
 
 .add-border-left::before {
@@ -201,6 +202,10 @@ a {
   border: solid 0.125rem #6a44d4;
   border-radius: 1rem;
   transition: color 0.3s ease-in-out;
+}
+
+.card:hover .position {
+  color: #dcdcdc !important;
 }
 
 .card:hover .add-border-left::before {
@@ -248,6 +253,7 @@ a {
   color: black;
   position: relative;
   margin-bottom: 5px;
+  transition: all 500ms ease-in-out;
 }
 
 .progress-text {
