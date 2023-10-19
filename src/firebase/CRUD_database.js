@@ -140,6 +140,12 @@ export const allRoleData = async () => {
   return snapshot.val()
 }
 
+export const allDepartmentData = async () => {
+  const data = ref(db, '/department')
+  const snapshot = await get(data)
+  return snapshot.val()
+}
+
 
 // EDIT HERE
 // Vue.js data variables

@@ -5,7 +5,7 @@
 <template>
   <div class="container">
 
-    <FormSuccessModal id="formSuccessModal" ref="formSucModal" />
+    <FormSuccessModal ref="formSucModal" />
 
     <div class="p-3">
       <font-awesome-icon
@@ -39,14 +39,14 @@
                 </button>
     
                 <ul class="dropdown-menu dropdown-menu-end px-3">
-                  <input class="form-control mb-2" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarVal">
+                  <input class="form-control mb-2" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarValTitle">
     
-                  <div class="job_title_search_menu">
+                  <div class="dropdown_search_menu">
                     <div v-for="(e_title, index) in Object.keys(allRoles)">
                       <div v-if="checkJobTitleSearchBar(e_title)" class="form-check mb-3 ms-2 me-4">
                         <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title">
         
-                        <label class="form-check-label job_title_radio_text" :for="`jobTitleRadioBtn${index}`">
+                        <label class="form-check-label no_wrap w-100" :for="`jobTitleRadioBtn${index}`">
                           {{ e_title }}
                         </label>
                       </div>
@@ -55,7 +55,6 @@
                 </ul>
               </div>
             </div>
-            
           </div>
 
           <div class="form-group" style="margin-top: 1em">
@@ -95,14 +94,39 @@
           </div>
 
           <div class="form-group" style="margin-top: 1em">
-            <label for="department">Department</label>
-            <input
-              type="text"
-              class="form-control"
-              id="department"
-              v-model="jobListing.department"
-              required
-            />
+            <label for="jobTitle">Department</label>
+
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                id="department"
+                v-model="jobListing.department"
+                disabled
+              />
+    
+              <div class="dropdown">
+                <button class="btn btn-primary btn-input-group" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                </button>
+    
+                <ul class="dropdown-menu dropdown-menu-end px-3">
+                  <input class="form-control mb-2" id="deptDropdownSearch" type="text" placeholder="Search.." v-model="searchBarValDept">
+
+                  <div class="dropdown_search_menu">
+                    <div v-for="(e_title, index) in allDept">
+                      <div v-if="checkDeptSearchBar(e_title)" class="form-check mb-3 ms-2 me-4">
+                        <input class="form-check-input" type="radio" :id="`deptRadioBtn${index}`" v-model="jobListing.department" name="deptRadioBtn" :value="e_title">
+        
+                        <label class="form-check-label no_wrap w-100" :for="`deptRadioBtn${index}`">
+                          {{ e_title }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="form-group" style="margin-top: 1em">
@@ -154,7 +178,7 @@
 
 <script>
 import Listing from '../firebase/listing_class.js'
-import { allRoleData } from '../firebase/CRUD_database.js'
+import { allRoleData, allDepartmentData } from '../firebase/CRUD_database.js'
 
 export default {
   data() {
@@ -171,7 +195,9 @@ export default {
       },
 
       allRoles: {},
-      searchBarVal: '',
+      allDept: [],
+      searchBarValTitle: '',
+      searchBarValDept: '',
     }
   },
   methods: {
@@ -230,28 +256,37 @@ export default {
     async fetchRolesFromDB() {
       this.allRoles = await allRoleData()
     },
+    async fetchDeptFromDB() {
+      this.allDept = await allDepartmentData()
+    },
     checkJobTitleSearchBar(my_job_title) {
-      if (my_job_title.toLowerCase().indexOf(this.searchBarVal.toLowerCase()) > -1) {
+      if (my_job_title.toLowerCase().indexOf(this.searchBarValTitle.toLowerCase()) > -1) {
         return true
       } else {
         return false
       }
-    }
+    },
+    checkDeptSearchBar(my_dept) {
+      if (my_dept.toLowerCase().indexOf(this.searchBarValDept.toLowerCase()) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   watch: {
     jobListing: {
       handler(val) {
-        if (Object.keys(this.allRoles).length == 0) {
-          return
+        if (Object.keys(this.allRoles).length > 0 && val.title !== '') {
+          this.jobListing.skills = this.allRoles[val.title]['skillsets']
         }
-
-        this.jobListing.skills = this.allRoles[val.title]['skillsets']
       },
       deep: true
     }
   },
   mounted() {
     this.fetchRolesFromDB()
+    this.fetchDeptFromDB()
   }
 }
 </script>
@@ -283,11 +318,11 @@ export default {
   border-radius: 0 0.5rem 0.5rem 0;
 }
 
-.job_title_radio_text {
+.no_wrap {
   white-space: nowrap;
 }
 
-.job_title_search_menu {
+.dropdown_search_menu {
   max-height: 200px;
   overflow-y: scroll;
 }
