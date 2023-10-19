@@ -42,8 +42,9 @@ import { getStaffObj } from '../firebase/staff_class'
             {{ toHumanReadbleDate(listingDetails.createdate) }} to
             {{ toHumanReadbleDate(listingDetails.deadline) }}
           </p>
-
-          <div v-if="id1== 3">
+          
+          <div v-if="listingDetails.dataLoaded">
+            <div v-if="id1== 3">
             <button type="button" class="btn btn-secondary applyButton" disabled>You are ups already, don't need apply</button>
           </div>
 
@@ -64,6 +65,8 @@ import { getStaffObj } from '../firebase/staff_class'
               <button type="button" class="btn btn-secondary applyButton" disabled>Applied</button>
             </div>
           </div>
+          </div>
+
 
 
 
@@ -89,7 +92,8 @@ export default {
         deadline: '',
         userDepartment:'',
         listingDepartment:'',
-        id1:''
+        id1:'',
+        dataLoaded: false,
       },
       userSkills: [],
       applied: [],
@@ -113,6 +117,9 @@ export default {
 
         console.log("listing: ", this.listingDepartment,"user: ", this.userDepartment)
         console.log(this.id1)
+
+        this.listingDetails.dataLoaded = true;
+        
 
         this.listingDetails.skills.sort((a, b) => {
           if (user_skills.includes(a)) {
