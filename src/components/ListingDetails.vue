@@ -30,6 +30,9 @@ import { getStaffObj } from '../firebase/staff_class'
             :key="index"
             class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
             :class="userSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
+            data-bs-toggle="popover"
+            data-bs-trigger="hover"
+            :data-bs-content="allSkills[e_skill]"
           >
             {{ e_skill }}
           </div>
@@ -77,6 +80,8 @@ import { getStaffObj } from '../firebase/staff_class'
 </template>
 
 <script>
+import { allSkillsData } from '../firebase/CRUD_database.js'
+
 export default {
   created() {
     this.fetchIndividualListingData(), this.fetch_read_staff_data()
@@ -97,7 +102,8 @@ export default {
       },
       userSkills: [],
       applied: [],
-      sortedSkills: []
+      sortedSkills: [],
+      allSkills: {},
     }
   },
   methods: {
@@ -157,10 +163,15 @@ export default {
     async fetch_read_staff_data() {
       const staff = await getStaffObj(localStorage.getItem('id'))
       this.applied = staff.getListingsApplied()
-    }
+    },
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
   },
-  mounted() {
-    this.getUserSkills()
+  async mounted() {
+    await this.getUserSkills()
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
   }
 }
 </script>
