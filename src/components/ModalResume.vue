@@ -2,9 +2,11 @@
 import {read_staff_data } from '../firebase/CRUD_database'
 import {uploadFiles } from '../firebase/storage'
 import {getStaffObj} from '../firebase/staff_class'
+
 </script>
 
 <template>
+   
     <!-- Modal -->
     <div class="modal fade" id="ModalInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -33,10 +35,6 @@ import {getStaffObj} from '../firebase/staff_class'
                     <h5>Resume</h5>
                     <p style="font-family: Montserrat" >Please include an updated resume</p>
 
-                    <!-- <div>
-                        <input type="file" @change="uFile" ref="file">
-                        <button @click="submitFile">Upload!</button>
-                    </div> -->
                     <div class="mb-3">
                         <label for="formFile" class="form-label btn btn-outline-secondary border-3" style="font-family: Montserrat">
                             <input type="file" @change="uFile" ref="file" class="form-control" id="formFile" style="display:none">
@@ -76,6 +74,7 @@ export default {
         }
     },
     async mounted(){
+
         var staffid = localStorage.getItem('id')
         var staff1= await getStaffObj(staffid)
         this.fullname = staff1.getFullName()
@@ -90,8 +89,15 @@ export default {
             const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
             var staffid = localStorage.getItem('id')
             var staff1= await getStaffObj(staffid)
-            staff1.applyNewListing(this.listing)
-            location.reload()
+            await staff1.applyNewListing(this.listing)
+            // console.log(this.$route.path)
+            await this.$router.push({
+            path: this.$route.path,
+            query: {applied: "Success"}
+            , replace:true
+          });
+          this.$router.go(0)
+       
         }
     }
 }

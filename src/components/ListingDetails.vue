@@ -4,12 +4,13 @@ import ResumeDropOffButton from './ResumeDropOffButton.vue'
 import '../main.js'
 import TopNavBar from './TopNavBar.vue'
 import { getStaffObj } from '../firebase/staff_class'
+import appliedSuccess from '../components/appliedSuccess.vue'
 </script>
 
 <template>
   <div class="w-100">
     <TopNavBar />
-
+    <applied-success ref="appliedsuccess" />
     <div class="bg-white rounded m-3 p-4">
       <div class="row">
         <div class="col-7">
@@ -153,12 +154,19 @@ export default {
       this.allSkills = await allSkillsData()
     },
   },
+
   async mounted() {
     await this.getUserSkills()
     await this.fetchSkillsFromDB()
     this.globalMethodEnablePopovers()
-  }
-}
+    this.getUserSkills()
+    const success = this.$route.query.applied
+        console.log(this.$route.query.applied)
+        if(success=="Success"){
+            this.$refs.appliedsuccess.showSuccessModal('Listing Successfully Updated!')
+        }
+ 
+}}
 </script>
 
 <style>
