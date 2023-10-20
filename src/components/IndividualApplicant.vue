@@ -1,5 +1,6 @@
 <script setup>
 import TopNavBar from './TopNavBar.vue'
+import Listing from '../firebase/listing_class'
 import {getStaffObj} from '../firebase/staff_class'
 import {getFile} from '../firebase/storage'
 
@@ -102,6 +103,9 @@ import {getFile} from '../firebase/storage'
 
 <script>
 export default {
+  created(){
+    this.getListingSkills()
+  },
   data() {
     return {
       applicant: {
@@ -137,9 +141,15 @@ export default {
         this.job.applicantSkills= staff1.getSkillset()
 
         this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
-
+  
     },
   methods: {
+    async getListingSkills(){
+      const newListing = new Listing()
+        await newListing.loadListing(this.$route.params.id)
+        this.job.jobSkills = newListing.getSkills()
+        console.log(this.job.jobSkills)
+    },
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
       return {

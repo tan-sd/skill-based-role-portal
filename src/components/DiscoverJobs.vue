@@ -71,7 +71,7 @@ import { getStaffObj } from '../firebase/staff_class'
           class="d-flex flex-column align-items-center justify-content-center h-100"
         >
           <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
-          <h4 class="fw-bold">OOPS! Looks like you haven't made any listings yet...</h4>
+          <h4 class="fw-bold text-center">OOPS! Looks like there aren't any listings available at the moment...</h4>
         </div>
       </div>
 
@@ -185,7 +185,7 @@ export default {
 }
 
 .card:hover .progress-bar {
-  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 0 0.25rem #ffffff;
 }
 
 .add-border-left::before {
@@ -193,6 +193,10 @@ export default {
   border: solid 0.125rem #6a44d4 !important;
   border-radius: 1rem;
   transition: color 0.3s ease-in-out;
+}
+
+.card:hover .department {
+  color: #dcdcdc !important;
 }
 
 .card:hover .add-border-left::before {
@@ -227,6 +231,7 @@ export default {
   color: black;
   position: relative;
   margin-bottom: 5px;
+  transition: all 500ms ease-in-out;
 }
 
 .progress-text {

@@ -23,10 +23,7 @@ firebase_admin.initialize_app(cred, {
 
 # Initialize the data variable to push into the database, and the path reference
 # Data to upload
-data = {
-    'key1': 'value1',
-    'key2': 'value2',
-}
+data = {}
 
 # Path to your Realtime Database root
 path = '/'

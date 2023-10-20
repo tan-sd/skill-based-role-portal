@@ -23,10 +23,7 @@ firebase_admin.initialize_app(cred, {
 
 # Initialize the data variable to push into the database, and the path reference
 # Data to upload
-data = {
-    'key1': 'value1',
-    'key2': 'value2',
-}
+data = {}
 
 # Path to your Realtime Database root
 path = '/'
@@ -35,7 +32,15 @@ path = '/'
 with open(staff_csv_file_name, 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     for row in csv_reader:
-        data[row['Staff_ID']] = {"firstname":row['Staff_FName'],"lastname":row['Staff_LName'],"department":row['Dept'],"country":row['Country'],"email":row['Email'],"accessrights":row['Role'],"skillsets":[]}
+        if row['Staff_ID'][0:2] == '13':
+            data[row['Staff_ID']] = {"firstname":row['Staff_FName'],"lastname":row['Staff_LName'],"department":row['Dept'],"position":row['Dept'],"country":row['Country'],"email":row['Email'],"accessrights":row['Role'],"skillsets":['NIL'],"listingsapplied":['NIL']}
+        else:
+            if row['Role'] == '2':
+                data[row['Staff_ID']] = {"firstname":row['Staff_FName'],"lastname":row['Staff_LName'],"department":row['Dept'],"position":row['Dept']+" Associate","country":row['Country'],"email":row['Email'],"accessrights":row['Role'],"skillsets":[],"listingsapplied":['No listings applied yet']}
+            elif row['Role'] == '3':
+                data[row['Staff_ID']] = {"firstname":row['Staff_FName'],"lastname":row['Staff_LName'],"department":row['Dept'],"position":row['Dept']+" Manager","country":row['Country'],"email":row['Email'],"accessrights":row['Role'],"skillsets":[],"listingsapplied":['No listings applied yet']}
+            elif row['Role'] == '4':
+                data[row['Staff_ID']] = {"firstname":row['Staff_FName'],"lastname":row['Staff_LName'],"department":row['Dept']+"Manager","position":row['Dept']+" Senior Manager","country":row['Country'],"email":row['Email'],"accessrights":row['Role'],"skillsets":[],"listingsapplied":['No listings applied yet']}
 
 with open(staff_skill_csv_file_name , 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)

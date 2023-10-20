@@ -21,7 +21,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <h4 class="text-center">
-                        <font-awesome-icon icon="fa-solid fa-circle-xmark" class="text-danger me-2" />Error: {{ errorMsg }}
+                        <font-awesome-icon icon="fa-solid fa-circle-xmark" class="text-danger me-2" />{{ errorMsg }}
                     </h4>
                 </div>
                 <div class="modal-footer">

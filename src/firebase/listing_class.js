@@ -108,8 +108,10 @@ export default class Listing {
     async saveNewListingToDB() {
         // Saves a NEW listing object to the database
 
-        if (!this.#checkReadyToSave()) {
-            var error = new Error('Not all required attributes are set')
+        var readyToSave = this.#checkReadyToSave()
+
+        if (!readyToSave[0]) {
+            var error = new Error(`Not all required attributes are set: ${readyToSave[1]}`)
             console.log(`Error in saveNewListingToDB: ${error}`)
             throw error
         } else if (this.#buildMethod != 'new') {
@@ -191,8 +193,10 @@ export default class Listing {
     async pushUpdatedListingToDB() {
         // Updates an EXISTING listing in the database
 
-        if (!this.#checkReadyToSave()) {
-            var error = new Error('Not all required attributes are set')
+        var readyToSave = this.#checkReadyToSave()
+
+        if (!readyToSave[0]) {
+            var error = new Error(`Not all required attributes are set: ${readyToSave[1]}`)
             console.log(`Error in pushUpdatedListingToDB: ${error}`)
             throw error
         } else if (this.#buildMethod == 'new') {
@@ -230,26 +234,32 @@ export default class Listing {
         // Returns true if all required fields are filled
 
         var to_check = {
-            'title': this.#title,
-            'department': this.#department,
-            'deadline': this.#deadline,
-            'description': this.#description,
-            'responsibilities': this.#responsibilities,
-            'skills': this.#skills,
-            'applicants': this.#applicants,
-            'createdate': this.#createdate
+            // key: [value, allow_empty]
+            'title': [this.#title, false],
+            'department': [this.#department, false],
+            'deadline': [this.#deadline, true],
+            'description': [this.#description, true],
+            'responsibilities': [this.#responsibilities, true],
+            'skills': [this.#skills, true],
+            'applicants': [this.#applicants, true],
+            'createdate': [this.#createdate, true]
         }
 
         for (const key in to_check) {
-            var e_val = to_check[key]
+            var [e_val, allow_empty] = to_check[key]
 
             if (e_val == null) {
                 console.log(`Attr ${key} is not set`)
-                return false
+                return [false, `${key} field is not set`]
+            } else if (!allow_empty) {
+                if (e_val == '') {
+                    console.log(`Attr ${key} is empty`)
+                    return [false, `${key} field is empty`]
+                }
             }
         }
 
-        return true
+        return [true, '']
     }
 
     getTitle() {
