@@ -122,7 +122,7 @@ export default {
       }
     },
     navigateToDetails(index) {
-      this.$router.push({ name: 'listingDetails', params: { id: index } })
+      this.$router.push({ name: 'listingDetails', params: { listingid: index } })
     },
     async getMatchPercentage() {
       try {
