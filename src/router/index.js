@@ -32,7 +32,7 @@ const router = createRouter({
       component: MyListings
     },
     {
-      path: '/editListing/:id',
+      path: '/editListing/:listingid',
       name: 'editListing',
       component: JobEditingForm,
       props: true, // Pass route params as props
@@ -56,18 +56,18 @@ const router = createRouter({
     //Test if the data is received after HR submit the job listing form
 
     {
-      path: '/listingdetails/:id',
+      path: '/listingdetails/:listingid',
       name: 'listingDetails',
       component: ListingDetails,
       props: (route) => ({details: route.params.details})
     },
     {
-      path: '/individualApplicant/:id',
+      path: '/:listingid/individualApplicant/:applicantid',
       name: 'individualApplicant',
       component: IndividualApplicant
     },
     {
-      path: '/:id/myApplicants/',
+      path: '/:listingid/myApplicants/',
       name: 'myApplicants',
       component: MyApplicants
     },
