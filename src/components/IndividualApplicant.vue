@@ -1,9 +1,8 @@
 <script setup>
 import TopNavBar from './TopNavBar.vue'
 import Listing from '../firebase/listing_class'
-import {getStaffObj} from '../firebase/staff_class'
-import {getFile} from '../firebase/storage'
-
+import { getStaffObj } from '../firebase/staff_class'
+import { getFile } from '../firebase/storage'
 </script>
 
 <template>
@@ -15,23 +14,23 @@ import {getFile} from '../firebase/storage'
         <div class="card-body">
           <div class="row pb-5 align-items-center">
             <div class="col-2">
-              <img class="profilePic" src="applicant.profilePicture" />
+              <img class="profilePic" :src="applicant.profilepic" />
             </div>
-  
+
             <div class="col-3">
               <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
                 {{ applicant.fullname }}
               </h3>
               <p class="m-0">{{ applicant.email }}</p>
             </div>
-  
+
             <div class="col-1 d-flex justify-content-end">
               <div
                 class="vr bg-secondary opacity-100"
                 style="width: 5px; height: 60px; border-radius: 3px"
               ></div>
             </div>
-  
+
             <div class="col-6">
               <h5 class="card-title">{{ applicant.position }}</h5>
               <div class="row">
@@ -41,36 +40,26 @@ import {getFile} from '../firebase/storage'
               </div>
             </div>
           </div>
-  
+
           <div class="row pb-3">
             <div class="col-6">
               <div class="pb-4">
                 <h4>Current Skills</h4>
-                <div v-for="skill in job.applicantSkills" :key="skill" class="d-inline">
-                  <span
-                    class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3"
-                    style="font-size: small; font-weight: 400"
-                    >{{ skill }}
+                <div v-for="(e_skill, index) in job.applicantSkills" :key="index" class="d-inline">
+                  <span class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
+                    >{{ e_skill }}
                   </span>
                 </div>
               </div>
               <div>
                 <h4>Required Skills</h4>
-                <div v-for="skill in job.jobSkills" :key="skill" class="d-inline">
-                  <span v-if="job.applicantSkills.includes(skill)">
-                    <span
-                      class="badge bg-primary me-2 p-2 ps-3 pe-3 mb-3"
-                      style="font-size: small; font-weight: 400"
-                      >{{ skill }}
-                    </span>
-                  </span>
-                  <span v-else>
-                    <span
-                      class="badge bg-light me-2 p-2 ps-3 pe-3 mb-3"
-                      style="font-size: small; font-weight: 400"
-                      >{{ skill }}
-                    </span>
-                  </span>
+                <div
+                  v-for="(e_skill, index) in job.jobSkills"
+                  :key="index"
+                  class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
+                  :class="job.applicantSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
+                >
+                  {{ e_skill }}
                 </div>
               </div>
             </div>
@@ -83,14 +72,15 @@ import {getFile} from '../firebase/storage'
               </div>
             </div>
           </div>
-  
+
           <div class="row pt-5 mb-5">
             <div class="col">
               <button type="button" class="btn btn-secondary w-50 text-light">
                 <span class="text-light" style="font-weight: bold">
-                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" /> 
-                  <a style="color: white" target="__blank" :href="applicant.resumeDLlink">Download
-                  Resume</a>
+                  <font-awesome-icon icon="fa-solid fa-download" class="me-2" />
+                  <a style="color: white" target="__blank" :href="applicant.resumeDLlink"
+                    >Download Resume</a
+                  >
                 </span>
               </button>
             </div>
@@ -103,20 +93,19 @@ import {getFile} from '../firebase/storage'
 
 <script>
 export default {
-  created(){
+  created() {
     this.getListingSkills()
   },
   data() {
     return {
       applicant: {
-        fullname:'',
+        fullname: '',
         email: '',
         position: '',
-        profilePicture: 'profile.jpg',
         department: '',
         country: '',
-        resumeDLlink:'',
-        profilepic:null
+        resumeDLlink: '',
+        profilepic: null
       },
 
       job: {
@@ -124,31 +113,41 @@ export default {
         jobSkills: []
       }
     }
-  },    
-  // created() {
-  //   this.loadData()
-  // },
-  async mounted(){
-        var staffid = localStorage.getItem('id')
-        var staff1= await getStaffObj(staffid)
+  },
+  async mounted() {
+    var staff1 = await getStaffObj(this.$route.params.applicantid)
 
-        this.applicant.fullname = staff1.getFullName()
-        this.applicant.email = staff1.getEmail()
-        this.applicant.profilepic = staff1.getProfilePic()
-        this.applicant.department = staff1.getDepartment()
-        this.applicant.position = staff1.getPosition()
-        this.applicant.country = staff1.getCountry()
-        this.job.applicantSkills= staff1.getSkillset()
+    this.applicant.fullname = staff1.getFullName()
+    this.applicant.email = staff1.getEmail()
+    this.applicant.profilepic = staff1.getProfilePic()
+    this.applicant.department = staff1.getDepartment()
+    this.applicant.position = staff1.getPosition()
+    this.applicant.country = staff1.getCountry()
+    this.job.applicantSkills = staff1.getSkillset()
 
-        this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
-  
-    },
+    this.applicant.resumeDLlink = await getFile(
+      `resumes/${this.$route.params.applicantid}/${localStorage.getItem('id')}/resume.pdf`
+    )
+  },
   methods: {
-    async getListingSkills(){
-      const newListing = new Listing()
-        await newListing.loadListing(this.$route.params.id)
+    async getListingSkills() {
+      try {
+        const newListing = new Listing()
+        await newListing.loadListing(this.$route.params.listingid)
+        const staff = await getStaffObj(this.$route.params.applicantid)
         this.job.jobSkills = newListing.getSkills()
-        console.log(this.job.jobSkills)
+        this.job.jobSkills.sort((a, b) => {
+          if (this.job.applicantSkills.includes(a)) {
+            return -1
+          } else if (this.job.applicantSkills.includes(b)) {
+            return 1
+          } else {
+            return 0
+          }
+        })
+      } catch (error) {
+        console.log('Error fetching data from Firebase:', error)
+      }
     },
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
@@ -157,11 +156,11 @@ export default {
             radial-gradient(closest-side, white 79%, transparent 80% 100%),
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
-    },
+    }
     // async loadData(){
     //   const staff = await getStaffObj(localStorage.getItem('id'))
     //   await staff.init()
-  
+
     //   this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
     // }
   },
@@ -183,6 +182,9 @@ export default {
 </script>
 
 <style scoped>
+* {
+  text-decoration: none;
+}
 .header {
   font-family: 'montserrat';
   font-size: 30px;
