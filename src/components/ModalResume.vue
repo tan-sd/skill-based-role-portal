@@ -88,6 +88,10 @@ export default {
         },
         async submitFile(){
             const resp = await uploadFiles(`resumes/${this.listing}/${localStorage.getItem('id')}/resume.pdf`, this.resume)
+            var staffid = localStorage.getItem('id')
+            var staff1= await getStaffObj(staffid)
+            staff1.applyNewListing(this.listing)
+            location.reload()
         }
     }
 }

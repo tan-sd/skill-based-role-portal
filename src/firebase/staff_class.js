@@ -20,7 +20,7 @@ const createdAccess = [1,4] // Roles that can create listings
 // Settings [END] ==============================================================x
 
 
-class Staff {
+export class Staff {
     #id
     #fname
     #lname

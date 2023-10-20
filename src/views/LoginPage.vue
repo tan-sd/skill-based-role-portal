@@ -16,24 +16,41 @@
         <div class="login_inputs text-white">
           <form>
             <h6>Email</h6>
-            <input type="text" class="form-control rounded-3 border-0 w-100 mb-4" v-model="email" @keyup.enter="loginUser" />
-            
+            <input
+              type="text"
+              class="form-control rounded-3 border-0 w-100 mb-4"
+              v-model="email"
+              @keyup.enter="loginUser"
+            />
+
             <h6>Password</h6>
-            <input type="password" class="form-control rounded-3 border-0 w-100" v-model="password" @keyup.enter="loginUser" />
+            <input
+              type="password"
+              class="form-control rounded-3 border-0 w-100"
+              v-model="password"
+              @keyup.enter="loginUser"
+            />
           </form>
 
           <div v-if="isIncorrect || isMissing" class="mt-3 text-warning">
-            <small v-if="isIncorrect" class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Incorrect Email or Password</small>
-            <small v-if="isMissing" class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Missing Email or Password</small>
+            <small
+              v-if="isIncorrect"
+              class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"
+              ><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Incorrect Email or
+              Password</small
+            >
+            <small
+              v-if="isMissing"
+              class="text-truncate bg-warning d-inline p-1 px-3 rounded text-white warning-msg"
+              ><font-awesome-icon icon="fa-solid fa-circle-exclamation" /> Missing Email or
+              Password</small
+            >
           </div>
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-          <button class="btn btn-secondary text-white px-5" @click="loginUser">
-            Login
-          </button>
+          <button id="loginButton" ref="loginButton" class="btn btn-secondary text-white px-5" @click="loginUser()">Login</button>
         </div>
-     
       </div>
     </div>
   </div>
@@ -60,18 +77,12 @@ export default {
 
     const loginUser = async () => {
       if (!email.value || !password.value) {
-        console.log(email.value)
-        console.log(password.value)
         isMissing.value = true
         isIncorrect.value = false
-        console.log(isMissing.value)
-        console.log(isIncorrect.value)
       } else if (await validateLogin(email)) {
-        console.log('Valid login')
         auth.login()
         router.push('/discoverJobs')
       } else {
-        console.log('Invalid login')
         isMissing.value = false
         isIncorrect.value = true
       }
@@ -96,7 +107,7 @@ export default {
       }
     }
     return { loginUser, email, password, isIncorrect, isMissing }
-  },
+  }
 }
 </script>
 
@@ -106,7 +117,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex: 1 0 0px
+  flex: 1 0 0px;
 }
 
 .login_container {
@@ -130,7 +141,7 @@ export default {
   width: 70%;
   height: 0.45rem;
   border-radius: 10px;
-  background-color: #160B32;
+  background-color: #160b32;
 }
 
 .warning-msg {
