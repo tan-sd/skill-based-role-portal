@@ -24,6 +24,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
                   class="form-control"
                   id="jobTitle"
                   v-model="jobListing.title"
+                  placeholder="Click search button to select a job title"
                   disabled
                 />
       
@@ -96,6 +97,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
                   class="form-control"
                   id="department"
                   v-model="jobListing.department"
+                  placeholder="Click search button to select a department"
                   disabled
                 />
       
@@ -332,5 +334,10 @@ export default {
 }
 .list-elem-hover:hover {
   color: #FF7649;
+}
+.form-control::placeholder {
+  color: #B5A8B5;
+  font-family: montserrat;
+  font-style: italic;
 }
 </style>

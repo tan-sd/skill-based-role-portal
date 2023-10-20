@@ -12,6 +12,7 @@
             <div class="text-center row d-flex mt-4 gx-3 justify-content-evenly">
                 <h4>Main Background Colors</h4>
                 <div class="col-sm-2 py-2 rounded bg-light border border-dark border-2"><p>bg-light</p></div>
+                <div class="col-sm-2 py-2 rounded bg-light2"><p>bg-light2</p></div>
                 <div class="col-sm-2 py-2 rounded bg-white"><p>bg-white</p></div>
                 <div class="col-sm-2 py-2 rounded bg-dark text-light"><p>bg-dark<br><i>(w text-light)</i></p></div>
                 <div class="col-sm-2 py-2 rounded bg-extra-dark text-light"><p>bg-extra-dark<br><i>(w text-light)</i></p></div>
