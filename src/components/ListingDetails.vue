@@ -113,10 +113,6 @@ export default {
         this.id1 = localStorage.getItem('id').toString()[1]
         this.userDepartment= staff.getDepartment()
         this.listingDepartment = newListing.getDepartment()
-
-        console.log("listing: ", this.listingDepartment,"user: ", this.userDepartment)
-        console.log(this.id1)
-
         this.listingDetails.dataLoaded = true;
         
 
