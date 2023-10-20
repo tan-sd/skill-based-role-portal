@@ -126,7 +126,7 @@ export default {
     this.job.applicantSkills = staff1.getSkillset()
 
     this.applicant.resumeDLlink = await getFile(
-      `resumes/${this.$route.params.applicantid}/${localStorage.getItem('id')}/resume.pdf`
+      `resumes/${this.$route.params.listingid}/${this.$route.params.applicantid}/resume.pdf`
     )
   },
   methods: {
