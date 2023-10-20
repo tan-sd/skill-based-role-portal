@@ -49,9 +49,7 @@ import appliedSuccess from '../components/appliedSuccess.vue'
 
           <div v-if="listingDetails.dataLoaded">
             <div v-if="id1 == 3">
-              <button type="button" class="btn btn-secondary applyButton" disabled>
-                You are ups already, don't need apply
-              </button>
+              
             </div>
 
             <div v-else-if="listingDepartment == userDepartment">
