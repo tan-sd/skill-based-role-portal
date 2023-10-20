@@ -107,8 +107,7 @@ export const addNewListing = async (formData) => {
   }
 };
 
-export const updateJobListing = async (id, formData) => 
-{
+export const updateJobListing = async (id, formData) => {
   const jobListingsRef = ref(db, `/listing/${id}`);
   
   try {
@@ -146,6 +145,49 @@ export const allDepartmentData = async () => {
   return snapshot.val()
 }
 
+export const addListingApplied = async (staff_id, listing_id) => {
+  // 1) Get the current listings applied and current listings
+  const staffRef = ref(db, `/staff/${staff_id}`)
+  const snapshot = await get(staffRef)
+  const staffObj = snapshot.val()
+
+  const listingsApplied = staffObj.listingsapplied
+  const accessRights = staffObj.accessrights
+
+  const allListings = await allListingData()
+
+  // 2) Add the new listing to listings applied & push
+  if (accessRights == '1') {
+    var error = 'Admin user cannot apply for listings'
+    console.log(`Error in addListingApplied: ${error}`)
+    throw error
+  }
+
+  if (listingsApplied.includes(listing_id)) {
+    // If staff alr applied for this listing
+    return listingsApplied
+  } else if (!Object.keys(allListings).includes(String(listing_id))) {
+    // If listing does not exist
+    var error = 'Listing ID does not exist'
+    console.log(`Error in addListingApplied: ${error}`)
+    throw error
+  }
+
+  if (listingsApplied[0] == 'No listings applied yet') {
+    // If no listings applied yet
+    listingsApplied[0] = listing_id
+  } else {
+    listingsApplied.push(listing_id)
+  }
+
+  try {
+    const staffLARef = ref(db, `/staff/${staff_id}/listingsapplied`)
+    await set(staffLARef, listingsApplied)
+    return listingsApplied
+  } catch (error) {
+    console.error('Error in addListingApplied:', error);
+  }
+};
 
 // EDIT HERE
 // Vue.js data variables

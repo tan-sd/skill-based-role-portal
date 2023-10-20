@@ -1,6 +1,7 @@
 import {
     read_staff_data,
     listingDataByCreator,
+    addListingApplied,
 } from './CRUD_database.js'
 
 import {
@@ -126,6 +127,28 @@ class Staff {
 
     getCountry (){
         return this.#country
+    }
+
+    async applyNewListing (listing_id) {
+        const staff_id = this.#id
+
+        if (staff_id == null) {
+            var error = `Staff instance has not yet been initialized. Call init() first`
+            console.log(`Error in applyNewListing for staff id ${staff_id} and listing id ${listing_id}: ${error}`)
+            throw error
+        }
+
+        try {
+            const new_LA_arr = await addListingApplied(staff_id, listing_id)
+
+            if (Array.isArray(new_LA_arr)) {
+                this.#listingsApp = new_LA_arr
+            }
+        } catch (error) {
+            var error = `Error in applyNewListing for staff id ${staff_id} and listing id ${listing_id}: ${error}`
+            console.log(error)
+            throw error
+        }
     }
 }
 
