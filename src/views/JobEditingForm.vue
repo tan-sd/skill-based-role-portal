@@ -205,7 +205,7 @@ export default {
     async fetchIndividualListingData() {
       try {
         var listing = new Listing()
-        await listing.loadListing(this.$route.params.id)
+        await listing.loadListing(this.$route.params.listingid)
 
         this.jobListing.title = listing.getTitle()
         this.jobListing.createdate = listing.getCreateDate()
@@ -234,7 +234,7 @@ export default {
     async submitForm() {
       // Call the Firebase function to write data
       var listing = new Listing()
-      await listing.loadListing(this.$route.params.id)
+      await listing.loadListing(this.$route.params.listingid)
       listing.updateListing(this.jobListing)
       await listing.pushUpdatedListingToDB()
 
