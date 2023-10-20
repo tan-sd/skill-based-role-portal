@@ -76,7 +76,6 @@ export default {
       },
       userSkills: [],
       applied: [],
-      sortedSkills: []
     }
   },
   methods: {
