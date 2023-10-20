@@ -28,7 +28,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
                 />
       
                 <div class="dropdown">
-                  <button class="btn btn-primary btn-input-group" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <button class="btn btn-primary btn-input-group" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" disabled>
                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                   </button>
       
