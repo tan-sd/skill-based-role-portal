@@ -30,6 +30,9 @@ import { getStaffObj } from '../firebase/staff_class'
             :key="index"
             class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
             :class="userSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
+            data-bs-toggle="popover"
+            data-bs-trigger="hover"
+            :data-bs-content="allSkills[e_skill]"
           >
             {{ e_skill }}
           </div>
@@ -79,6 +82,8 @@ import { getStaffObj } from '../firebase/staff_class'
 </template>
 
 <script>
+import { allSkillsData } from '../firebase/CRUD_database.js'
+
 export default {
   created() {
     this.fetchIndividualListingData(), this.fetch_read_staff_data()
@@ -87,7 +92,9 @@ export default {
     return {
       listingDetails: {},
       userSkills: [],
-      applied: []
+      applied: [],
+      sortedSkills: [],
+      allSkills: {},
     }
   },
   methods: {
@@ -103,10 +110,8 @@ export default {
         this.id1 = localStorage.getItem('id').toString()[1]
         this.userDepartment = staff.getDepartment()
         this.listingDepartment = newListing.getDepartment()
-
-        console.log('listing: ', this.listingDepartment, 'user: ', this.userDepartment)
-
-        this.listingDetails.dataLoaded = true
+        this.listingDetails.dataLoaded = true;
+        
 
         this.listingDetails.skills.sort((a, b) => {
           if (user_skills.includes(a)) {
@@ -143,10 +148,15 @@ export default {
     async fetch_read_staff_data() {
       const staff = await getStaffObj(localStorage.getItem('id'))
       this.applied = staff.getListingsApplied()
-    }
+    },
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
   },
-  mounted() {
-    this.getUserSkills()
+  async mounted() {
+    await this.getUserSkills()
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
   }
 }
 </script>

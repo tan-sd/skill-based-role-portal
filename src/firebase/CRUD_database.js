@@ -145,6 +145,12 @@ export const allDepartmentData = async () => {
   return snapshot.val()
 }
 
+export const allSkillsData = async () => {
+  const data = ref(db, '/skill')
+  const snapshot = await get(data)
+  return snapshot.val()
+}
+
 export const addListingApplied = async (staff_id, listing_id) => {
   // 1) Get the current listings applied and current listings
   const staffRef = ref(db, `/staff/${staff_id}`)

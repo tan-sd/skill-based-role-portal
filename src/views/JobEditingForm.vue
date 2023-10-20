@@ -39,7 +39,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
                     <div class="dropdown_search_menu">
                       <div v-for="(e_title, index) in Object.keys(allRoles)">
                         <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover">
-                          <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title">
+                          <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title" @change="this.globalMethodEnablePopovers()">
           
                           <label class="form-check-label no_wrap w-100 pb-3 pe-4" :for="`jobTitleRadioBtn${index}`">
                             {{ e_title }}
@@ -55,8 +55,10 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
             <div class="form-group" style="margin-top: 1em">
               <p class="mb-1">Skills</p>
               <div v-if="jobListing.skills[0] !== ''">
-                <div v-for="(e_skill, index) in jobListing.skills" class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary fw-normal-custom">
-                  {{ e_skill }} 
+                <div v-for="(e_skill, index) in jobListing.skills" class="d-inline-block">
+                  <div class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary fw-normal-custom" data-bs-toggle="popover" data-bs-trigger="hover" :data-bs-content="allSkills[e_skill]">
+                    {{ e_skill }}
+                  </div>
                 </div>
               </div>
               <div v-else>
@@ -175,7 +177,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
 
 <script>
 import Listing from '../firebase/listing_class'
-import { allRoleData, allDepartmentData } from '../firebase/CRUD_database.js'
+import { allRoleData, allDepartmentData, allSkillsData } from '../firebase/CRUD_database.js'
 
 export default {
   created() {
@@ -196,6 +198,7 @@ export default {
       
       allRoles: {},
       allDept: [],
+      allSkills: {},
       searchBarValTitle: '',
       searchBarValDept: '',
     }
@@ -266,6 +269,9 @@ export default {
     async fetchDeptFromDB() {
       this.allDept = await allDepartmentData()
     },
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
     checkJobTitleSearchBar(my_job_title) {
       if (my_job_title.toLowerCase().indexOf(this.searchBarValTitle.toLowerCase()) > -1) {
         return true
@@ -291,9 +297,11 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  async mounted() {
     this.fetchRolesFromDB()
     this.fetchDeptFromDB()
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
   },
 }
 </script>
@@ -328,6 +336,9 @@ export default {
 .dropdown_search_menu {
   max-height: 200px;
   overflow-y: scroll;
+}
+.dropdown-menu {
+  z-index: 1071;
 }
 .list-elem-hover {
   transition: all 200ms ease-in-out;
