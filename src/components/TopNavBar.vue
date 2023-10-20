@@ -24,7 +24,7 @@ import Listing from '../firebase/listing_class.js'
         {{ this.jobDepartment }}
       </div>
     </div>
-    <div v-if="isMyApplicants" class="d-flex flex-row applicantDetails">
+    <div v-if="isMyApplicants || isIndividualApplicant" class="d-flex flex-row applicantDetails">
       <div>
         <font-awesome-icon icon="fa-solid fa-user-group" class="ms-5 me-1 text-primary card-icon" />
         {{ this.applicantNum }} Applicants
@@ -41,7 +41,7 @@ import Listing from '../firebase/listing_class.js'
 export default {
   async created() {
     const listingObj = new Listing()
-    await listingObj.loadListing(this.$route.params.id)
+    await listingObj.loadListing(this.$route.params.listingid)
 
     this.jobTitle = listingObj.getTitle()
     this.jobDepartment = listingObj.getDepartment()
@@ -75,6 +75,9 @@ export default {
     },
     isMyApplicants() {
       return this.$route.name === 'myApplicants'
+    },
+    isIndividualApplicant() {
+      return this.$route.name === 'individualApplicant'
     }
   }
 }
