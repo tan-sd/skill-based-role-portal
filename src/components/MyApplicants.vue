@@ -10,7 +10,10 @@ import TopNavBar from './TopNavBar.vue'
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">Listing Details</h3>
-        <button class="btn btn-secondary text-white px-5" type="button" @click="edit_clicked()">
+        <button v-if="isListingExpired(listingDetails.deadline)" class="btn btn-secondary text-white px-3" type="button" @click="edit_clicked()">
+          Reopen Listing
+        </button>
+        <button v-else class="btn btn-secondary text-white px-3" type="button" @click="edit_clicked()">
           Edit Listing
         </button>
       </div>
@@ -192,7 +195,13 @@ export default {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
-    }
+    },
+    isListingExpired(deadline) {
+    const currentDate = new Date();
+    const listingDeadline = new Date(deadline);
+    console.log(listingDeadline)
+    return currentDate > listingDeadline;
+    },
   },
   mounted() {
     this.getUserSkills()

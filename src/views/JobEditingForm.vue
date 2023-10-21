@@ -13,7 +13,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
   
       <div class="card card_sp">
         <div class="card-body">
-          <h4 class="card-title text-center titles">Edit Listing</h4>
+          <h4 class="card-title text-center titles">Update Listing</h4>
           <form @submit.prevent="submitForm" class="general">
             <div class="form-group">
               <label for="jobTitle">Job Title</label>
