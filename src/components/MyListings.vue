@@ -35,7 +35,11 @@ import { allListingData } from '../firebase/CRUD_database'
           <h6 class="fw-bold text-truncate d-inline me-4"><font-awesome-icon icon="fa-solid fa-user-group" class="me-2 text-primary card-icon" />{{ list.applicants.length }} Applicants</h6>
           <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h6>
         </div>
+
+        <div v-if="isListingExpired(list.deadline)" class="job-expired-label">Job Expired</div>
+
       </div>
+
 
       <div v-if="listing.length == 0" class="d-flex flex-column align-items-center justify-content-center h-100">
         <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
@@ -86,6 +90,12 @@ export default {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
+    },
+    isListingExpired(deadline) {
+    const currentDate = new Date();
+    const listingDeadline = new Date(deadline);
+    console.log(listingDeadline)
+    return currentDate > listingDeadline;
     },
   }
 }
@@ -153,5 +163,28 @@ export default {
 
 .card:hover .add-border-left::before {
   border: solid 0.125rem #ffffff;
+}
+
+.job-expired-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #E03800;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'montserrat-bold';
+}
+.card:hover .job-expired-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #A32900 !important;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'montserrat-bold';
 }
 </style>

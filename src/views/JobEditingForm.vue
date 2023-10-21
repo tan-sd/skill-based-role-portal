@@ -13,7 +13,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
   
       <div class="card card_sp">
         <div class="card-body">
-          <h4 class="card-title text-center">Edit Listing</h4>
+          <h4 class="card-title text-center titles">Edit Listing</h4>
           <form @submit.prevent="submitForm" class="general">
             <div class="form-group">
               <label for="jobTitle">Job Title</label>
@@ -315,6 +315,9 @@ export default {
 }
 .fw-normal-custom {
   font-family: 'montserrat';
+}
+.titles {
+  font-family: 'montserrat-bold';
 }
 .card_sp {
   margin-bottom: 2em;

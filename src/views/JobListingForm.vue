@@ -18,7 +18,7 @@
 
     <div class="card card_sp border-0 rounded-3">
       <div class="card-body">
-        <h4 class="card-title text-center">Create a New Listing</h4>
+        <h4 class="card-title text-center titles">Create a New Listing</h4>
 
         <form @submit.prevent="submitForm" class="general">
           <div class="form-group">
@@ -309,6 +309,9 @@ export default {
 }
 .fw-normal-custom {
   font-family: 'montserrat';
+}
+.titles {
+  font-family: 'montserrat-bold';
 }
 .card_sp {
   margin-bottom: 2em;
