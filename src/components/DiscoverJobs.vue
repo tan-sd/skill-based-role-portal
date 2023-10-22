@@ -12,10 +12,10 @@ import Listing from '../firebase/listing_class'
     <!-- Container for Cards -->
     <div class="body-container container-fluid px-4">
       <div
-        v-for="(list, index) in activeListings"
-        :key="index"
+        v-for="list in activeListings"
+        :key="list.id"
         class="card border-0 my-3 p-3 flex-col flex-sm-row listing-card justify-content-start"
-        @click="navigateToDetails(index)"
+        @click="navigateToDetails(list.listingId)"
       >
         <!-- Card content here -->
         <div class="add-border-left me-3 d-none d-sm-block"></div>
@@ -112,9 +112,9 @@ export default {
         console.error('Error fetching data from Firebase:', error);
       }
     },
-    navigateToDetails(index) {
-      // Assuming 'index' is the listing ID, you can pass it as a parameter to the details route
-      this.$router.push({ name: 'listingDetails', params: { listingid: index } });
+    navigateToDetails(listingId) {
+      // Use the provided listingId for navigation
+      this.$router.push({ name: 'listingDetails', params: { listingid: listingId } });
     },
     async getMatchPercentage(allListings) {
       try {
@@ -145,7 +145,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .header-container {
