@@ -70,7 +70,7 @@ import Listing from '../firebase/listing_class'
         class="d-flex flex-column align-items-center justify-content-center h-100"
       >
         <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
-        <h4 class="fw-bold text-center">OOPS! Looks like there aren't any listings available at the moment...</h4>
+        <h4 class="fw-bold text-center">OOPS! Looks like you have not applied to any listing...</h4>
       </div>
     </div>
   </div>
