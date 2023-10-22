@@ -1,157 +1,151 @@
 <script setup>
-import { allListingData } from '../firebase/CRUD_database'
 import { getStaffObj } from '../firebase/staff_class'
+import Listing from '../firebase/listing_class'
 </script>
 <template>
   <div class="d-flex flex-column">
-      <div class="header-container px-4 py-4">
-        <!-- Header -->
-        <h3 class="fw-bold">Find your next opportunity!</h3>
-      </div>
+    <div class="header-container px-4 py-4">
+      <!-- Header -->
+      <h3 class="fw-bold">Find your next opportunity!</h3>
+    </div>
 
-      <!-- Container for Cards -->
-      <div class="body-container container-fluid px-4">
+    <!-- Container for Cards -->
+    <div class="body-container container-fluid px-4">
+      <div
+        v-for="(list, index) in activeListings"
+        :key="index"
+        class="card border-0 my-3 p-3 flex-col flex-sm-row listing-card justify-content-start"
+        @click="navigateToDetails(index)"
+      >
+        <!-- Card content here -->
+        <div class="add-border-left me-3 d-none d-sm-block"></div>
+
+        <div class="me-sm-5 constrain-width w-100">
+          <div class="add-border-left me-2 d-inline d-sm-none"></div>
+          <p class="name m-0 text-truncate d-inline d-sm-block">{{ list.title }}</p>
+          <p class="department m-0 text-truncate d-inline d-sm-block ms-3 ms-sm-0">
+            {{ list.department }}
+          </p>
+        </div>
+
+        <div class="d-none d-sm-block me-sm-5 constrain-width">
+          <h5 class="fw-bold text-truncate">
+            <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
+            {{ toHumanReadableDate(list.deadline) }}
+          </h5>
+        </div>
+
         <div
-          v-for="(list, index) in listing"
-          :key="index"
-          class="card border-0 my-3 p-3 flex-col flex-sm-row listing-card justify-content-start"
-          @click="navigateToDetails(index)"
+          class="d-none d-sm-block progress-bar"
+          v-if="typeof list.matchPercentage === 'number'"
+          :style="getProgressBarStyle(list.matchPercentage)"
         >
-          <!-- Card content here -->
-          <div class="add-border-left me-3 d-none d-sm-block"></div>
-
-          <!-- <div class="details d-inline"> -->
-          <div class="me-sm-5 constrain-width w-100">
-            <div class="add-border-left me-2 d-inline d-sm-none"></div>
-            <p class="name m-0 text-truncate d-inline d-sm-block">{{ list.title }}</p>
-            <p class="department m-0 text-truncate d-inline d-sm-block ms-3 ms-sm-0">
-              {{ list.department }}
-            </p>
-          </div>
-
-          <div class="d-none d-sm-block me-sm-5 constrain-width">
-            <h5 class="fw-bold text-truncate">
-              <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
-              {{ toHumanReadbleDate(list.deadline) }}
-            </h5>
-          </div>
-
-          <div
-            class="d-none d-sm-block progress-bar"
-            v-if="typeof list.matchPercentage === 'number'"
-            :style="getProgressBarStyle(list.matchPercentage)"
-          >
-            <div class="progress-text">
-              <div>{{ Math.round(list.matchPercentage) }}%</div>
-              <div>Match</div>
-            </div>
-          </div>
-
-          <div class="d-flex d-sm-none justify-content-start w-100 px-3 mt-4">
-            <h6 class="fw-bold text-truncate">
-              <font-awesome-icon
-                icon="fa-solid fa-calendar"
-                class="me-2 text-primary card-icon"
-              />{{ toHumanReadbleDate(list.deadline) }}
-            </h6>
-          </div>
-          <div
-            class="d-flex flex-column d-sm-none progress-bar"
-            v-if="typeof list.matchPercentage === 'number'"
-            :style="getProgressBarStyle(list.matchPercentage)"
-          >
-            <div class="progress-text">
-              <div>{{ Math.round(list.matchPercentage) }}%</div>
-              <div>Match</div>
-            </div>
+          <div class="progress-text">
+            <div>{{ Math.round(list.matchPercentage) }}%</div>
+            <div>Match</div>
           </div>
         </div>
+
+        <div class="d-flex d-sm-none justify-content-start w-100 px-3 mt-4">
+          <h6 class="fw-bold text-truncate">
+            <font-awesome-icon
+              icon="fa-solid fa-calendar"
+              class="me-2 text-primary card-icon"
+            />{{ toHumanReadableDate(list.deadline) }}
+          </h6>
+        </div>
         <div
-          v-if="listing.length == 0"
-          class="d-flex flex-column align-items-center justify-content-center h-100"
+          class="d-flex flex-column d-sm-none progress-bar"
+          v-if="typeof list.matchPercentage === 'number'"
+          :style="getProgressBarStyle(list.matchPercentage)"
         >
-          <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
-          <h4 class="fw-bold text-center">OOPS! Looks like there aren't any listings available at the moment...</h4>
+          <div class="progress-text">
+            <div>{{ Math.round(list.matchPercentage) }}%</div>
+            <div>Match</div>
+          </div>
         </div>
       </div>
-
+      <div
+        v-if="activeListings.length === 0"
+        class="d-flex flex-column align-items-center justify-content-center h-100"
+      >
+        <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
+        <h4 class="fw-bold text-center">OOPS! Looks like there aren't any active listings available at the moment...</h4>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   created() {
-    this.fetchAllListingData()
+    this.fetchAllListingData();
   },
   data() {
     return {
-      listing: [],
-      job: [
-        {
-          matchPercentage: 67
-        },
-        {
-          matchPercentage: 67
-        },
-        {
-          matchPercentage: 70
-        },
-        {
-          matchPercentage: 68
-        }
-      ]
-    }
+      listings: [],
+    };
+  },
+  computed: {
+    activeListings() {
+      const currentDate = new Date().getTime();
+      return this.listings.filter(listing => new Date(listing.deadline).getTime() > currentDate);
+    },
   },
   methods: {
     getProgressBarStyle(matchPercentage) {
       // Determine the color of the progress bar based on matchPercentage
       return {
         background: `
-            radial-gradient(closest-side, white 79%, transparent 80% 100%),
-            conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
-      }
+          radial-gradient(closest-side, white 79%, transparent 80% 100%),
+          conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
+      };
     },
     async fetchAllListingData() {
       try {
-        const data = await allListingData()
-        this.listing = Object.values(data)
-        this.getMatchPercentage()
-        
+        const listing = new Listing();
+        const allListings = await listing.getAllListings();
+        this.listings = Object.values(allListings);
+        // You should call getMatchPercentage here to calculate match percentages
+        this.getMatchPercentage(this.listings);
       } catch (error) {
-        console.error('Error fetching data from Firebase:', error)
+        console.error('Error fetching data from Firebase:', error);
       }
     },
     navigateToDetails(index) {
-      this.$router.push({ name: 'listingDetails', params: { listingid: index } })
+      // Assuming 'index' is the listing ID, you can pass it as a parameter to the details route
+      this.$router.push({ name: 'listingDetails', params: { listingid: index } });
     },
-    async getMatchPercentage() {
+    async getMatchPercentage(allListings) {
       try {
-        const data = this.listing
-        const staff = await getStaffObj(localStorage.getItem('id'))
-        const staffSkillset = await staff.getSkillset()
-        
-        for (let index = 0; index < data.length; index++) {
-          const listingSkills = data[index].skills
-          var skillMatch = 0
+        const staff = await getStaffObj(localStorage.getItem('id'));
+        const staffSkillset = await staff.getSkillset();
+
+        for (let index = 0; index < allListings.length; index++) {
+          const listingSkills = allListings[index].skills;
+          let skillMatch = 0;
           for (const skill of listingSkills) {
             if (staffSkillset.includes(skill)) {
-              skillMatch++
+              skillMatch++;
             }
           }
-          data[index].matchPercentage = Math.round((skillMatch / listingSkills.length) * 100)
+          allListings[index].matchPercentage = Math.round((skillMatch / listingSkills.length) * 100);
         }
+        // You should update the computed property directly
+        this.listings = allListings;
       } catch (error) {
-        console.error('Error fetching data from Firebase:', error)
+        console.error('Error fetching data from Firebase:', error);
       }
     },
-    toHumanReadbleDate(date) {
-      const dateObj = new Date(date)
-      const options = { day: '2-digit', month: 'short', year: 'numeric' }
-      return dateObj.toLocaleDateString('en-US', options)
-    }
-  }
-}
+    toHumanReadableDate(date) {
+      const dateObj = new Date(date);
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      return dateObj.toLocaleDateString('en-US', options);
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 .header-container {
