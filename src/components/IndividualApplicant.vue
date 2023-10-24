@@ -46,7 +46,11 @@ import { getFile } from '../firebase/storage'
               <div class="pb-4">
                 <h4>Current Skills</h4>
                 <div v-for="(e_skill, index) in job.applicantSkills" :key="index" class="d-inline">
-                  <span class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
+                  <span 
+                    class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
+                    data-bs-toggle="popover"
+                    data-bs-trigger="hover"
+                    :data-bs-content="allSkills[e_skill]"
                     >{{ e_skill }}
                   </span>
                 </div>
@@ -58,6 +62,9 @@ import { getFile } from '../firebase/storage'
                   :key="index"
                   class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
                   :class="job.applicantSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  :data-bs-content="allSkills[e_skill]"
                 >
                   {{ e_skill }}
                 </div>
@@ -92,10 +99,9 @@ import { getFile } from '../firebase/storage'
 </template>
 
 <script>
+import { allSkillsData } from '../firebase/CRUD_database.js'
+
 export default {
-  created() {
-    this.getListingSkills()
-  },
   data() {
     return {
       applicant: {
@@ -111,7 +117,9 @@ export default {
       job: {
         applicantSkills: [],
         jobSkills: []
-      }
+      },
+
+      allSkills: [],
     }
   },
   async mounted() {
@@ -124,6 +132,11 @@ export default {
     this.applicant.position = staff1.getPosition()
     this.applicant.country = staff1.getCountry()
     this.job.applicantSkills = staff1.getSkillset()
+
+    await this.getListingSkills()
+
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
 
     this.applicant.resumeDLlink = await getFile(
       `resumes/${this.$route.params.listingid}/${this.$route.params.applicantid}/resume.pdf`
@@ -156,13 +169,10 @@ export default {
             radial-gradient(closest-side, white 79%, transparent 80% 100%),
             conic-gradient(#6A44D4 ${matchPercentage}% , #b3b3b3 0)`
       }
-    }
-    // async loadData(){
-    //   const staff = await getStaffObj(localStorage.getItem('id'))
-    //   await staff.init()
-
-    //   this.applicant.resumeDLlink = await getFile(`resumes/${this.$route.params.id}/${localStorage.getItem('id')}/resume.pdf`)
-    // }
+    },
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
   },
   computed: {
     getMatchPercentage() {

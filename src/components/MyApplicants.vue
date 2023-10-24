@@ -50,8 +50,10 @@ import TopNavBar from './TopNavBar.vue'
             <div
               v-for="(e_skill, index) in listingDetails.skills"
               :key="index"
-              class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block"
-              :class="userSkills.includes(e_skill) ? 'bg-primary' : 'bg-light2'"
+              class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
+              data-bs-toggle="popover"
+              data-bs-trigger="hover"
+              :data-bs-content="allSkills[e_skill]"
             >
               {{ e_skill }}
             </div>
@@ -263,12 +265,16 @@ import TopNavBar from './TopNavBar.vue'
 </template>
 
 <script>
+import { allSkillsData } from '../firebase/CRUD_database.js'
+
 export default {
   data() {
     return {
       listingDetails: {},
       userSkills: [],
       newAppList: [],
+
+      allSkills: [],
 
       // Applicants: for filtering
       applicantsNameSearch: '',
@@ -279,6 +285,8 @@ export default {
     const listing = await this.fetchIndividualListingData()
     await this.fetch_read_staff_data(listing)
     await this.getUserSkills()
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
   },
   methods: {
     async fetchIndividualListingData() {
@@ -405,7 +413,10 @@ export default {
     },
     selectAllSkillsFilter() {
       this.applicantsSkillsFilter = this.listingDetails.skills
-    }
+    },
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
   }
 }
 </script>
