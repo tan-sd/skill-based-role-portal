@@ -100,7 +100,11 @@ import TopNavBar from './TopNavBar.vue'
                   placeholder="Search..."
                   v-model="applicantsNameSearch"
                 />
-                <div class="input-group-text btn btn-light" @click="applicantsNameSearch = ''" :class="{disabled: applicantsNameSearch == ''}">
+                <div
+                  class="input-group-text btn btn-light"
+                  @click="applicantsNameSearch = ''"
+                  :class="{ disabled: applicantsNameSearch == '' }"
+                >
                   <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
                 </div>
               </div>
@@ -111,16 +115,27 @@ import TopNavBar from './TopNavBar.vue'
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="m-0">Skills</h6>
                 <div>
-                  <button class="btn btn-light btn-sm me-2" @click="clearSkillsFilter()"><small>Clear</small></button>
-                  <button class="btn btn-light btn-sm" @click="selectAllSkillsFilter()"><small>Select All</small></button>
+                  <button class="btn btn-light btn-sm me-2" @click="clearSkillsFilter()">
+                    <small>Clear</small>
+                  </button>
+                  <button class="btn btn-light btn-sm" @click="selectAllSkillsFilter()">
+                    <small>Select All</small>
+                  </button>
                 </div>
               </div>
 
               <div class="filter-skills-scrollable">
                 <div v-for="(e_skill, index) in listingDetails.skills">
                   <div class="form-check mb-2 ms-1">
-                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox" v-model="applicantsSkillsFilter">
-                    <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      :value="e_skill"
+                      :id="`skill_filter_checkbox_${index}`"
+                      name="skill_filter_checkbox"
+                      v-model="applicantsSkillsFilter"
+                    />
+                    <label class="form-check-label" :for="`skill_filter_checkbox_${index}`">
                       {{ e_skill }}
                     </label>
                   </div>
@@ -143,17 +158,41 @@ import TopNavBar from './TopNavBar.vue'
 
             <div class="dropdown-menu dropdown-menu-end p-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="skillmatch" id="sort_1" name="sort_by" checked @click="sortMatchPercentage()" />
-                <label class="form-check-label" for="sort_1"> Sort by skill match (high to low) </label>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="skillmatch"
+                  id="sort_1"
+                  name="sort_by"
+                  checked
+                  @click="sortMatchPercentage()"
+                />
+                <label class="form-check-label" for="sort_1">
+                  Sort by skill match (high to low)
+                </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_a_z" id="sort_2" name="sort_by" @click="sortApplicantNameDescending()" />
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="name_a_z"
+                  id="sort_2"
+                  name="sort_by"
+                  @click="sortApplicantNameDescending()"
+                />
                 <label class="form-check-label" for="sort_2"> Sort by name (A-Z) </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_z_a" id="sort_3" name="sort_by" @click="sortApplicantNameAcending()" />
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="name_z_a"
+                  id="sort_3"
+                  name="sort_by"
+                  @click="sortApplicantNameAcending()"
+                />
                 <label class="form-check-label" for="sort_3"> Sort by name (Z-A) </label>
               </div>
             </div>
@@ -165,8 +204,13 @@ import TopNavBar from './TopNavBar.vue'
       <div class="body-container container-fluid px-4">
         <!-- Conditionally render loop if newAppList has data -->
         <div v-if="newAppList.length > 0">
-          <div v-for="applicant in newAppList">
-            <div v-if="applicant.name.toLowerCase().includes(applicantsNameSearch.toLowerCase()) && checkForAnySkillMatch(applicant.applicantSkills)">
+          <div v-for="(applicant, index) in newAppList" :key="index">
+            <div
+              v-if="
+                applicant.name.toLowerCase().includes(applicantsNameSearch.toLowerCase()) &&
+                checkForAnySkillMatch(applicant.applicantSkills)
+              "
+            >
               <router-link
                 :key="applicant.name"
                 :to="`/${applicant.listingId}/individualApplicant/${applicant.staffId}`"
@@ -192,6 +236,19 @@ import TopNavBar from './TopNavBar.vue'
                 </div>
               </router-link>
             </div>
+          </div>
+          <div
+            v-if="
+              !newAppList.some(
+                (applicant) =>
+                  applicant.name.toLowerCase().includes(applicantsNameSearch.toLowerCase()) &&
+                  checkForAnySkillMatch(applicant.applicantSkills)
+              )
+            "
+            class="d-flex flex-column align-items-center justify-content-center h-100"
+          >
+            <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
+            <h4 class="fw-bold">OOPS! No applicants match your current filter criteria...</h4>
           </div>
         </div>
 
@@ -348,8 +405,8 @@ export default {
     },
     selectAllSkillsFilter() {
       this.applicantsSkillsFilter = this.listingDetails.skills
-    },
-  },
+    }
+  }
 }
 </script>
 
