@@ -7,6 +7,7 @@ import TopNavBar from './TopNavBar.vue'
   <div>
     <TopNavBar />
     <div class="d-flex flex-column w-100">
+      <!-- Listing Details Header -->
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">Listing Details</h3>
@@ -17,6 +18,8 @@ import TopNavBar from './TopNavBar.vue'
           Edit Listing
         </button>
       </div>
+
+      <!-- Listing Details -->
       <div class="bg-white rounded m-3 p-4">
         <div class="row">
           <div class="col-7">
@@ -53,12 +56,16 @@ import TopNavBar from './TopNavBar.vue'
           </div>
         </div>
       </div>
+
+      <!-- My Applicants Header -->
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">My Applicants</h3>
       </div>
-      <!-- Container for Cards -->
+
+      <!-- My Applicants -->
       <div class="body-container container-fluid px-4">
+
         <!-- Conditionally render loop if newAppList has data -->
         <div v-if="newAppList.length > 0">
           <router-link
@@ -86,7 +93,8 @@ import TopNavBar from './TopNavBar.vue'
               </div>
             </div>
           </router-link>
-        </div>
+        </div>]
+        
         <!-- Display a loading message if newAppList is empty -->
         <div v-else class="d-flex flex-column align-items-center justify-content-center h-100">
           <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
