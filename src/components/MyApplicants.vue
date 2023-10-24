@@ -93,7 +93,7 @@ import TopNavBar from './TopNavBar.vue'
               </div>
             </div>
           </router-link>
-        </div>]
+        </div>
         
         <!-- Display a loading message if newAppList is empty -->
         <div v-else class="d-flex flex-column align-items-center justify-content-center h-100">
