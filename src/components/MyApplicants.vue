@@ -11,10 +11,20 @@ import TopNavBar from './TopNavBar.vue'
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">Listing Details</h3>
-        <button v-if="isListingExpired(listingDetails.deadline)" class="btn btn-secondary text-white px-3" type="button" @click="edit_clicked()">
+        <button
+          v-if="isListingExpired(listingDetails.deadline)"
+          class="btn btn-secondary text-white px-3"
+          type="button"
+          @click="edit_clicked()"
+        >
           Reopen Listing
         </button>
-        <button v-else class="btn btn-secondary text-white px-3" type="button" @click="edit_clicked()">
+        <button
+          v-else
+          class="btn btn-secondary text-white px-3"
+          type="button"
+          @click="edit_clicked()"
+        >
           Edit Listing
         </button>
       </div>
@@ -66,10 +76,16 @@ import TopNavBar from './TopNavBar.vue'
         <div class="d-flex">
           <!-- FILTER -->
           <div class="dropdown me-3">
-            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button
+              class="btn btn-primary"
+              type="button"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="outside"
+              aria-expanded="false"
+            >
               <font-awesome-icon icon="fa-solid fa-filter" />
             </button>
-  
+
             <div class="dropdown-menu dropdown-menu-end p-3">
               <!-- Filter by Name -->
               <h6>Name</h6>
@@ -78,11 +94,16 @@ import TopNavBar from './TopNavBar.vue'
                 <span class="input-group-text">
                   <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </span>
-                <input class="form-control" type="text" placeholder="Search..." v-model="applicantsNameSearch">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Search..."
+                  v-model="applicantsNameSearch"
+                />
               </div>
-  
+
               <hr />
-  
+
               <!-- Filter by Skills -->
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="m-0">Skills</h6>
@@ -91,57 +112,61 @@ import TopNavBar from './TopNavBar.vue'
                   <button class="btn btn-light btn-sm"><small>Select All</small></button>
                 </div>
               </div>
-  
+
               <div class="filter-skills-scrollable">
                 <div v-for="(e_skill, index) in listingDetails.skills">
                   <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox" v-model="applicantsSkillsFilter">
-                    <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      :value="e_skill"
+                      :id="`skill_filter_checkbox_${index}`"
+                      name="skill_filter_checkbox"
+                      v-model="applicantsSkillsFilter"
+                    />
+                    <label class="form-check-label" :for="`skill_filter_checkbox_${index}`">
                       {{ e_skill }}
                     </label>
                   </div>
                 </div>
               </div>
-  
             </div>
           </div>
-  
+
           <!-- SORT -->
           <div class="dropdown">
-            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button
+              class="btn btn-primary"
+              type="button"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="outside"
+              aria-expanded="false"
+            >
               <font-awesome-icon icon="fa-solid fa-arrows-up-down" />
             </button>
-  
+
             <div class="dropdown-menu dropdown-menu-end p-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_a_z" id="sort_1" name="sort_by" v-model="applicantsSortBy">
-                <label class="form-check-label" for="sort_1">
-                  Sort by name (A-Z)
-                </label>
+                <input class="form-check-input" type="radio" value="skillmatch" id="sort_1" name="sort_by" checked @click="sortMatchPercentage()" />
+                <label class="form-check-label" for="sort_1"> Sort by skill match (high to low) </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_z_a" id="sort_2" name="sort_by" v-model="applicantsSortBy">
-                <label class="form-check-label" for="sort_2">
-                  Sort by name (Z-A)
-                </label>
+                <input class="form-check-input" type="radio" value="name_a_z" id="sort_2" name="sort_by" @click="sortApplicantNameDescending()" />
+                <label class="form-check-label" for="sort_2"> Sort by name (A-Z) </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="skillmatch" id="sort_3" name="sort_by" v-model="applicantsSortBy">
-                <label class="form-check-label" for="sort_3">
-                  Sort by skill match (high to low)
-                </label>
+                <input class="form-check-input" type="radio" value="name_z_a" id="sort_3" name="sort_by" @click="sortApplicantNameAcending()" />
+                <label class="form-check-label" for="sort_3"> Sort by name (Z-A) </label>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- My Applicants -->
       <div class="body-container container-fluid px-4">
-
         <!-- Conditionally render loop if newAppList has data -->
         <div v-if="newAppList.length > 0">
           <router-link
@@ -170,7 +195,7 @@ import TopNavBar from './TopNavBar.vue'
             </div>
           </router-link>
         </div>
-        
+
         <!-- Display a loading message if newAppList is empty -->
         <div v-else class="d-flex flex-column align-items-center justify-content-center h-100">
           <p><font-awesome-icon icon="fa-solid fa-ghost" class="text-light2" size="5x" /></p>
@@ -185,17 +210,13 @@ import TopNavBar from './TopNavBar.vue'
 export default {
   data() {
     return {
-      listingDetails: {
-      },
+      listingDetails: {},
       userSkills: [],
       newAppList: [],
 
       // Applicants: for filtering
       applicantsNameSearch: '',
-      applicantsSkillsFilter: [],
-
-      // Applicants: for sorting
-      applicantsSortBy: 'skillmatch'
+      applicantsSkillsFilter: []
     }
   },
   async created() {
@@ -232,6 +253,7 @@ export default {
         }
 
         this.newAppList.push(tempObj) // Push data to newAppList
+        this.sortMatchPercentage() // Sort newAppList by matchPercentage
       }
     },
     calculateMatchPercentage(reqs, skills) {
@@ -288,11 +310,26 @@ export default {
       return dateObj.toLocaleDateString('en-US', options)
     },
     isListingExpired(deadline) {
-    const currentDate = new Date();
-    const listingDeadline = new Date(deadline);
-    console.log(listingDeadline)
-    return currentDate > listingDeadline;
+      const currentDate = new Date()
+      const listingDeadline = new Date(deadline)
+      console.log(listingDeadline)
+      return currentDate > listingDeadline
     },
+    sortMatchPercentage() {
+      this.newAppList.sort((a, b) => {
+        return b.matchPercentage - a.matchPercentage
+      })
+    },
+    sortApplicantNameDescending() {
+      this.newAppList.sort((a, b) => {
+        return a.name.localeCompare(b.name)
+      })
+    },
+    sortApplicantNameAcending() {
+      this.newAppList.sort((a, b) => {
+        return b.name.localeCompare(a.name)
+      })
+    }
   },
   mounted() {
     this.getUserSkills()
