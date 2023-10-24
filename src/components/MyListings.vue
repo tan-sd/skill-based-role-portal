@@ -36,7 +36,7 @@ import { allListingData } from '../firebase/CRUD_database'
           <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h6>
         </div>
 
-        <div v-if="isListingExpired(list.deadline)" class="job-expired-label">Job Expired</div>
+        <div v-if="isListingExpired(list.deadline)" class="job-expired-label">Listing Expired</div>
 
       </div>
 
@@ -172,19 +172,11 @@ export default {
   background-color: #E03800;
   color: white;
   padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 0.25rem 0 0.25rem 0 ;
+  font-size: 0.7rem;
   font-family: 'montserrat-bold';
 }
 .card:hover .job-expired-label {
-  position: absolute;
-  bottom: 0;
-  right: 0;
   background-color: #A32900 !important;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: 'montserrat-bold';
 }
 </style>
