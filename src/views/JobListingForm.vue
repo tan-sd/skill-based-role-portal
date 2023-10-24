@@ -40,7 +40,16 @@
                 </button>
     
                 <ul class="dropdown-menu dropdown-menu-end px-3">
-                  <input class="form-control mb-2" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarValTitle">
+                  <div class="input-group mb-2">
+                    <input class="form-control" id="deptDropdownSearch" type="text" placeholder="Search.." v-model="searchBarValTitle">
+                    <div
+                      class="input-group-text btn btn-light"
+                      @click="searchBarValTitle = ''"
+                      :class="{ disabled: searchBarValTitle == '' }"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
+                    </div>
+                  </div>
     
                   <div class="dropdown_search_menu">
                     <div v-for="(e_title, index) in Object.keys(allRoles)">
@@ -115,7 +124,16 @@
                 </button>
     
                 <ul class="dropdown-menu dropdown-menu-end px-3">
-                  <input class="form-control mb-2" id="deptDropdownSearch" type="text" placeholder="Search.." v-model="searchBarValDept">
+                  <div class="input-group mb-2">
+                    <input class="form-control" id="deptDropdownSearch" type="text" placeholder="Search.." v-model="searchBarValDept">
+                    <div
+                      class="input-group-text btn btn-light"
+                      @click="searchBarValDept = ''"
+                      :class="{ disabled: searchBarValDept == '' }"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
+                    </div>
+                  </div>
 
                   <div class="dropdown_search_menu">
                     <div v-for="(e_title, index) in allDept">

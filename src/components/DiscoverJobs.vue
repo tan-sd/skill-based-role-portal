@@ -22,66 +22,77 @@ import Listing from '../firebase/listing_class'
               <font-awesome-icon icon="fa-solid fa-filter" />
             </button>
 
-            <div class="dropdown-menu dropdown-menu-end p-3">
-              <!-- Filter by Name -->
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="m-0">Job Title</h6>
-                <div>
-                  <button class="btn btn-light btn-sm me-2" @click="clearJobTitleFilter()"><small>Clear</small></button>
-                  <button class="btn btn-light btn-sm" @click="selectAllJobTitleFilter()"><small>Select All</small></button>
-                </div>
-              </div>
+            <div class="dropdown-menu dropdown-menu-1 dropdown-menu-end p-3">
+              <div class="d-flex flex-column flex-md-row">
+                <!-- Filter by Title -->
+                <div class="flex-item-thing me-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="m-0">Job Title</h6>
+                    <div>
+                      <button class="btn btn-light btn-sm me-2" @click="clearJobTitleFilter()"><small>Clear</small></button>
+                      <button class="btn btn-light btn-sm" @click="selectAllJobTitleFilter()"><small>Select All</small></button>
+                    </div>
+                  </div>
 
-              <input class="form-control mb-2" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarValTitle">
-
-              <div class="dropdown_search_menu">
-                <div v-for="(e_title, index) in Object.keys(allRoles)">
-                  <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
-                    <input class="form-check-input" type="checkbox" :id="`jobTitleRadioBtn${index}`" v-model="jobTitleFilterList" name="jobTitleRadioBtn" :value="e_title">
+                  <div class="input-group mb-2">
+                    <input class="form-control" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarValTitle">
+                    <div
+                      class="input-group-text btn btn-light"
+                      @click="searchBarValTitle = ''"
+                      :class="{ disabled: searchBarValTitle == '' }"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
+                    </div>
+                  </div>
     
-                    <label class="form-check-label no_wrap w-100 pe-4" :for="`jobTitleRadioBtn${index}`">
-                      {{ e_title }}
-                    </label>
+                  <div class="dropdown_search_menu">
+                    <div v-for="(e_title, index) in Object.keys(allRoles)">
+                      <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
+                        <input class="form-check-input" type="checkbox" :id="`jobTitleRadioBtn${index}`" v-model="jobTitleFilterList" name="jobTitleRadioBtn" :value="e_title">
+        
+                        <label class="form-check-label no_wrap w-100 pe-4" :for="`jobTitleRadioBtn${index}`">
+                          {{ e_title }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <!-- Filter by Department -->
+                <div class="flex-item-thing">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="m-0">Department</h6>
+                    <div>
+                      <button class="btn btn-light btn-sm me-2" @click="clearDeptFilter()"><small>Clear</small></button>
+                      <button class="btn btn-light btn-sm" @click="selectAllDeptFilter()"><small>Select All</small></button>
+                    </div>
+                  </div>
+    
+                  <div class="input-group mb-2">
+                    <input class="form-control" id="jobTitleSearchBar" type="text" placeholder="Search.." v-model="searchBarValDept">
+                    <div
+                      class="input-group-text btn btn-light"
+                      @click="searchBarValDept = ''"
+                      :class="{ disabled: searchBarValDept == '' }"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
+                    </div>
+                  </div>
+    
+                  <div class="dropdown_search_menu">
+                    <div v-for="(e_title, index) in allDept">
+                      <div v-if="checkDeptSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
+                        <input class="form-check-input" type="checkbox" :id="`deptRadioBtn${index}`" v-model="deptFilterList" name="deptRadioBtn" :value="e_title">
+        
+                        <label class="form-check-label no_wrap w-100 pe-4" :for="`deptRadioBtn${index}`">
+                          {{ e_title }}
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- <div class="input-group mb-2">
-                <span class="input-group-text">
-                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                </span>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Search..."
-                  v-model="applicantsNameSearch"
-                />
-                <div class="input-group-text btn btn-light" @click="applicantsNameSearch = ''" :class="{disabled: applicantsNameSearch == ''}">
-                  <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
-                </div>
-              </div> -->
-
-              <hr />
-
-              <!-- Filter by Skills -->
-              <!-- <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="m-0">Skills</h6>
-                <div>
-                  <button class="btn btn-light btn-sm me-2" @click="clearSkillsFilter()"><small>Clear</small></button>
-                  <button class="btn btn-light btn-sm" @click="selectAllSkillsFilter()"><small>Select All</small></button>
-                </div>
-              </div>
-
-              <div class="filter-skills-scrollable">
-                <div v-for="(e_skill, index) in listingDetails.skills">
-                  <div class="form-check mb-2 ms-1">
-                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox" v-model="applicantsSkillsFilter">
-                    <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
-                      {{ e_skill }}
-                    </label>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
 
@@ -100,17 +111,17 @@ import Listing from '../firebase/listing_class'
             <div class="dropdown-menu dropdown-menu-end p-3">
               <div class="form-check">
                 <input class="form-check-input" type="radio" value="skillmatch" id="sort_1" name="sort_by" @click="sortMatchPercentage()" checked />
-                <label class="form-check-label" for="sort_1"> Sort by skill match (high to low) </label>
+                <label class="form-check-label no_wrap" for="sort_1"> Sort by skill match (high to low) </label>
               </div>
 
               <div class="form-check">
                 <input class="form-check-input" type="radio" value="name_a_z" id="sort_2" name="sort_by" @click="sortDeadlineEarly()" />
-                <label class="form-check-label" for="sort_2"> Sort by deadline (earliest to latest) </label>
+                <label class="form-check-label no_wrap" for="sort_2"> Sort by deadline (earliest to latest) </label>
               </div>
 
               <div class="form-check">
                 <input class="form-check-input" type="radio" value="name_z_a" id="sort_3" name="sort_by" @click="sortDeadlineLatest()" />
-                <label class="form-check-label" for="sort_3"> Sort by deadline (latest to earliest) </label>
+                <label class="form-check-label no_wrap" for="sort_3"> Sort by deadline (latest to earliest) </label>
               </div>
             </div>
           </div>
@@ -120,7 +131,7 @@ import Listing from '../firebase/listing_class'
     <!-- Container for Cards -->
     <div class="body-container container-fluid px-4">
       <div v-for="list in activeListings">
-        <div v-if="checkTitleInFilter(list.title)">
+        <div v-if="checkTitleInFilter(list.title) && checkDeptInFilter(list.department)">
           <div
             :key="list.id"
             class="card border-0 my-3 p-3 flex-col flex-sm-row listing-card justify-content-start"
@@ -189,12 +200,13 @@ import Listing from '../firebase/listing_class'
 </template>
 
 <script>
-import { allRoleData } from '../firebase/CRUD_database.js'
+import { allRoleData, allDepartmentData } from '../firebase/CRUD_database.js'
 
 export default {
   async created() {
     await this.fetchAllListingData();
     await this.fetchRolesFromDB();
+    await this.fetchDeptFromDB();
     this.sortMatchPercentage();
   },
   data() {
@@ -202,9 +214,12 @@ export default {
       listings: [],
 
       allRoles: {},
+      allDept: [],
 
       searchBarValTitle: '',
+      searchBarValDept: '',
       jobTitleFilterList: [],
+      deptFilterList: [],
     };
   },
   computed: {
@@ -289,8 +304,18 @@ export default {
         return false
       }
     },
+    checkDeptSearchBar(my_dept) {
+      if (my_dept.toLowerCase().indexOf(this.searchBarValDept.toLowerCase()) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     async fetchRolesFromDB() {
       this.allRoles = await allRoleData()
+    },
+    async fetchDeptFromDB() {
+      this.allDept = await allDepartmentData()
     },
     checkTitleInFilter(listingTitle) {
       if (this.jobTitleFilterList.length === 0) {
@@ -305,11 +330,30 @@ export default {
 
       return false
     },
+    checkDeptInFilter(deptName) {
+      if (this.deptFilterList.length === 0) {
+        return true
+      }
+
+      const filterList = new Set(this.deptFilterList)
+
+      if (filterList.has(deptName)) {
+        return true
+      }
+
+      return false
+    },
     clearJobTitleFilter () {
       this.jobTitleFilterList = []
     },
     selectAllJobTitleFilter () {
       this.jobTitleFilterList = Object.keys(this.allRoles)
+    },
+    clearDeptFilter () {
+      this.deptFilterList = []
+    },
+    selectAllDeptFilter () {
+      this.deptFilterList = this.allDept
     },
   },
 };
@@ -411,12 +455,18 @@ export default {
 .card:hover .me-2 {
   color: #ffffff !important;
 }
-
-.dropdown-menu {
-  min-width: 300px;
+.dropdown-menu-1 {
+  width: 600px;
+  max-width: 90vw;
 }
 .dropdown_search_menu {
-  max-height: 150px;
+  max-height: 200px;
   overflow-y: scroll;
+}
+.flex-item-thing {
+  flex: 1 0 0px
+}
+.no_wrap {
+  white-space: nowrap;
 }
 </style>
