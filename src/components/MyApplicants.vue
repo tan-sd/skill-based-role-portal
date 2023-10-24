@@ -78,7 +78,7 @@ import TopNavBar from './TopNavBar.vue'
                 <span class="input-group-text">
                   <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </span>
-                <input class="form-control" type="text" placeholder="Search...">
+                <input class="form-control" type="text" placeholder="Search..." v-model="applicantsNameSearch">
               </div>
   
               <hr />
@@ -86,13 +86,16 @@ import TopNavBar from './TopNavBar.vue'
               <!-- Filter by Skills -->
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="m-0">Skills</h6>
-                <button class="btn btn-light btn-sm"><small>Select All</small></button>
+                <div>
+                  <button class="btn btn-light btn-sm me-2"><small>Clear</small></button>
+                  <button class="btn btn-light btn-sm"><small>Select All</small></button>
+                </div>
               </div>
   
               <div class="filter-skills-scrollable">
                 <div v-for="(e_skill, index) in listingDetails.skills">
                   <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox">
+                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox" v-model="applicantsSkillsFilter">
                     <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
                       {{ e_skill }}
                     </label>
@@ -111,21 +114,21 @@ import TopNavBar from './TopNavBar.vue'
   
             <div class="dropdown-menu dropdown-menu-end p-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_a_z" id="sort_1" name="sort_by">
+                <input class="form-check-input" type="radio" value="name_a_z" id="sort_1" name="sort_by" v-model="applicantsSortBy">
                 <label class="form-check-label" for="sort_1">
                   Sort by name (A-Z)
                 </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="name_z_a" id="sort_2" name="sort_by">
+                <input class="form-check-input" type="radio" value="name_z_a" id="sort_2" name="sort_by" v-model="applicantsSortBy">
                 <label class="form-check-label" for="sort_2">
                   Sort by name (Z-A)
                 </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" value="skillmatch" id="sort_3" name="sort_by">
+                <input class="form-check-input" type="radio" value="skillmatch" id="sort_3" name="sort_by" v-model="applicantsSortBy">
                 <label class="form-check-label" for="sort_3">
                   Sort by skill match (high to low)
                 </label>
@@ -188,8 +191,11 @@ export default {
       newAppList: [],
 
       // Applicants: for filtering
+      applicantsNameSearch: '',
+      applicantsSkillsFilter: [],
 
       // Applicants: for sorting
+      applicantsSortBy: 'skillmatch'
     }
   },
   async created() {
