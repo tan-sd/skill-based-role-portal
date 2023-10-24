@@ -61,6 +61,79 @@ import TopNavBar from './TopNavBar.vue'
       <div class="header-container px-4 py-4">
         <!-- Header -->
         <h3 class="fw-bold">My Applicants</h3>
+
+        <!-- SORT & FILTER container -->
+        <div class="d-flex">
+          <!-- FILTER -->
+          <div class="dropdown me-3">
+            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              <font-awesome-icon icon="fa-solid fa-filter" />
+            </button>
+  
+            <div class="dropdown-menu dropdown-menu-end p-3">
+              <!-- Filter by Name -->
+              <h6>Name</h6>
+
+              <div class="input-group mb-2">
+                <span class="input-group-text">
+                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                </span>
+                <input class="form-control" type="text" placeholder="Search...">
+              </div>
+  
+              <hr />
+  
+              <!-- Filter by Skills -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="m-0">Skills</h6>
+                <button class="btn btn-light btn-sm"><small>Select All</small></button>
+              </div>
+  
+              <div class="filter-skills-scrollable">
+                <div v-for="(e_skill, index) in listingDetails.skills">
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox">
+                    <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
+                      {{ e_skill }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+  
+          <!-- SORT -->
+          <div class="dropdown">
+            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              <font-awesome-icon icon="fa-solid fa-arrows-up-down" />
+            </button>
+  
+            <div class="dropdown-menu dropdown-menu-end p-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="name_a_z" id="sort_1" name="sort_by">
+                <label class="form-check-label" for="sort_1">
+                  Sort by name (A-Z)
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="name_z_a" id="sort_2" name="sort_by">
+                <label class="form-check-label" for="sort_2">
+                  Sort by name (Z-A)
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="skillmatch" id="sort_3" name="sort_by">
+                <label class="form-check-label" for="sort_3">
+                  Sort by skill match (high to low)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- My Applicants -->
@@ -112,7 +185,11 @@ export default {
       listingDetails: {
       },
       userSkills: [],
-      newAppList: [] // Initialize newAppList as an empty array
+      newAppList: [],
+
+      // Applicants: for filtering
+
+      // Applicants: for sorting
     }
   },
   async created() {
@@ -314,5 +391,13 @@ a {
   align-items: center;
   text-align: center;
   font-family: 'montserrat-bold';
+}
+
+.dropdown-menu {
+  min-width: 300px;
+}
+.filter-skills-scrollable {
+  max-height: 100px;
+  overflow-y: scroll;
 }
 </style>
