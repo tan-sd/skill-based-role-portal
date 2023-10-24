@@ -100,6 +100,9 @@ import TopNavBar from './TopNavBar.vue'
                   placeholder="Search..."
                   v-model="applicantsNameSearch"
                 />
+                <div class="input-group-text btn btn-light" @click="applicantsNameSearch = ''" :class="{disabled: applicantsNameSearch == ''}">
+                  <font-awesome-icon icon="fa-solid fa-xmark" size="xs" />
+                </div>
               </div>
 
               <hr />
@@ -108,23 +111,16 @@ import TopNavBar from './TopNavBar.vue'
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="m-0">Skills</h6>
                 <div>
-                  <button class="btn btn-light btn-sm me-2"><small>Clear</small></button>
-                  <button class="btn btn-light btn-sm"><small>Select All</small></button>
+                  <button class="btn btn-light btn-sm me-2" @click="clearSkillsFilter()"><small>Clear</small></button>
+                  <button class="btn btn-light btn-sm" @click="selectAllSkillsFilter()"><small>Select All</small></button>
                 </div>
               </div>
 
               <div class="filter-skills-scrollable">
                 <div v-for="(e_skill, index) in listingDetails.skills">
-                  <div class="form-check mb-2">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      :value="e_skill"
-                      :id="`skill_filter_checkbox_${index}`"
-                      name="skill_filter_checkbox"
-                      v-model="applicantsSkillsFilter"
-                    />
-                    <label class="form-check-label" :for="`skill_filter_checkbox_${index}`">
+                  <div class="form-check mb-2 ms-1">
+                    <input class="form-check-input" type="checkbox" :value="e_skill" :id=" `skill_filter_checkbox_${index}` " name="skill_filter_checkbox" v-model="applicantsSkillsFilter">
+                    <label class="form-check-label" :for=" `skill_filter_checkbox_${index}` ">
                       {{ e_skill }}
                     </label>
                   </div>
@@ -169,31 +165,34 @@ import TopNavBar from './TopNavBar.vue'
       <div class="body-container container-fluid px-4">
         <!-- Conditionally render loop if newAppList has data -->
         <div v-if="newAppList.length > 0">
-          <router-link
-            v-for="applicant in newAppList"
-            :key="applicant.name"
-            :to="`/${applicant.listingId}/individualApplicant/${applicant.staffId}`"
-            class="card border-0 my-3 p-3 bg-white flex-col flex-row listing-card justify-content-start"
-          >
-            <div class="profile-picture">
-              <img :src="applicant.profilePic" alt="Profile Picture" />
+          <div v-for="applicant in newAppList">
+            <div v-if="applicant.name.toLowerCase().includes(applicantsNameSearch.toLowerCase()) && checkForAnySkillMatch(applicant.applicantSkills)">
+              <router-link
+                :key="applicant.name"
+                :to="`/${applicant.listingId}/individualApplicant/${applicant.staffId}`"
+                class="card border-0 my-3 p-3 bg-white flex-col flex-row listing-card justify-content-start"
+              >
+                <div class="profile-picture">
+                  <img :src="applicant.profilePic" alt="Profile Picture" />
+                </div>
+                <div class="details d-inline">
+                  <div class="name">{{ applicant.name }}</div>
+                  <div class="position">{{ applicant.position }}</div>
+                </div>
+                <!-- Only display the progress-bar when matchPercentage is defined -->
+                <div
+                  class="progress-bar"
+                  v-if="typeof applicant.matchPercentage === 'number'"
+                  :style="getProgressBarStyle(applicant.matchPercentage)"
+                >
+                  <div class="progress-text">
+                    {{ Math.round(applicant.matchPercentage) }}%
+                    <span class="match-text">Match</span>
+                  </div>
+                </div>
+              </router-link>
             </div>
-            <div class="details d-inline">
-              <div class="name">{{ applicant.name }}</div>
-              <div class="position">{{ applicant.position }}</div>
-            </div>
-            <!-- Only display the progress-bar when matchPercentage is defined -->
-            <div
-              class="progress-bar"
-              v-if="typeof applicant.matchPercentage === 'number'"
-              :style="getProgressBarStyle(applicant.matchPercentage)"
-            >
-              <div class="progress-text">
-                {{ Math.round(applicant.matchPercentage) }}%
-                <span class="match-text">Match</span>
-              </div>
-            </div>
-          </router-link>
+          </div>
         </div>
 
         <!-- Display a loading message if newAppList is empty -->
@@ -222,8 +221,7 @@ export default {
   async created() {
     const listing = await this.fetchIndividualListingData()
     await this.fetch_read_staff_data(listing)
-
-    // Populate newAppList
+    await this.getUserSkills()
   },
   methods: {
     async fetchIndividualListingData() {
@@ -312,7 +310,6 @@ export default {
     isListingExpired(deadline) {
       const currentDate = new Date()
       const listingDeadline = new Date(deadline)
-      console.log(listingDeadline)
       return currentDate > listingDeadline
     },
     sortMatchPercentage() {
@@ -329,11 +326,30 @@ export default {
       this.newAppList.sort((a, b) => {
         return b.name.localeCompare(a.name)
       })
-    }
+    },
+    checkForAnySkillMatch(applicantSkills) {
+      if (this.applicantsSkillsFilter.length === 0) {
+        return true
+      }
+
+      const skillsSet = new Set(applicantSkills)
+
+      // Loop through the `reqs` array and count common elements
+      for (const req of this.applicantsSkillsFilter) {
+        if (skillsSet.has(req)) {
+          return true
+        }
+      }
+
+      return false
+    },
+    clearSkillsFilter() {
+      this.applicantsSkillsFilter = []
+    },
+    selectAllSkillsFilter() {
+      this.applicantsSkillsFilter = this.listingDetails.skills
+    },
   },
-  mounted() {
-    this.getUserSkills()
-  }
 }
 </script>
 
@@ -442,5 +458,8 @@ a {
 .filter-skills-scrollable {
   max-height: 100px;
   overflow-y: scroll;
+}
+.btn-remove-styling {
+  all: unset;
 }
 </style>
