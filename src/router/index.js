@@ -9,6 +9,7 @@ import DiscoverJobs from '../components/DiscoverJobs.vue'
 import ListingDetails from '../components/ListingDetails.vue'
 import jobListingForm from '../views/joblistingform.vue'
 import JobEditingForm from '../views/JobEditingForm.vue'
+import ProfilePage from '../components/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,11 @@ const router = createRouter({
       path: '/jobListingForm',
       name: 'jobListingForm',
       component: jobListingForm
+    },
+    {
+      path: '/profilepage',
+      name: 'ProfilePage',
+      component: ProfilePage
     },
 
     //Test if the data is received after HR submit the job listing form
