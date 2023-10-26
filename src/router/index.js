@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StyleGuide from '../views/StyleGuide.vue'
-import IndividualApplicant from '../components/IndividualApplicant.vue'
+import IndividualApplicant from '../views/IndividualApplicant.vue'
 import MyApplicants from '../components/MyApplicants.vue'
 import LoginPage from '../views/LoginPage.vue'
 import MyListings from '../components/MyListings.vue'
