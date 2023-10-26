@@ -50,9 +50,21 @@ import {getStaffObj} from '../firebase/staff_class'
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @click="submitFile" data-bs-dismiss="modal">Submit</button>
+
+            <div v-if='resume==null'>
+                <div class="modal-footer">
+                <div style="font-family: montserrat; text-align: right; color:red; font-size: 12px"> ** You must attach a resume before submitting your application</div>
+                <button type="button" class="btn btn-primary disabled" @click="submitFile" data-bs-dismiss="modal">Submit</button>
+                </div>
             </div>
+
+            <div v-else>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @click="submitFile" data-bs-dismiss="modal">Submit</button>
+                </div>
+            </div>
+
+
             </div>
         </div>
     </div>
