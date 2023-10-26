@@ -1,10 +1,10 @@
 <script setup>
 import Listing from '../firebase/listing_class'
-import ResumeDropOffButton from './ResumeDropOffButton.vue'
+import ResumeDropOffButton from '../components/ResumeDropOffButton.vue'
 import '../main.js'
-import TopNavBar from './TopNavBar.vue'
+import TopNavBar from '../components/TopNavBar.vue'
 import { getStaffObj } from '../firebase/staff_class'
-import appliedSuccess from '../components/appliedSuccess.vue'
+import appliedSuccess from '../components/AppliedSuccess.vue'
 </script>
 
 <template>

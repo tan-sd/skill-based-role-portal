@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import StyleGuide from '../views/StyleGuide.vue'
-import IndividualApplicant from '../components/IndividualApplicant.vue'
-import MyApplicants from '../components/MyApplicants.vue'
+import StyleGuide from '../utils/StyleGuide.vue'
+import IndividualApplicant from '../views/IndividualApplicant.vue'
+import MyListingDetails from '../views/MyListingDetails.vue'
 import LoginPage from '../views/LoginPage.vue'
-import MyListings from '../components/MyListings.vue'
-import MyApplications from '../components/MyApplications.vue'
-import DiscoverJobs from '../components/DiscoverJobs.vue'
-import ListingDetails from '../components/ListingDetails.vue'
+import MyListings from '../views/MyListings.vue'
+import MyApplications from '../views/MyApplications.vue'
+import DiscoverJobs from '../views/DiscoverJobs.vue'
+import ListingDetails from '../views/ListingDetails.vue'
 import jobListingForm from '../views/joblistingform.vue'
 import JobEditingForm from '../views/JobEditingForm.vue'
-import ProfilePage from '../components/ProfilePage.vue'
+import ProfilePage from '../views/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,9 +73,9 @@ const router = createRouter({
       component: IndividualApplicant
     },
     {
-      path: '/:listingid/myApplicants/',
-      name: 'myApplicants',
-      component: MyApplicants
+      path: '/:listingid/myListingDetails/',
+      name: 'myListingDetails',
+      component: MyListingDetails
     },
     {
       path: '/discoverJobs',
