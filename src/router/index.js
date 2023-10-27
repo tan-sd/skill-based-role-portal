@@ -7,7 +7,7 @@ import MyListings from '../views/MyListings.vue'
 import MyApplications from '../views/MyApplications.vue'
 import DiscoverJobs from '../views/DiscoverJobs.vue'
 import ListingDetails from '../views/ListingDetails.vue'
-import jobListingForm from '../views/joblistingform.vue'
+import jobListingForm from '../views/JobListingForm.vue'
 import JobEditingForm from '../views/JobEditingForm.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 
