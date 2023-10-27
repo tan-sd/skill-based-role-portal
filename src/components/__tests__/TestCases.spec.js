@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginPage from '../../views/LoginPage.vue'
-import DiscoverJobs from '../../components/DiscoverJobs.vue'
+import DiscoverJobs from '../../views/DiscoverJobs.vue'
 import { Staff } from '../../firebase/staff_class'
 
 const router = createRouter({
