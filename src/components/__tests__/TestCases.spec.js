@@ -5,6 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '../../views/LoginPage.vue'
 import DiscoverJobs from '../../views/DiscoverJobs.vue'
 import { Staff } from '../../firebase/staff_class'
+import Listing from '../../firebase/listing_class'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -136,5 +137,64 @@ describe('Staff Class', () => {
     ])
     expect(staff.getFullName()).toBe('Sally Loh')
     expect(staff.getRole()).toBe('HR')
+  })
+})
+
+describe('Listing Class', () => {
+  it('Verify Listing Attributes', async () => {
+    const listing = new Listing()
+    await listing.loadListing(1)
+
+    expect(listing.getApplicants()).toStrictEqual([
+      140002, 140003, 140004, 140008, 140015, 140025, 140036, 140078, 150096, 150655, 160323
+    ])
+    expect(listing.getCreateDate()).toBe('2023-09-15')
+    expect(listing.getCreatedBy()).toBe(130001)
+    expect(listing.getDeadline()).toBe('2023-10-28')
+    expect(listing.getDepartment()).toBe('Accounting')
+    expect(listing.getDescription()).toBe('This is accounting department')
+    expect(listing.getListingId()).toBe(1)
+    expect(listing.getResponsibilities()).toStrictEqual([
+      'help with all accounting stuff',
+      'working very hard'
+    ])
+    expect(listing.getSkills()).toStrictEqual([
+      'Call Centre Management',
+      'Collaboration',
+      'Communication',
+      'Customer Relationship Management',
+      'Digital Fluency',
+      'Problem Solving',
+      'Stakeholder Management',
+      'Technology Application',
+      'Accounting Standards',
+      'Project Management'
+    ])
+    expect(listing.getTitle()).toBe('Call Centre')
+    expect(listing.getAllAtrr()).toStrictEqual({
+      applicants: [
+        140002, 140003, 140004, 140008, 140015, 140025, 140036, 140078, 150096, 150655, 160323
+      ],
+      createdate: '2023-09-15',
+      createdby: 130001,
+      deadline: '2023-10-28',
+      department: 'Accounting',
+      description: 'This is accounting department',
+      listingId: 1,
+      responsibilities: ['help with all accounting stuff', 'working very hard'],
+      skills: [
+        'Call Centre Management',
+        'Collaboration',
+        'Communication',
+        'Customer Relationship Management',
+        'Digital Fluency',
+        'Problem Solving',
+        'Stakeholder Management',
+        'Technology Application',
+        'Accounting Standards',
+        'Project Management'
+      ],
+      title: 'Call Centre'
+    })
   })
 })
