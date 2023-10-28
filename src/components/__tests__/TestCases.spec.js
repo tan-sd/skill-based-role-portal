@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginPage from '../../views/LoginPage.vue'
 import DiscoverJobs from '../../views/DiscoverJobs.vue'
-import { Staff } from '../../firebase/staff_class'
+import { Staff, HRStaff } from '../../firebase/staff_class'
 import Listing from '../../firebase/listing_class'
 
 const router = createRouter({
@@ -125,6 +125,7 @@ describe('Staff Class', () => {
     expect(staff.getID()).toBe(160008)
     expect(staff.getFirstName()).toBe('Sally')
     expect(staff.getLastName()).toBe('Loh')
+    expect(staff.getListingsApplied()).toStrictEqual([0, 11, 10, 7])
     expect(staff.getEmail()).toBe('Sally.Loh@allinone.com.sg')
     expect(staff.getAccessRights()).toBe(4)
     expect(staff.getCountry()).toBe('Singapore')
@@ -137,6 +138,71 @@ describe('Staff Class', () => {
     ])
     expect(staff.getFullName()).toBe('Sally Loh')
     expect(staff.getRole()).toBe('HR')
+  })
+
+  it('Verify HR Staff Attributes', async () => {
+    const staff = new HRStaff()
+    await staff.init(160008)
+
+    expect(staff.getListingsCreated()).toStrictEqual([
+      {
+        applicants: [140002, 140003],
+        createdate: '2023-10-07',
+        createdby: '160008',
+        deadline: '2023-10-12',
+        department: 'Marketing',
+        description:
+          'We are seeking a highly analytical and data-driven Social Media Analyst to join our dynamic Marketing team. As a Social Media Analyst, you will play a crucial role in optimizing our social media presence, tracking performance, and providing insights to drive our social media strategy. If you are passionate about social media, have a keen eye for data, and can turn insights into actionable recommendations, we want to hear from you.',
+        listingId: 3,
+        responsibilities: [
+          'Monitor and analyze social media platforms (e.g., Facebook, Twitter, LinkedIn, Instagram) to track engagement, reach, and audience growth.',
+          'Develop and maintain dashboards and reports to provide real-time and historical performance metrics.',
+          'New responsibility added'
+        ],
+        skills: [
+          'Talent Management',
+          'Proven experience as a Social Media Analyst or similar role.',
+          'Professional and Business Ethics',
+          'Data Analytics',
+          'Problem Solving'
+        ],
+        title: 'Social Media Analyst'
+      },
+      {
+        applicants: '',
+        createdate: '2023-10-15',
+        createdby: '160008',
+        deadline: '2023-10-23',
+        department: 'Data Engineering',
+        description:
+          'Analyse and interpret complex datasets, develop predictive models, and extract actionable insights to support data-driven decision-making. Utilize statistical and machine learning techniques, programming skills, and domain knowledge to solve business problems and enhance data-driven strategies. Effective communication of findings to non-technical stakeholders is essential.',
+        listingId: 4,
+        responsibilities: ['Help build monthly dashboard and report', 'Help development ML models'],
+        skills: ['Python', 'C++', '.NET'],
+        title: 'Data Science'
+      },
+      {
+        applicants: '',
+        createdate: '2023-10-21',
+        createdby: '160008',
+        deadline: '2023-10-28',
+        department: 'HR',
+        description: "New Job that's not expired",
+        listingId: 6,
+        responsibilities: ["Timely solve client's issue"],
+        skills: [
+          'Call Centre Management',
+          'Collaboration',
+          'Communication',
+          'Customer Relationship Management',
+          'Digital Fluency',
+          'Problem Solving',
+          'Stakeholder Management',
+          'Technology Application'
+        ],
+        title: 'Call Centre'
+      }
+    ])
   })
 })
 
