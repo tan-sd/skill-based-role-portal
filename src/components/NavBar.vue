@@ -69,6 +69,7 @@
     <!-- Profile Btn -->
     <div
       class="profileContainer p-3 bg-light rounded d-flex flex-row justify-content-center align-items-center"
+      @click="redirectProfilePage()"
     >
       <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block" />
       <p id="userProfileName" class="fw-bold m-0 ms-2 text-truncate">{{ username }}</p>
@@ -106,7 +107,12 @@ export default {
         text: 'Log Out',
         to: '/',
         views: ['loginPage']
-      }
+      },
+      // {
+      //   text: 'Profile Page',
+      //   to: '/profilepage',
+      //   views: ['ProfilePage'],
+      // }
     ])
 
     const filteredNavLinks = computed(() => {
@@ -133,6 +139,12 @@ export default {
   },
   methods: {
     // Methods go here
+    redirectProfilePage() {
+      if (window.location.pathname != "/profilepage"){
+        window.location.href = '/profilepage'
+      }
+    },
+
     navbarItemClass(path, views) {
       const currentRoute = this.$route
       const currentComponent = currentRoute.name
@@ -209,6 +221,12 @@ export default {
 
 .profileContainer {
   width: 150px;
+}
+
+.profileContainer:hover {
+  background-color: #6a44d4 !important;
+  color: white;
+  cursor: pointer;
 }
 
 #userProfileIcon {

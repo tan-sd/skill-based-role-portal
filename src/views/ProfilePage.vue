@@ -1,257 +1,189 @@
 <script setup>
+import TopNavBar from '../components/TopNavBar.vue'
 import { getStaffObj } from '../firebase/staff_class'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 </script>
 
 <template>
-    <div class="d-flex flex-column">
-      <div class="header-container px-4 py-4">
-        <!-- Header -->
-        <h3 class="fw-bold">Profile Page</h3>
-      </div>
-
-    <div class="body-container container-fluid px-4">
-      <!-- this portion controls the personal details -->
-      <div class="row" id="profileHeaderHeader">
-        <div class="col">
-          Profile
-        </div>
-      </div>
-      <div class="row" id="profileHeader">
-        <div class="col-4 text-center position-relative" id="imageContainer">
-          <img :src="getImageUrl(imgSrc)" id="profilePicture" >
-          <div class="middle">
-            <div class="text"><font-awesome-icon icon="fa-solid fa-camera-rotate" /></div>
-          </div>
-        </div>
-        <div class="col-8" id="headerText">
-          <div id="fullName">
-            {{ firstName }} {{ lastName }}
-          </div>
-          
-          <div class="blackDivider">
-          </div>
-
-          <div id="positionDepartmentCountry">
-            {{ position }} <font-awesome-icon icon="fa-solid fa-grip-lines-vertical" /> {{ department }} <font-awesome-icon icon="fa-solid fa-grip-lines-vertical" /> {{ country }}
-          </div>
-
-          <div id="email">
-            {{ email }}
-          </div>
-        </div>
-      </div>
-
-      <!-- this portion controls the skillsets -->
-      <div class="row" id="skillsetsHeader">
-        <div class="col">
-          Skillsets
-        </div>
-      </div>
-      <div class="row" id="skillsets">
-        <!-- ADAM! paste your code for skills here -->
-      </div>
-
+  
+  <div class="py-3">
+    <div class="mx-5">
+      <font-awesome-icon
+        :icon="['fas', 'chevron-left']"
+        size="2xl"
+        @click="navigateBack"
+        class="btn-back"
+      />
     </div>
+    <div class="px-3 px-md-5 pb-3 my-3">
+      <div class="card m-0 py-5">
+        <div class="card-body pb-5">
+          <div class="row pb-5 align-items-center">
+            <div class="col-2">
+              <img class="profilePic" :src="getImageUrl(applicant.profilepic)" />
+            </div>
 
+            <div class="col-3">
+              <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
+                {{ applicant.fullName }}
+              </h3>
+              <p class="m-0">{{ applicant.email }}</p>
+            </div>
 
+            <div class="col-1 d-flex justify-content-end">
+              <div
+                class="vr bg-secondary opacity-100"
+                style="width: 5px; height: 60px; border-radius: 3px"
+              ></div>
+            </div>
+
+            <div class="col-6">
+              <h5 class="card-title">{{ applicant.position }}</h5>
+              <div class="row">
+                <p class="card-title">
+                  {{ applicant.department }} department, {{ applicant.country }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row pb-3">
+            <div class="col">
+              <div class="pb-4">
+                <h4>Current Skills</h4>
+                <div v-for="(e_skill, index) in applicant.skillsets" :key="index" class="d-inline">
+                  <span 
+                    class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
+                    data-bs-toggle="popover"
+                    data-bs-trigger="hover"
+                    :data-bs-content="allSkills[e_skill]"
+                    >{{ e_skill }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
+import { allSkillsData } from '../firebase/CRUD_database.js'
+
 export default {
   data() {
     return {
-      id: '',
-      firstName: "Seth",
-      lastName: "Yap",
-      email: "your@mother.fly.sg",
-      department: "IT",
-      position: "Sales",
-      country: "Singapore",
-      skillsets: ["live","laugh","SOP Development and Implementation"],
-      skillDesc: {"live":"Well, donkey, the meaning of life is like an onion. It's got layers, you see. Sometimes, it's about finding love, friendships, and maybe a cozy swamp to call your own. But it's different for everyone, and you have to figure it out on your own journey. Just don't let Lord Farquaad tell you what it should be!","laugh":"Well, donkey, the meaning of life is like an onion. It's got layers, you see. Sometimes, it's about finding love, friendships, and maybe a cozy swamp to call your own. But it's different for everyone, and you have to figure it out on your own journey. Just don't let Lord Farquaad tell you what it should be!","SOP Development and Implementation":"Well, donkey, the meaning of life is like an onion. It's got layers, you see. Sometimes, it's about finding love, friendships, and maybe a cozy swamp to call your own. But it's different for everyone, and you have to figure it out on your own journey. Just don't let Lord Farquaad tell you what it should be!"},
-      imgSrc: "../assets/profile_pics/user1.png"
+      applicant: {
+        fullName: 'Perry the Platypus',
+        email: 'agentp@secretagency.gov',
+        position: 'Agent P',
+        department: 'O.W.C.A (The Agency)',
+        country: 'Tri-State Area',
+        profilepic: '../assets/profile_pics/user1.png',
+        id: '',
+        skillsets: ["He's a semiaquatic","Egg laying mammal of action","He's a furry little flatfoot","Who'll never flinch from a fray","He's got more than just mad skill", "He's got a beaver tail and bill", "And the women swoon", "Whenever they hear him say -", "He's Perry, Perry the Platypus", "(You can call him Agent P)", "Perry (I said you can call him Agent P)", "Agent P"],
+      },
+
+      allSkills: [],
     }
   },
-  
-  async created() {
-    this.id = localStorage.getItem('id');
-    
-    await this.getStaffData()
+  async mounted() {
+    this.applicant.id = localStorage.getItem("id")
+
+    await this.getStaffData(this.applicant.id)
+
+    await this.fetchSkillsFromDB()
+    this.globalMethodEnablePopovers()
+    console.log(this.allSkills)
+
   },
 
   methods: {
+    async fetchSkillsFromDB() {
+      this.allSkills = await allSkillsData()
+    },
+
+    navigateBack() {
+      this.$router.go(-1)
+    },
+
     getImageUrl(name) {
-        return new URL(name, import.meta.url).href
-      },
+      return new URL(name, import.meta.url).href
+    },
     
     async getStaffData() {
       console.log("========= getStaffData =========")
-      var staff = await getStaffObj(this.id)
-      this.firstName = staff.getFirstName()
-      this.lastName = staff.getLastName()
-      this.email = staff.getEmail()
-      this.department = staff.getDepartment()
-      this.position = staff.getPosition()
-      this.skillsets = staff.getSkillset()
-      this.imgSrc = staff.getProfilePic()
-      this.country = staff.getCountry()
-    }
-
-  }
+      var staff = await getStaffObj(this.applicant.id)
+      this.applicant.fullName = staff.getFirstName() + " " + staff.getLastName()
+      this.applicant.email = staff.getEmail()
+      this.applicant.department = staff.getDepartment()
+      this.applicant.position = staff.getPosition()
+      this.applicant.skillsets = staff.getSkillset()
+      this.applicant.profilepic = staff.getProfilePic()
+      this.applicant.country = staff.getCountry()
+    },
+  },
 }
-  
-
 </script>
 
-
 <style scoped>
-.header-container {
+* {
+  text-decoration: none;
+}
+.header {
+  font-family: 'montserrat';
+  font-size: 30px;
+  padding: 10px;
+}
+
+.card {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  flex: 0 0 0px;
-}
-
-.body-container {
-  flex: 1 0 0px;
-}
-
-.listing-card {
-  align-items: center;
-  transition:
-    background-color 0.3s ease-in-out,
-    color 0.3s ease-in-out;
-  cursor: pointer;
-  width: 100%;
-}
-
-#profileHeaderHeader {
-  background-color: #6a44d4;
-  color: #ffffff;
-  font-family: 'montserrat-bold';
-  padding: 10px 10px 10px 25px;
-  border-radius: 25px 25px 0px 0px;
-  letter-spacing: 10px;
-  font-size: 30px;
-}
-
-#profileHeader {
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
   background-color: #ffffff;
-  border: 0px;
-  border-radius: 0px 0px 25px 25px;
-  padding: 20px 10px 20px 10px;
-  font-family: 'montserrat-bold';
-}
-
-#headerText {
-  padding: 50px 0px 50px 0px;
-}
-
-#fullName {
-  font-size: 50px;
-  letter-spacing: 5px;
-  text-align: center;
-}
-.blackDivider {
-  border: solid 0.125rem black;
-  border-radius: 1rem;
-  margin:5px 20px 5px 20px;
-}
-
-#positionDepartmentCountry {
-  text-align: center;
-  font-size: 25px;
-}
-
-#email {
-  text-align: center;
-}
-
-.imageContainer {
-  margin: 10px 20px;
-  padding-top: 25px;
-}
-
-#profilePicture {
+  border-radius: 5px;
+  flex: 1;
   width: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  aspect-ratio: 1/1;
-  transition: .5s ease;
-  backface-visibility: hidden;
-  opacity: 1;
-  display: block;
-}
-
-.middle {
-  transition: .5s ease;
-  opacity: 0;
-  position: absolute;
-  top: 45%;
-  left: 42%;
-  /* transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%); */
-  text-align: center;
-}
-
-.text {
-  background-color: rgb(95, 95, 95);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   color: black;
-  /* font-size: 16px; */
-  padding: 8px 16px;
-  border-radius: 15%;
 }
 
-#imageContainer:hover #profilePicture{
-  opacity: 0.3;
+.profilePic {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+  float: center;
 }
 
-#imageContainer:hover .middle{
-  opacity: 1;
+.progress-bar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: black;
+  position: relative;
+  margin-bottom: 5px;
 }
 
-#skillsetsHeader {
-  background-color: #6a44d4;
-  color: #ffffff;
+.progress-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   font-family: 'montserrat-bold';
-  padding: 10px 10px 10px 25px;
-  border-radius: 25px 25px 0px 0px;
-  letter-spacing: 10px;
-  font-size: 30px;
-  margin-top:3rem;
 }
 
-#skillsets {
-background-color: #ffffff;
-border: 0px;
-border-radius: 0px 0px 25px 25px;
-padding: 20px 10px 20px 10px;
-font-family: 'montserrat-bold';
+.btn-back {
+  cursor: pointer;
 }
-
-#skillset {
-  margin: auto;
-  margin-bottom:20px;
-}
-
-#skill {
-  font-size: 25px;
-}
-
-#desc {
-  font-size: 15px;
-  /* background-color: #b8acb4; */
-  border-radius: 10px;
-  padding: 10px 20px 10px 20px;
-  /* color: rgb(72, 72, 72); */
-}
-
-.divider {
-  border: solid 0.125rem #6a44d4;
-  border-radius: 1rem;
-  margin:5px 0px 0px 0px;
-}
-
 </style>
+
