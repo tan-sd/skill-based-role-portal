@@ -201,6 +201,31 @@ describe('Staff Class', () => {
           'Technology Application'
         ],
         title: 'Call Centre'
+      },
+      {
+        applicants: '',
+        createdate: '2023-10-29',
+        createdby: '160008',
+        deadline: '2023-11-15',
+        department: 'Sales',
+        description: 'Experience with Sales and able to lead a team of members',
+        listingId: 12,
+        responsibilities: ['Leading, coordinating sales targets each month'],
+        skills: [
+          'Budgeting',
+          'Business Negotiation',
+          'Business Presentation Delivery',
+          'Collaboration',
+          'Communication',
+          'Customer Acquisition Management',
+          'Customer Relationship Management',
+          'Problem Solving',
+          'Sales Closure',
+          'Stakeholder Management',
+          'Strategy Planning',
+          'Technology Integration'
+        ],
+        title: 'Sales Manager'
       }
     ])
   })
