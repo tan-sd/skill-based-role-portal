@@ -1,5 +1,6 @@
 <script setup>
 import { allListingData } from '../firebase/CRUD_database'
+import Listing from '../firebase/listing_class'
 </script>
 <template>
   <div class="d-flex flex-column">
@@ -66,12 +67,14 @@ export default {
     },
     async filteredListingData() {
       try {
-        const data = await allListingData()
-        for (let i = 0; i < Object.values(data).length; i++) {
+        const listing = new Listing();
+        const allListings = await listing.getAllListings();
+        
+        for (let i = 0; i < Object.values(allListings).length; i++) {
           // console.log(localStorage.getItem('id'))
           // console.log(Object.values(data)[i].createdby)
-          if (Object.values(data)[i].createdby == localStorage.getItem('id')) {
-            this.listing.push(Object.values(data)[i])
+          if (Object.values(allListings)[i].createdby == localStorage.getItem('id')) {
+            this.listing.push(Object.values(allListings)[i])
           }
         }
         // this.listing = Object.values(data)
