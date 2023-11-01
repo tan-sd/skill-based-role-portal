@@ -6,6 +6,7 @@ import LoginPage from '../../views/LoginPage.vue'
 import DiscoverJobs from '../../views/DiscoverJobs.vue'
 import { Staff, HRStaff } from '../../firebase/staff_class'
 import Listing from '../../firebase/listing_class'
+import { deleteListing, individualListingData } from '../../firebase/CRUD_database'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -118,7 +119,7 @@ describe('LoginPage', () => {
 })
 
 describe('Staff Class', () => {
-  it('Verify Staff Attributes', async () => {
+  it('Integration Testing (Staff)', async () => {
     const staff = new Staff()
     await staff.init(160008)
 
@@ -140,7 +141,7 @@ describe('Staff Class', () => {
     expect(staff.getRole()).toBe('HR')
   })
 
-  it('Verify HR Staff Attributes', async () => {
+  it('Integration Testing (HR Staff)', async () => {
     const staff = new HRStaff()
     await staff.init(160008)
 
@@ -232,7 +233,9 @@ describe('Staff Class', () => {
 })
 
 describe('Listing Class', () => {
-  it('Verify Listing Attributes', async () => {
+  /* Creates a new instance of a `Listing` object and loads a listing with ID 1 in Firebase. It then asserts various properties and methods of
+  the `Listing` object to ensure they have the expected values. The test checks the applicants, create date, created by, deadline, department, description, listing ID, responsibilities, skills, and title of the listing. It also checks that the `getAllAtrr` method returns all the attributes of the listing in a specific format. */
+  it('Integration Testing', async () => {
     const listing = new Listing()
     await listing.loadListing(1)
 
@@ -287,5 +290,167 @@ describe('Listing Class', () => {
       ],
       title: 'Call Centre'
     })
+  })
+  /* Performs unit testing for a JavaScript class called "Listing". It creates an instance of the Listing class with specific parameters and then uses the expect function to test various methods of the Listing class. The tests check if the methods return the expected values for the given instance of the class. */
+  it('Unit Testing', async () => {
+    const listing = new Listing(
+      'Data Analyst',
+      'Accounting',
+      '2023-11-20',
+      'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      ['Problem Solving', 'Accounting Standards']
+    )
+
+    expect(listing.getTitle()).toBe('Data Analyst')
+    expect(listing.getDepartment()).toBe('Accounting')
+    expect(listing.getDeadline()).toBe('2023-11-20')
+    expect(listing.getDescription()).toBe(
+      'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.'
+    )
+    expect(listing.getResponsibilities()).toStrictEqual([
+      'Collecting and cleaning data from various sources',
+      'Conducting data analysis using Python, R, or SQL'
+    ])
+    expect(listing.getSkills()).toStrictEqual(['Problem Solving', 'Accounting Standards'])
+  })
+})
+
+describe('Create Listing', () => {
+  const invalidInputs = [
+    {
+      title: '',
+      department: 'Accounting',
+      deadline: '2025-11-20',
+      description:
+        'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      responsibilities: [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      skills: ['Problem Solving', 'Accounting Standards']
+    },
+    {
+      title: 'Data Analyst',
+      department: '',
+      deadline: '2025-11-20',
+      description:
+        'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      responsibilities: [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      skills: ['Problem Solving', 'Accounting Standards']
+    },
+    {
+      title: 'Data Analyst',
+      department: 'Accounting',
+      deadline: '2025-11-20',
+      description: '',
+      responsibilities: [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      skills: ['Problem Solving', 'Accounting Standards']
+    },
+    {
+      title: 'Data Analyst',
+      department: 'Accounting',
+      deadline: '2025-11-20',
+      description:
+        'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      responsibilities: [],
+      skills: ['Problem Solving', 'Accounting Standards']
+    },
+    {
+      title: 'Data Analyst',
+      department: 'Accounting',
+      deadline: '2025-11-20',
+      description:
+        'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      responsibilities: [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      skills: []
+    }
+  ]
+
+  for (const input of invalidInputs) {
+    it(`Missing Input`, () => {
+      try {
+        const listing = new Listing(
+          input.title,
+          input.department,
+          input.deadline,
+          input.description,
+          input.responsibilities,
+          input.skills
+        )
+      } catch (error) {
+        expect(error.message).toBe('Not all required fields are filled')
+      }
+    })
+  }
+
+  it('Invalid Deadline', () => {
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(
+      2,
+      '0'
+    )}-${String(yesterday.getDate()).padStart(2, '0')}`
+
+    expect(() => {
+      new Listing(
+        'Data Analyst',
+        'Accounting',
+        yesterdayStr,
+        'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+        [
+          'Collecting and cleaning data from various sources',
+          'Conducting data analysis using Python, R, or SQL'
+        ],
+        [
+          'Collecting and cleaning data from various sources',
+          'Conducting data analysis using Python, R, or SQL'
+        ]
+      )
+    }).toThrow('Deadline cannot be before today')
+  })
+
+  it('Push New Listing to Firebase', async () => {
+    const listing = new Listing(
+      'Data Analyst',
+      'Accounting',
+      '2025-11-20',
+      'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.',
+      [
+        'Collecting and cleaning data from various sources',
+        'Conducting data analysis using Python, R, or SQL'
+      ],
+      ['Problem Solving', 'Accounting Standards']
+    )
+
+    await listing.saveNewListingToDB()
+
+    const newListing = await individualListingData(listing.getListingId())
+
+    expect(newListing.title).toBe('Data Analyst')
+    expect(newListing.department).toBe('Accounting')
+    expect(newListing.deadline).toBe('2025-11-20')
+    expect(newListing.description).toBe(
+      'Seeking a Data Analyst to analyze and visualize data, uncover insights, and support data-driven decisions. Responsibilities include data collection, cleaning, analysis, and reporting. Collaborate with cross-functional teams and contribute to informed decision-making.'
+    )
+    expect(newListing.responsibilities).toStrictEqual([
+      'Collecting and cleaning data from various sources',
+      'Conducting data analysis using Python, R, or SQL'
+    ])
+    expect(newListing.skills).toStrictEqual(['Problem Solving', 'Accounting Standards'])
+
+    deleteListing(listing.getListingId())
   })
 })

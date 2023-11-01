@@ -20,6 +20,7 @@
               type="text"
               class="form-control rounded-3 border-0 w-100 mb-4"
               v-model="email"
+              data-type="email"
               @keyup.enter="loginUser"
             />
 
@@ -28,6 +29,7 @@
               type="password"
               class="form-control rounded-3 border-0 w-100"
               v-model="password"
+              data-type="password"
               @keyup.enter="loginUser"
             />
           </form>
@@ -49,7 +51,7 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-          <button id="loginButton" ref="loginButton" class="btn btn-secondary text-white px-5" @click="loginUser()">Login</button>
+          <button id="loginButton" ref="loginButton" class="btn btn-secondary text-white px-5" data-type="login" @click="loginUser()">Login</button>
         </div>
       </div>
     </div>
