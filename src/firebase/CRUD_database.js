@@ -39,7 +39,7 @@ export const listingDataByCreator = async (id) => {
   const listingData = await allListingData()
   var res = []
 
-  for (let i=0; i<listingData.length; i++) {
+  for (let i in listingData) {
     var listing = listingData[i]
 
     if (listing.createdby == id) {
@@ -204,6 +204,34 @@ export const deleteListing = async (listing_id) => {
     return true
   } catch (error) {
     console.error('Error deleting listing:', error);
+  }
+}
+
+export const testCaseAddFakeListing = async () => {
+  try {
+    // Path to new index
+    const newPath = `/listing/-1`;
+
+    // Transform
+    const newListingData = {
+      createdate: "2021-09-01",
+      createdby: 160316,
+      deadline: "2021-09-30",
+      department: "Accounting",
+      description: "This is a fake listing",
+      responsibilities: ["res1", "res2"],
+      skills: ["skill1", "skill2", "skill3"],
+      applicants: ["140002", "140003", "140004"],
+      title: "Fake Listing",
+      listingId: -1
+    };
+
+    await set(ref(db, newPath), newListingData);
+    console.log('Fake listing added successfully');
+    return true
+  } catch (error) {
+    console.error('Error adding fake listing:', error);
+    return false
   }
 }
 
