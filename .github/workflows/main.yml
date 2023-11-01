@@ -40,7 +40,8 @@ jobs:
     - run: npm run build --if-present
     - run: npm run test:unit --loglevel verbose
     
-    - name: send telegram message on push
+    - name: send telegram message on success
+      if: success()
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
@@ -50,5 +51,24 @@ jobs:
           Commit message: ${{ github.event.commits[0].message }}
           
           Repository: ${{ github.repository }}
+
+          All test cases passed!
           
           See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+    - name: send telegram message on failure
+      if: failure()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          ${{ github.actor }} created commit:
+          Commit message: ${{ github.event.commits[0].message }}
+          
+          Repository: ${{ github.repository }}
+
+          Test cases failed!
+          
+          Please check: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      
