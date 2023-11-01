@@ -195,6 +195,18 @@ export const addListingApplied = async (staff_id, listing_id) => {
   }
 };
 
+export const deleteListing = async (listing_id) => {
+  const listingRef = ref(db, `/listing/${listing_id}`)
+
+  try {
+    await set(listingRef, null)
+    console.log('Listing deleted successfully');
+    return true
+  } catch (error) {
+    console.error('Error deleting listing:', error);
+  }
+}
+
 // EDIT HERE
 // Vue.js data variables
 // Input whatever data variables you need, and edit the HTML file to have a v-model, etc.
