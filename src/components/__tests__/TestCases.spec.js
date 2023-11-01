@@ -6,6 +6,7 @@ import LoginPage from '../../views/LoginPage.vue'
 import DiscoverJobs from '../../views/DiscoverJobs.vue'
 import { Staff, HRStaff } from '../../firebase/staff_class'
 import Listing from '../../firebase/listing_class'
+import { testCaseAddFakeListing, deleteListing } from '../../firebase/CRUD_database'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -287,5 +288,31 @@ describe('Listing Class', () => {
       ],
       title: 'Call Centre'
     })
+  })
+})
+
+describe('View Listing', () => {
+  it('test loadListing() in Listing Class', async () => {
+    // Set Up: Push fake listing (id = -1) to DB
+    await testCaseAddFakeListing()
+
+    var test_listing = new Listing()
+    await test_listing.loadListing(-1)
+
+    expect(test_listing.getAllAtrr()).toStrictEqual({
+      createdate: "2021-09-01",
+      createdby: 160316,
+      deadline: "2021-09-30",
+      department: "Accounting",
+      description: "This is a fake listing",
+      responsibilities: ["res1", "res2"],
+      skills: ["skill1", "skill2", "skill3"],
+      applicants: ["140002", "140003", "140004"],
+      title: "Fake Listing",
+      listingId: -1
+    })
+
+    // Tear Down: Delete fake listing
+    await deleteListing(-1)
   })
 })
