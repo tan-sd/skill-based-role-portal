@@ -1,5 +1,5 @@
 <script setup>
-import TopNavBar from './TopNavBar.vue'
+import TopNavBar from '../components/TopNavBar.vue'
 import Listing from '../firebase/listing_class'
 import { getStaffObj } from '../firebase/staff_class'
 import { getFile } from '../firebase/storage'

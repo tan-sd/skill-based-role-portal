@@ -46,7 +46,7 @@ import Listing from '../firebase/listing_class'
                   </div>
     
                   <div class="dropdown_search_menu">
-                    <div v-for="(e_title, index) in Object.keys(allRoles)">
+                    <div v-for="(e_title, index) in Object.keys(allRoles)" :key="index">
                       <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
                         <input class="form-check-input" type="checkbox" :id="`jobTitleRadioBtn${index}`" v-model="jobTitleFilterList" name="jobTitleRadioBtn" :value="e_title">
         
@@ -80,7 +80,7 @@ import Listing from '../firebase/listing_class'
                   </div>
     
                   <div class="dropdown_search_menu">
-                    <div v-for="(e_title, index) in allDept">
+                    <div v-for="(e_title, index) in allDept" :key="index">
                       <div v-if="checkDeptSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
                         <input class="form-check-input" type="checkbox" :id="`deptRadioBtn${index}`" v-model="deptFilterList" name="deptRadioBtn" :value="e_title">
         
@@ -130,7 +130,7 @@ import Listing from '../firebase/listing_class'
 
     <!-- Container for Cards -->
     <div class="body-container container-fluid px-4">
-      <div v-for="list in activeListings">
+      <div v-for="(list, index) in activeListings" :key="index">
         <div v-if="checkTitleInFilter(list.title) && checkDeptInFilter(list.department)">
           <div
             :key="list.id"

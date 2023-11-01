@@ -152,7 +152,7 @@ export class Staff {
     }
 }
 
-class HRStaff extends Staff {
+export class HRStaff extends Staff {
     #listings_created
 
     constructor () {

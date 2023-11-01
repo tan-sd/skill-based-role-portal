@@ -1,7 +1,7 @@
 <script setup>
 import { getStaffObj } from '../firebase/staff_class'
 import Listing from '../firebase/listing_class'
-import TopNavBar from './TopNavBar.vue'
+import TopNavBar from '../components/TopNavBar.vue'
 </script>
 <template>
   <div>

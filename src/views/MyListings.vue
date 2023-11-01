@@ -84,7 +84,7 @@ export default {
     },
     navigateToApplicants(id) {
       // this.$router.push({ name: 'listingDetails', params: { id: index } })
-      this.$router.push(`${id}/myapplicants`);
+      this.$router.push(`${id}/mylistingdetails`);
     },
     toHumanReadbleDate(date) {
       const dateObj = new Date(date)
