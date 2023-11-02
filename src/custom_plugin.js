@@ -1,19 +1,20 @@
-import { Popover } from 'bootstrap';
+import { Popover } from 'bootstrap'
 
 export default {
   install: (app) => {
     app.mixin({
       mounted() {
-        this.globalMethodEnablePopovers();
-      },
-    });
+        this.globalMethodEnablePopovers()
+      }
+    })
 
     // Add a method
     app.config.globalProperties.globalMethodEnablePopovers = () => {
-        console.log(`=== [START] globalMethodEnablePopovers() ===`)
-        // Allows bootstrap popovers in all files
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl))
-    };
-  },
-};
+      // Allows bootstrap popovers in all files
+      const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+      const popoverList = [...popoverTriggerList].map(
+        (popoverTriggerEl) => new Popover(popoverTriggerEl)
+      )
+    }
+  }
+}

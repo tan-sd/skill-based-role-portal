@@ -83,7 +83,7 @@ export default {
         isIncorrect.value = false
       } else if (await validateLogin(email)) {
         auth.login()
-        router.push('/discoverJobs')
+        router.push('/discoverjobs')
       } else {
         isMissing.value = false
         isIncorrect.value = true

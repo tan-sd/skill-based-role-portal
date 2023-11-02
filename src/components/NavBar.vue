@@ -102,7 +102,7 @@ export default {
       {
         text: 'My Listings',
         to: '/mylistings',
-        views: ['mylistings', 'myApplicants', 'individualApplicant', 'jobListingForm', 'editListing']
+        views: ['mylistings', 'myApplicants', 'individualApplicant', 'jobListingForm', 'editListing', 'myListingDetails']
       },
       {
         text: 'Log Out',
