@@ -65,7 +65,6 @@ const router = createRouter({
       path: '/listingdetails/:listingid',
       name: 'listingDetails',
       component: ListingDetails,
-      props: (route) => ({details: route.params.details})
     },
     {
       path: '/:listingid/individualapplicant/:applicantid',
@@ -73,7 +72,7 @@ const router = createRouter({
       component: IndividualApplicant
     },
     {
-      path: '/:listingid/mylistingdetails/',
+      path: '/:listingid/mylistingdetails',
       name: 'myListingDetails',
       component: MyListingDetails
     },
