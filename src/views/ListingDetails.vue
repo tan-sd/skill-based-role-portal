@@ -61,7 +61,7 @@ import appliedSuccess from '../components/AppliedSuccess.vue'
             </div>
 
             <div v-else>
-              <div v-if="!applied.includes(parseInt(this.$route.params.listingid))">
+              <div v-if="!applied.includes(parseInt(listingid))">
                 <ResumeDropOffButton
                   :job="listingDetails.title"
                   :listing="listingDetails.listingId"
@@ -87,7 +87,7 @@ import { allSkillsData } from '../firebase/CRUD_database.js'
 
 export default {
   created() {
-    this.fetchIndividualListingData(), this.fetch_read_staff_data()
+    this.fetchIndividualListingData(), this.fetch_read_staff_data(), this.getListingId()
   },
   data() {
     return {
@@ -96,9 +96,13 @@ export default {
       applied: [],
       sortedSkills: [],
       allSkills: {},
+      listingid: null
     }
   },
   methods: {
+    getListingId() {
+      this.listingId = this.$route.params.listingid
+    },
     async fetchIndividualListingData() {
       try {
         const newListing = new Listing()
