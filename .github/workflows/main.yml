@@ -65,7 +65,8 @@ jobs:
 
             All test cases passed!
 
-            Deployed to: ${{ env.DEPLOY_URL }}
+            Deployment: ${{ env.DEPLOY_URL }}
+            Domain: https://sbrp.vercel.app/
 
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
