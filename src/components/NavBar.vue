@@ -81,6 +81,7 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '../stores/authStore.js'
 import { getStaffObj } from '../firebase/staff_class.js'
+import profilePic from "../assets/profile_pics/user1.png"
 
 export default {
   setup() {
@@ -134,7 +135,7 @@ export default {
     return {
       // For Profile Button
       username: 'Perry',
-      imgSrc: '../assets/profile_pics/user1.png'
+      imgSrc: profilePic
     }
   },
   methods: {

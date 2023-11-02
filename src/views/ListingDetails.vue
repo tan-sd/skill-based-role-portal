@@ -161,7 +161,6 @@ export default {
     this.globalMethodEnablePopovers()
     this.getUserSkills()
     const success = this.$route.query.applied
-        console.log(this.$route.query.applied)
         if(success=="Success"){
             this.$refs.appliedsuccess.showSuccessModal('Listing Successfully Updated!')
         }

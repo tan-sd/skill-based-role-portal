@@ -1,5 +1,4 @@
 <script setup>
-import {read_staff_data } from '../firebase/CRUD_database'
 import {uploadFiles } from '../firebase/storage'
 import {getStaffObj} from '../firebase/staff_class'
 
@@ -102,7 +101,6 @@ export default {
             var staffid = localStorage.getItem('id')
             var staff1= await getStaffObj(staffid)
             await staff1.applyNewListing(this.listing)
-            // console.log(this.$route.path)
             await this.$router.push({
             path: this.$route.path,
             query: {applied: "Success"}

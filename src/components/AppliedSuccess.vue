@@ -30,12 +30,10 @@ export default {
 
     methods: {
         showSuccessModal(successmsg) {
-            console.log(`=== [START] showSuccessModal() ===`)
             this.successMsg = successmsg
             this.successModal.show()
         },
         dismissModals() {
-            console.log(`=== [START] dismissModals() ===`)
             this.successModal.hide()
         },
 

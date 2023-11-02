@@ -48,19 +48,16 @@ export default {
 
     methods: {
         showSuccessModal(successmsg) {
-            console.log(`=== [START] showSuccessModal() ===`)
             this.successMsg = successmsg
             this.successModal.show()
         },
         
         showErrorModal(errormsg) {
-            console.log(`=== [START] showErrorModal() ===`)
             this.errorMsg = errormsg
             this.errorModal.show()
         },
 
         dismissModals() {
-            console.log(`=== [START] dismissModals() ===`)
             this.successModal.hide()
             this.errorModal.hide()
         },

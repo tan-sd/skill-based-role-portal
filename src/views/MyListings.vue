@@ -61,18 +61,12 @@ export default {
     }
   },
   methods: {
-    handleCardClick(index) {
-      // Handle card click event, e.g., navigate to applicant's details page
-      console.log(`Clicked on card ${index}`)
-    },
     async filteredListingData() {
       try {
         const listing = new Listing();
         const allListings = await listing.getAllListings();
         
         for (let i = 0; i < Object.values(allListings).length; i++) {
-          // console.log(localStorage.getItem('id'))
-          // console.log(Object.values(data)[i].createdby)
           if (Object.values(allListings)[i].createdby == localStorage.getItem('id')) {
             this.listing.push(Object.values(allListings)[i])
           }
@@ -97,7 +91,6 @@ export default {
     isListingExpired(deadline) {
     const currentDate = new Date();
     const listingDeadline = new Date(deadline);
-    console.log(listingDeadline)
     return currentDate > listingDeadline;
     },
   }

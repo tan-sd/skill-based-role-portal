@@ -44,12 +44,12 @@ const router = createRouter({
       component: MyApplications
     },
     {
-      path: '/styleGuide',
+      path: '/styleguide',
       name: 'styleGuide',
       component: StyleGuide
     },
     {
-      path: '/jobListingForm',
+      path: '/jobListingform',
       name: 'jobListingForm',
       component: jobListingForm
     },
@@ -68,17 +68,17 @@ const router = createRouter({
       props: (route) => ({details: route.params.details})
     },
     {
-      path: '/:listingid/individualApplicant/:applicantid',
+      path: '/:listingid/individualapplicant/:applicantid',
       name: 'individualApplicant',
       component: IndividualApplicant
     },
     {
-      path: '/:listingid/myListingDetails/',
+      path: '/:listingid/mylistingdetails/',
       name: 'myListingDetails',
       component: MyListingDetails
     },
     {
-      path: '/discoverJobs',
+      path: '/discoverjobs',
       name: 'discoverJobs',
       component: DiscoverJobs
     }

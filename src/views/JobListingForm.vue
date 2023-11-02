@@ -240,7 +240,6 @@ export default {
       // Call the Firebase function to write data
       var curr = this.jobListing
       var new_listing = new Listing(curr.title, curr.department, curr.deadline, curr.description, curr.responsibilities, curr.skills)
-      console.log("new listing", new_listing)
 
       try {
         await new_listing.saveNewListingToDB()

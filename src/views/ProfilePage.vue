@@ -95,8 +95,6 @@ export default {
 
     await this.fetchSkillsFromDB()
     this.globalMethodEnablePopovers()
-    console.log(this.allSkills)
-
   },
 
   methods: {
@@ -113,7 +111,6 @@ export default {
     },
     
     async getStaffData() {
-      console.log("========= getStaffData =========")
       var staff = await getStaffObj(this.applicant.id)
       this.applicant.fullName = staff.getFirstName() + " " + staff.getLastName()
       this.applicant.email = staff.getEmail()
