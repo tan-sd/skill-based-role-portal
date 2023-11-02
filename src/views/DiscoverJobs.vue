@@ -243,7 +243,7 @@ export default {
     },
     navigateToDetails(listingId) {
       // Use the provided listingId for navigation
-      this.$router.push(`listingDetails'/${listingId}`);
+      this.$router.push(`listingDetails/${listingId}`);
     },
     async getMatchPercentage(allListings) {
       try {
