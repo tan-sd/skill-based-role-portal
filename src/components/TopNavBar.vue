@@ -50,8 +50,8 @@ export default {
   },
   data() {
     return {
-      jobTitle: '',
-      jobDepartment: '',
+      jobTitle: null,
+      jobDepartment: null,
       applicantNum: '',
       deadline: ''
     }
