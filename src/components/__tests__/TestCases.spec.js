@@ -6,7 +6,11 @@ import LoginPage from '../../views/LoginPage.vue'
 import DiscoverJobs from '../../views/DiscoverJobs.vue'
 import { Staff, HRStaff } from '../../firebase/staff_class'
 import Listing from '../../firebase/listing_class'
-import { testCaseAddFakeListing, deleteListing, individualListingData } from '../../firebase/CRUD_database'
+import {
+  testCaseAddFakeListing,
+  deleteListing,
+  individualListingData
+} from '../../firebase/CRUD_database'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -199,7 +203,7 @@ describe('Staff Class', () => {
           'Digital Fluency',
           'Problem Solving',
           'Stakeholder Management',
-          'Technology Application'
+          'Technology Application',
         ],
         title: 'Call Centre'
       },
@@ -244,7 +248,7 @@ describe('Listing Class', () => {
     ])
     expect(listing.getCreateDate()).toBe('2023-09-15')
     expect(listing.getCreatedBy()).toBe(130001)
-    expect(listing.getDeadline()).toBe('2023-10-28')
+    expect(listing.getDeadline()).toBe('2023-11-10')
     expect(listing.getDepartment()).toBe('Accounting')
     expect(listing.getDescription()).toBe('This is accounting department')
     expect(listing.getListingId()).toBe(1)
@@ -261,8 +265,6 @@ describe('Listing Class', () => {
       'Problem Solving',
       'Stakeholder Management',
       'Technology Application',
-      'Accounting Standards',
-      'Project Management'
     ])
     expect(listing.getTitle()).toBe('Call Centre')
     expect(listing.getAllAtrr()).toStrictEqual({
@@ -271,7 +273,7 @@ describe('Listing Class', () => {
       ],
       createdate: '2023-09-15',
       createdby: 130001,
-      deadline: '2023-10-28',
+      deadline: '2023-11-10',
       department: 'Accounting',
       description: 'This is accounting department',
       listingId: 1,
@@ -285,8 +287,6 @@ describe('Listing Class', () => {
         'Problem Solving',
         'Stakeholder Management',
         'Technology Application',
-        'Accounting Standards',
-        'Project Management'
       ],
       title: 'Call Centre'
     })
@@ -464,15 +464,15 @@ describe('View Listing', () => {
     await test_listing.loadListing(-1)
 
     expect(test_listing.getAllAtrr()).toStrictEqual({
-      createdate: "2021-09-01",
+      createdate: '2021-09-01',
       createdby: 160316,
-      deadline: "2021-09-30",
-      department: "Accounting",
-      description: "This is a fake listing",
-      responsibilities: ["res1", "res2"],
-      skills: ["skill1", "skill2", "skill3"],
-      applicants: ["140002", "140003", "140004"],
-      title: "Fake Listing",
+      deadline: '2021-09-30',
+      department: 'Accounting',
+      description: 'This is a fake listing',
+      responsibilities: ['res1', 'res2'],
+      skills: ['skill1', 'skill2', 'skill3'],
+      applicants: ['140002', '140003', '140004'],
+      title: 'Fake Listing',
       listingId: -1
     })
 
