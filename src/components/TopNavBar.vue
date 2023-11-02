@@ -1,6 +1,3 @@
-<script setup>
-import Listing from '../firebase/listing_class.js'
-</script>
 <template>
   <div class="navBarContainer mb-2 sticky-top">
     <div class="backButtonContainer">
@@ -38,6 +35,8 @@ import Listing from '../firebase/listing_class.js'
 </template>
 
 <script>
+import Listing from '../firebase/listing_class.js'
+
 export default {
   async created() {
     const listingObj = new Listing()
