@@ -48,7 +48,7 @@ import FormSuccessModal from '../components/FormSuccessModal.vue';
                     <div class="dropdown_search_menu">
                       <div v-for="(e_title, index) in Object.keys(allRoles)">
                         <div v-if="checkJobTitleSearchBar(e_title)" class="form-check ms-2 list-elem-hover my-2">
-                          <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title" @change="this.globalMethodEnablePopovers()">
+                          <input class="form-check-input" type="radio" :id="`jobTitleRadioBtn${index}`" v-model="jobListing.title" name="jobTitleRadioBtn" :value="e_title" @change="activatePopovers">
           
                           <label class="form-check-label no_wrap w-100 pe-4" :for="`jobTitleRadioBtn${index}`">
                             {{ e_title }}
@@ -304,6 +304,9 @@ export default {
         return false
       }
     },
+    activatePopovers() {
+      this.globalMethodEnablePopovers()
+    }
   },
   watch: {
     jobListing: {
