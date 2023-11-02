@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 env:
   VITE_DATABASE_KEY: ${{ secrets.VITE_DATABASE_KEY }}
@@ -18,10 +18,11 @@ env:
   VITE_MESSAGING_SENDER_ID: ${{ secrets.VITE_MESSAGING_SENDER_ID }}
   VITE_DATABASE_APP_ID: ${{ secrets.VITE_DATABASE_APP_ID }}
   VITE_APP_DATABASE_MEASUREMENT_ID: ${{ secrets.VITE_APP_DATABASE_MEASUREMENT_ID }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
   build:
-    
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,45 +31,56 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm run test:unit --loglevel verbose
-    
-    - name: send telegram message on success
-      if: success()
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          ${{ github.actor }} created commit:
-          Commit message: ${{ github.event.commits[0].message }}
-          
-          Repository: ${{ github.repository }}
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run test:unit --loglevel verbose
 
-          All test cases passed!
-          
-          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      - name: Deploy to Vercel
+        if: success()
+        run: |
+          npm install --global vercel@latest
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          URL=$(vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --confirm)
+          echo "DEPLOY_URL=$URL" >> $GITHUB_ENV
 
-    - name: send telegram message on failure
-      if: failure()
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          ${{ github.actor }} created commit:
-          Commit message: ${{ github.event.commits[0].message }}
-          
-          Repository: ${{ github.repository }}
+      - name: send telegram message on success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
 
-          Test cases failed!
-          
-          Please check: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-      
+            Repository: ${{ github.repository }}
+
+            All test cases passed!
+
+            Deployed to: ${{ env.DEPLOY_URL }}
+
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+      - name: send telegram message on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+
+            Repository: ${{ github.repository }}
+
+            Test cases failed!
+
+            Please check: https://github.com/${{ github.repository }}/commit/${{github.sha}}
