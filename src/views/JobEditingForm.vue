@@ -305,7 +305,7 @@ export default {
       }
     },
     activatePopovers() {
-      this.globalMethodEnablePopovers()
+      this.globalMethodEnablePopovers() 
     }
   },
   watch: {
