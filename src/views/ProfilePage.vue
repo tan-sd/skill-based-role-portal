@@ -1,5 +1,4 @@
 <script setup>
-import TopNavBar from '../components/TopNavBar.vue'
 import { getStaffObj } from '../firebase/staff_class'
 </script>
 
@@ -18,27 +17,31 @@ import { getStaffObj } from '../firebase/staff_class'
       <div class="card m-0 py-5">
         <div class="card-body pb-5">
           <div class="row pb-5 align-items-center">
-            <div class="col-2">
-              <img class="profilePic" :src="getImageUrl(applicant.profilepic)" />
+            <div class="col-12 col-md-auto row p-0 m-0 mb-3">
+              <div class="col-auto">
+                <img class="profilePic" :src="getImageUrl(applicant.profilepic)" />
+              </div>
+  
+              <div class="col d-flex align-items-center">
+                <div>
+                  <h3 class="card-title m-0 text-truncate fw-bold">{{ applicant.fullName }}</h3>
+                  <p class="m-0 text-truncate">{{ applicant.email }}</p>
+                </div>
+              </div>
             </div>
 
-            <div class="col-3">
-              <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
-                {{ applicant.fullName }}
-              </h3>
-              <p class="m-0">{{ applicant.email }}</p>
-            </div>
-
-            <div class="col-1 d-flex justify-content-end">
-              <div
-                class="vr bg-secondary opacity-100"
-                style="width: 5px; height: 60px; border-radius: 3px"
-              ></div>
-            </div>
-
-            <div class="col-6">
-              <h5 class="card-title">{{ applicant.position }}</h5>
-              <div class="row">
+            <div class="col-12 col-lg-6 row p-0 m-0">
+              <div class="col-auto">
+                <div>
+                  <div
+                    class="bg-secondary opacity-100"
+                    style="width: 5px; height: 60px; border-radius: 3px"
+                  ></div>
+                </div>
+              </div>
+  
+              <div class="col">
+                <h5 class="card-title">{{ applicant.position }}</h5>
                 <p class="card-title">
                   {{ applicant.department }} department, {{ applicant.country }}
                 </p>

@@ -222,6 +222,7 @@ export default {
 
 .profileContainer {
   width: 150px;
+  transition: all 250ms ease-in-out;
 }
 
 .profileContainer:hover {
