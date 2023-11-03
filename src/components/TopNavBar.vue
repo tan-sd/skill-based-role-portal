@@ -28,7 +28,7 @@
       </div>
       <div>
         <font-awesome-icon icon="fa-solid fa-calendar" class="ms-5 me-1 text-primary card-icon" />
-        {{ toHumanReadbleDate(this.deadline) }}
+        {{ toHumanReadableDate(this.deadline) }}
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@ export default {
     navigateBack() {
       this.$router.go(-1)
     },
-    toHumanReadbleDate(date) {
+    toHumanReadableDate(date) {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
