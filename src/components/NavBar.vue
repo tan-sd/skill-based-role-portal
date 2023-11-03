@@ -37,6 +37,7 @@
           <!-- Profile Btn -->
           <div
             class="profileContainer p-3 mb-3 bg-light rounded d-flex flex-row justify-content-center align-items-center"
+            @click="redirectProfilePage()"
           >
             <img :src="getImageUrl(imgSrc)" alt="user_image" id="userProfileIcon" class="d-block" />
             <p id="userProfileName" class="fw-bold m-0 ms-2 text-truncate">{{ username }}</p>
