@@ -9,6 +9,7 @@
         <li><a href="#team-members">Team Members</a></li>
       </ul>
     </li>
+    <li><a href="#deployment">Deployment</a></li>
     <li>
       <a href="#installation">Installation</a>
       <ul>
