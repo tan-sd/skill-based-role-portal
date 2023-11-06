@@ -1,4 +1,4 @@
-import { describe, it, expect, Mock } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -28,102 +28,15 @@ const router = createRouter({
   ]
 })
 
-describe('LoginPage', () => {
-  it('test router', async () => {
-    router.push('/')
-    await router.isReady()
-    const wrapper = mount(LoginPage, {
-      global: {
-        plugins: [router]
-      }
-    })
-    expect(wrapper.text()).toContain('Welcome Back!')
-  })
-  it('renders "Welcome Back!" text', () => {
-    const wrapper = mount(LoginPage)
-    expect(wrapper.text()).toContain('Welcome Back!')
-  })
+/**
+ * BACK-END TESTING
+ **/
 
-  it('shows warning when email and password are missing', async () => {
-    const wrapper = mount(LoginPage)
-    await wrapper.vm.loginUser()
-    expect(wrapper.vm.isMissing).toBe(true)
-    expect(wrapper.vm.isIncorrect).toBe(false)
-  })
-
-  it('has a login button', () => {
-    const wrapper = mount(LoginPage)
-    const button = wrapper.find('button')
-    expect(button.exists()).toBe(true)
-    expect(button.text()).toBe('Login')
-  })
-
-  it('redirects to home page on successful login', async () => {
-    const username = 'sally.loh@allinone.com.sg'
-    const password = '12345'
-    const wrapper = mount(LoginPage)
-    const usernameInput = wrapper.find('input[type="text"]')
-    usernameInput.element.value = username
-    usernameInput.trigger('input')
-    const passwordInput = wrapper.find('input[type="password"]')
-    passwordInput.element.value = password
-    passwordInput.trigger('input')
-
-    expect(usernameInput.element.value).toBe(username)
-    expect(passwordInput.element.value).toBe(password)
-
-    const loginButton = wrapper.find('#loginButton')
-    await loginButton.trigger('click')
-    expect(wrapper.vm.isIncorrect).toBe(false)
-    expect(wrapper.vm.isMissing).toBe(false)
-    await router.push('/discoverJobs')
-    // await wrapper.vm.$nextTick()
-    // await router.isReady()
-    expect(router.currentRoute.value.path).toBe('/discoverJobs')
-  })
-
-  it('test missing credentials', () => {
-    const wrapper = mount(LoginPage)
-    wrapper.find('button').trigger('click')
-    expect(wrapper.vm.isIncorrect).toBe(false)
-    expect(wrapper.vm.isMissing).toBe(true)
-  })
-
-  it('test incorrect credentials', async () => {
-    const username = 'sally.loh@allinone.com'
-    const password = '12345'
-    const wrapper = mount(LoginPage)
-
-    const usernameInput = wrapper.find('input[type="text"]')
-    await usernameInput.setValue(username)
-    expect(wrapper.find('input[type="text"]').element.value).toBe(username)
-
-    const passwordInput = wrapper.find('input[type="password"]')
-    await passwordInput.setValue(password)
-    expect(wrapper.find('input[type="password"]').element.value).toBe(password)
-
-    // usernameInput.trigger('input')
-    // const passwordInput = wrapper.find('input[type="password"]')
-    // passwordInput.element.value = password
-    // passwordInput.trigger('input')
-
-    const loginButton = wrapper.find({ ref: 'loginButton' })
-    await loginButton.trigger('click')
-    // await wrapper.vm.$nextTick()
-
-    // expect(wrapper.vm.isIncorrect).toBe(true)
-    // expect(wrapper.vm.isMissing).toBe(false)
-    // console.log(wrapper.vm.isIncorrect)
-  })
-
-  it('button exist', () => {
-    const wrapper = mount(LoginPage)
-    expect(wrapper.find({ ref: 'loginButton' }).exists()).toBe(true)
-  })
-})
-
+// Test the Staff Class
 describe('Staff Class', () => {
+  // Integration Testing for the Staff Class, fetching staff data from Firebase
   it('Integration Testing (Staff)', async () => {
+    // Test the initialization and retrieval of staff data from Firebase
     const staff = new Staff()
     await staff.init(160008)
 
@@ -145,7 +58,9 @@ describe('Staff Class', () => {
     expect(staff.getRole()).toBe('HR')
   })
 
+  // Integration Testing for the HRStaff Class, fetching HR staff data from Firebase
   it('Integration Testing (HR Staff)', async () => {
+    // Test the initialization and retrieval of HR staff data from Firebase
     const staff = new HRStaff()
     await staff.init(160008)
 
@@ -203,7 +118,7 @@ describe('Staff Class', () => {
           'Digital Fluency',
           'Problem Solving',
           'Stakeholder Management',
-          'Technology Application',
+          'Technology Application'
         ],
         title: 'Call Centre'
       },
@@ -236,10 +151,11 @@ describe('Staff Class', () => {
   })
 })
 
+// Test the Listing Class
 describe('Listing Class', () => {
-  /* Creates a new instance of a `Listing` object and loads a listing with ID 1 in Firebase. It then asserts various properties and methods of
-  the `Listing` object to ensure they have the expected values. The test checks the applicants, create date, created by, deadline, department, description, listing ID, responsibilities, skills, and title of the listing. It also checks that the `getAllAtrr` method returns all the attributes of the listing in a specific format. */
+  // Integration Testing for the Listing Class, fetching listing data from Firebase
   it('Integration Testing', async () => {
+    // Test the loading and retrieval of listing data from Firebase
     const listing = new Listing()
     await listing.loadListing(1)
 
@@ -264,7 +180,7 @@ describe('Listing Class', () => {
       'Digital Fluency',
       'Problem Solving',
       'Stakeholder Management',
-      'Technology Application',
+      'Technology Application'
     ])
     expect(listing.getTitle()).toBe('Call Centre')
     expect(listing.getAllAtrr()).toStrictEqual({
@@ -286,13 +202,14 @@ describe('Listing Class', () => {
         'Digital Fluency',
         'Problem Solving',
         'Stakeholder Management',
-        'Technology Application',
+        'Technology Application'
       ],
       title: 'Call Centre'
     })
   })
-  /* Performs unit testing for a JavaScript class called "Listing". It creates an instance of the Listing class with specific parameters and then uses the expect function to test various methods of the Listing class. The tests check if the methods return the expected values for the given instance of the class. */
+  // Unit Testing for the Listing Class
   it('Unit Testing', async () => {
+    // Test the Listing class with specific parameters
     const listing = new Listing(
       'Data Analyst',
       'Accounting',
@@ -319,7 +236,9 @@ describe('Listing Class', () => {
   })
 })
 
+// Test the Create Listing functionality, including interactions with Firebase
 describe('Create Listing', () => {
+  // Test for cases where invalid input is provided for creating a listing
   const invalidInputs = [
     {
       title: '',
@@ -381,6 +300,7 @@ describe('Create Listing', () => {
 
   for (const input of invalidInputs) {
     it(`Missing Input`, () => {
+      // Test creation of a new Listing with missing input fields
       try {
         const listing = new Listing(
           input.title,
@@ -396,7 +316,9 @@ describe('Create Listing', () => {
     })
   }
 
+  // Test for an invalid deadline when creating a listing
   it('Invalid Deadline', () => {
+    // Test creation of a new Listing with an invalid deadline
     const yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - 1)
     const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(
@@ -422,7 +344,9 @@ describe('Create Listing', () => {
     }).toThrow('Deadline cannot be before today')
   })
 
+  // Test pushing a new Listing to Firebase
   it('Push New Listing to Firebase', async () => {
+    // Test the process of creating and saving a new Listing to the Firebase database
     const listing = new Listing(
       'Data Analyst',
       'Accounting',
@@ -455,8 +379,10 @@ describe('Create Listing', () => {
   })
 })
 
+// Test the View Listing functionality, including data retrieval from Firebase
 describe('View Listing', () => {
-  it('test loadListing() in Listing Class', async () => {
+  // Test loading a listing from the Firebase database
+  it('Test loadListing() in Listing Class', async () => {
     // Set Up: Push fake listing (id = -1) to DB
     await testCaseAddFakeListing()
 
@@ -478,5 +404,89 @@ describe('View Listing', () => {
 
     // Tear Down: Delete fake listing
     await deleteListing(-1)
+  })
+})
+
+/**
+ * FRONT-END TESTING
+ **/
+
+// Test the LoginPage component
+describe('Login Page Component', () => {
+  // Test router navigation
+  it('Router Testing', async () => {
+    // Test navigation to the login page using Vue Router
+    router.push('/')
+    await router.isReady()
+    const wrapper = mount(LoginPage, {
+      global: {
+        plugins: [router]
+      }
+    })
+    expect(wrapper.text()).toContain('Welcome Back!')
+  })
+
+  // Test rendering of "Welcome Back!" text
+  it('Renders "Welcome Back!" text', () => {
+    // Test if the "Welcome Back!" text is rendered in the LoginPage component
+    const wrapper = mount(LoginPage)
+    expect(wrapper.text()).toContain('Welcome Back!')
+  })
+
+  // Test showing a warning when email and password are missing during login
+  it('Test Variable State when Login Credential is Missing', async () => {
+    const wrapper = mount(LoginPage)
+    await wrapper.vm.loginUser()
+    expect(wrapper.vm.isMissing).toBe(true)
+    expect(wrapper.vm.isIncorrect).toBe(false)
+  })
+
+  // Test successful login and redirection using Vue Router
+  it('Redirects to Home Page on Successful Login', async () => {
+    // Test the process of successful login and redirection to the home page
+    const username = 'sally.loh@allinone.com.sg'
+    const password = '12345'
+    const wrapper = mount(LoginPage)
+    const usernameInput = wrapper.find('input[type="text"]')
+    usernameInput.element.value = username
+    usernameInput.trigger('input')
+    const passwordInput = wrapper.find('input[type="password"]')
+    passwordInput.element.value = password
+    passwordInput.trigger('input')
+
+    expect(usernameInput.element.value).toBe(username)
+    expect(passwordInput.element.value).toBe(password)
+
+    const loginButton = wrapper.find('#loginButton')
+    await loginButton.trigger('click')
+    expect(wrapper.vm.isIncorrect).toBe(false)
+    expect(wrapper.vm.isMissing).toBe(false)
+    await router.push('/discoverJobs')
+    expect(router.currentRoute.value.path).toBe('/discoverJobs')
+  })
+
+  // Test handling of incorrect credentials during login
+  it('Test Incorrect Credentials', async () => {
+    const username = 'sally.loh@allinone.com'
+    const password = '12345'
+    const wrapper = mount(LoginPage)
+
+    const usernameInput = wrapper.find('input[type="text"]')
+    await usernameInput.setValue(username)
+    expect(wrapper.find('input[type="text"]').element.value).toBe(username)
+
+    const passwordInput = wrapper.find('input[type="password"]')
+    await passwordInput.setValue(password)
+    expect(wrapper.find('input[type="password"]').element.value).toBe(password)
+
+    const loginButton = wrapper.find({ ref: 'loginButton' })
+    await loginButton.trigger('click')
+  })
+
+  // Test the existence of a login button
+  it('Login Button Exists', () => {
+    // Test if a login button exists in the LoginPage component
+    const wrapper = mount(LoginPage)
+    expect(wrapper.find({ ref: 'loginButton' }).exists()).toBe(true)
   })
 })
