@@ -1,10 +1,8 @@
 <script setup>
-import TopNavBar from '../components/TopNavBar.vue'
 import { getStaffObj } from '../firebase/staff_class'
 </script>
 
 <template>
-  
   <div class="py-3">
     <div class="mx-5">
       <font-awesome-icon
@@ -18,27 +16,31 @@ import { getStaffObj } from '../firebase/staff_class'
       <div class="card m-0 py-5">
         <div class="card-body pb-5">
           <div class="row pb-5 align-items-center">
-            <div class="col-2">
-              <img class="profilePic" :src="getImageUrl(applicant.profilepic)" />
+            <div class="col-12 col-md-auto row p-0 m-0 mb-3">
+              <div class="col-auto">
+                <img class="profilePic" :src="getImageUrl(applicant.profilepic)" />
+              </div>
+
+              <div class="col d-flex align-items-center">
+                <div>
+                  <h3 class="card-title m-0 text-truncate fw-bold">{{ applicant.fullName }}</h3>
+                  <p class="m-0 text-truncate">{{ applicant.email }}</p>
+                </div>
+              </div>
             </div>
 
-            <div class="col-3">
-              <h3 class="card-title m-0" style="font-family: montserrat-bold; text-align: left">
-                {{ applicant.fullName }}
-              </h3>
-              <p class="m-0">{{ applicant.email }}</p>
-            </div>
+            <div class="col-12 col-lg-6 row p-0 m-0">
+              <div class="col-auto">
+                <div>
+                  <div
+                    class="bg-secondary opacity-100"
+                    style="width: 5px; height: 60px; border-radius: 3px"
+                  ></div>
+                </div>
+              </div>
 
-            <div class="col-1 d-flex justify-content-end">
-              <div
-                class="vr bg-secondary opacity-100"
-                style="width: 5px; height: 60px; border-radius: 3px"
-              ></div>
-            </div>
-
-            <div class="col-6">
-              <h5 class="card-title">{{ applicant.position }}</h5>
-              <div class="row">
+              <div class="col">
+                <h5 class="card-title">{{ applicant.position }}</h5>
                 <p class="card-title">
                   {{ applicant.department }} department, {{ applicant.country }}
                 </p>
@@ -51,7 +53,7 @@ import { getStaffObj } from '../firebase/staff_class'
               <div class="pb-4">
                 <h4>Current Skills</h4>
                 <div v-for="(e_skill, index) in applicant.skillsets" :key="index" class="d-inline">
-                  <span 
+                  <span
                     class="mb-1 me-2 p-1 px-2 text-white rounded d-inline-block bg-primary"
                     data-bs-toggle="popover"
                     data-bs-trigger="hover"
@@ -82,14 +84,27 @@ export default {
         country: 'Tri-State Area',
         profilepic: '../assets/profile_pics/user1.png',
         id: '',
-        skillsets: ["He's a semiaquatic","Egg laying mammal of action","He's a furry little flatfoot","Who'll never flinch from a fray","He's got more than just mad skill", "He's got a beaver tail and bill", "And the women swoon", "Whenever they hear him say -", "He's Perry, Perry the Platypus", "(You can call him Agent P)", "Perry (I said you can call him Agent P)", "Agent P"],
+        skillsets: [
+          "He's a semiaquatic",
+          'Egg laying mammal of action',
+          "He's a furry little flatfoot",
+          "Who'll never flinch from a fray",
+          "He's got more than just mad skill",
+          "He's got a beaver tail and bill",
+          'And the women swoon',
+          'Whenever they hear him say -',
+          "He's Perry, Perry the Platypus",
+          '(You can call him Agent P)',
+          'Perry (I said you can call him Agent P)',
+          'Agent P'
+        ]
       },
 
-      allSkills: [],
+      allSkills: []
     }
   },
   async mounted() {
-    this.applicant.id = localStorage.getItem("id")
+    this.applicant.id = localStorage.getItem('id')
 
     await this.getStaffData(this.applicant.id)
 
@@ -103,24 +118,24 @@ export default {
     },
 
     navigateBack() {
-      this.$router.go(-1)
+      this.$router.push('/discoverJobs')
     },
 
     getImageUrl(name) {
       return new URL(name, import.meta.url).href
     },
-    
+
     async getStaffData() {
       var staff = await getStaffObj(this.applicant.id)
-      this.applicant.fullName = staff.getFirstName() + " " + staff.getLastName()
+      this.applicant.fullName = staff.getFirstName() + ' ' + staff.getLastName()
       this.applicant.email = staff.getEmail()
       this.applicant.department = staff.getDepartment()
       this.applicant.position = staff.getPosition()
       this.applicant.skillsets = staff.getSkillset()
       this.applicant.profilepic = staff.getProfilePic()
       this.applicant.country = staff.getCountry()
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -183,4 +198,3 @@ export default {
   cursor: pointer;
 }
 </style>
-

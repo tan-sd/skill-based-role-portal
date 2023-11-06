@@ -29,12 +29,12 @@ import Listing from '../firebase/listing_class'
         </div>
 
         <div class="d-none d-sm-block constrain-width">
-          <h5 class="fw-bold text-truncate"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h5>
+          <h5 class="fw-bold text-truncate"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadableDate(list.deadline) }}</h5>
         </div>
 
         <div class="d-flex d-sm-none justify-content-start w-100 px-3 mt-4">
           <h6 class="fw-bold text-truncate d-inline me-4"><font-awesome-icon icon="fa-solid fa-user-group" class="me-2 text-primary card-icon" />{{ list.applicants.length }} Applicants</h6>
-          <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadbleDate(list.deadline) }}</h6>
+          <h6 class="fw-bold text-truncate d-inline"><font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />{{ toHumanReadableDate(list.deadline) }}</h6>
         </div>
 
         <div v-if="isListingExpired(list.deadline)" class="job-expired-label">Listing Expired</div>
@@ -83,7 +83,7 @@ export default {
       // this.$router.push({ name: 'listingDetails', params: { id: index } })
       this.$router.push(`${id}/mylistingdetails`);
     },
-    toHumanReadbleDate(date) {
+    toHumanReadableDate(date) {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)

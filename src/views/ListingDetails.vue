@@ -43,8 +43,8 @@ import appliedSuccess from '../components/AppliedSuccess.vue'
           <!-- Application Period -->
           <p>
             <span class="fw-bold add-border-right">Application Period</span>
-            {{ toHumanReadbleDate(listingDetails.createdate) }} to
-            {{ toHumanReadbleDate(listingDetails.deadline) }}
+            {{ toHumanReadableDate(listingDetails.createdate) }} to
+            {{ toHumanReadableDate(listingDetails.deadline) }}
           </p>
 
           <div v-if="listingDetails.dataLoaded">
@@ -132,7 +132,7 @@ export default {
       }
     },
 
-    toHumanReadbleDate(date) {
+    toHumanReadableDate(date) {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)

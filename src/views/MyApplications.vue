@@ -12,59 +12,54 @@ import Listing from '../firebase/listing_class'
 
     <!-- Container for Cards -->
     <div class="body-container container-fluid px-4">
-      <div
-        v-for="(list, index) in listing"
-        :key="index"
-        class="card border-0 my-3 p-3 flex-col flex-sm-row listing-card justify-content-start"
-      >
-        <!-- Card content here -->
-        <div class="add-border-left me-3 d-none d-sm-block"></div>
-
-        <div class="me-sm-5 constrain-width w-100">
-          <div class="add-border-left me-2 d-inline d-sm-none"></div>
-          <p class="name m-0 text-truncate d-inline d-sm-block">{{ list.title }}</p>
-          <p class="department m-0 text-truncate d-inline d-sm-block ms-3 ms-sm-0">
-            {{ list.department }}
-          </p>
-        </div>
-
-        <div class="d-none d-sm-block me-sm-5 constrain-width">
-          <h5 class="fw-bold text-truncate">
-            <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
-            {{ toHumanReadbleDate(list.deadline) }}
-          </h5>
-        </div>
-
+      <div v-for="(list, index) in listing" :key="index">
         <div
-          class="d-none d-sm-block progress-bar"
-          v-if="typeof list.matchPercentage === 'number'"
-          :style="getProgressBarStyle(list.matchPercentage)"
+          :key="list.id"
+          class="card border-0 my-3 p-3 flex-row listing-card justify-content-start align-items-start align-items-sm-center"
         >
-          <div class="progress-text">
-            <div>{{ Math.round(list.matchPercentage) }}%</div>
-            <div>Match</div>
+          <!-- Card content here -->
+          <div class="add-border-left me-3 d-none d-sm-block"></div>
+  
+          <div class="d-flex flex-column flex-sm-row constrain-width w-50 align-items-sm-center">
+            <!-- Title & Dept -->
+            <div class="d-flex align-items-center constrain-width">
+              <div class="add-border-left me-3 d-block d-sm-none"></div>
+              <div class="me-sm-5 constrain-width w-100">
+                <p class="name m-0 text-truncate d-block">{{ list.title }}</p>
+                <p class="department m-0 text-truncate d-block">
+                  {{ list.department }}
+                </p>
+              </div>
+            </div>
+    
+            <!-- Deadline (md & above) -->
+            <div class="d-block me-sm-5 constrain-width">
+              <h5 class="fw-bold text-truncate d-none d-sm-block">
+                <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
+                {{ toHumanReadableDate(list.deadline) }}
+              </h5>
+
+              <h6 class="fw-bold text-truncate d-block d-sm-none mt-3">
+                <font-awesome-icon icon="fa-solid fa-calendar" class="me-2 text-primary card-icon" />
+                {{ toHumanReadableDate(list.deadline) }}
+              </h6>
+            </div>
           </div>
-        </div>
-
-        <div class="d-flex d-sm-none justify-content-start w-100 px-3 mt-4">
-          <h6 class="fw-bold text-truncate">
-            <font-awesome-icon
-              icon="fa-solid fa-calendar"
-              class="me-2 text-primary card-icon"
-            />{{ toHumanReadbleDate(list.deadline) }}
-          </h6>
-        </div>
-        <div
-          class="d-flex flex-column d-sm-none progress-bar"
-          v-if="typeof list.matchPercentage === 'number'"
-          :style="getProgressBarStyle(list.matchPercentage)"
-        >
-          <div class="progress-text">
-            <div>{{ Math.round(list.matchPercentage) }}%</div>
-            <div>Match</div>
+  
+          <!-- Skill match -->
+          <div
+            class="d-block progress-bar"
+            v-if="typeof list.matchPercentage === 'number'"
+            :style="getProgressBarStyle(list.matchPercentage)"
+          >
+            <div class="progress-text">
+              <div>{{ Math.round(list.matchPercentage) }}%</div>
+              <div>Match</div>
+            </div>
           </div>
         </div>
       </div>
+
       <div
         v-if="listing.length == 0"
         class="d-flex flex-column align-items-center justify-content-center h-100"
@@ -132,7 +127,7 @@ export default {
 
       return (commonCount / reqs.length) * 100;
     },
-    toHumanReadbleDate(date) {
+    toHumanReadableDate(date) {
       const dateObj = new Date(date);
       const options = { day: '2-digit', month: 'short', year: 'numeric' };
       return dateObj.toLocaleDateString('en-US', options);

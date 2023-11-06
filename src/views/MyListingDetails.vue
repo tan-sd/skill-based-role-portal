@@ -62,8 +62,8 @@ import TopNavBar from '../components/TopNavBar.vue'
             <!-- Application Period -->
             <p>
               <span class="fw-bold add-border-right">Application Period</span>
-              {{ toHumanReadbleDate(listingDetails.createdate) }} to
-              {{ toHumanReadbleDate(listingDetails.deadline) }}
+              {{ toHumanReadableDate(listingDetails.createdate) }} to
+              {{ toHumanReadableDate(listingDetails.deadline) }}
             </p>
           </div>
         </div>
@@ -367,7 +367,7 @@ export default {
         console.log('Error fetching data from Firebase:', error)
       }
     },
-    toHumanReadbleDate(date) {
+    toHumanReadableDate(date) {
       const dateObj = new Date(date)
       const options = { day: '2-digit', month: 'short', year: 'numeric' }
       return dateObj.toLocaleDateString('en-US', options)
