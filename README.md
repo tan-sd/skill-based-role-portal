@@ -79,15 +79,13 @@ Clone the github repository to your local machine by typing in the terminal `git
 
 ### Project setup
 ```
+cd skill-based-role-portal
+
 npm install
 ```
 
 ### Running Development Server
 ```
-cd skill-based-role-portal
-
-# Start the development server
-
 npm run dev
 ```
 
@@ -97,7 +95,7 @@ npm run test:unit
 ```
 
 ### Test Account
-| **Username**       | **sally.loh@allinone.com.sg** |
+| **Username**       | **lucas.lee@allinone.com.sg** |
 | -------------- | ------------------|
 | **Password**       | **12345**  
 
