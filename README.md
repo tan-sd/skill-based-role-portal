@@ -42,8 +42,7 @@
 * <a href="https://www.javascript.com/"><img width="26px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"/></a>
 * <a href="https://vuejs.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" width="26px"></a>
 * <a href="https://getbootstrap.com"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="26px"></a>
-* <a href=""><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="26px"></a>
-* <a href=""><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlalchemy/sqlalchemy-original.svg" width="26px"></a>
+* <a href="https://firebase.google.com/?gclid=CjwKCAiA68ebBhB-EiwALVC-Nu9CUOHBl_f4ytQaPMxt6hrueI-AQV3jTr1F-8u7dtfenil2eMGkNhoCH2YQAvD_BwE&gclsrc=aw.ds"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" width="26px"></a>
 
 <br/>
 
